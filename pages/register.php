@@ -9,7 +9,7 @@ if(isset($_POST['reg_submit'])){
 			if(!empty($_POST['password'])){
 				if(!empty($_POST['r_password'])){
 					$name = $_POST['name'] = secure($_POST['name']);
-					$ret_check_pattern_username = preg_match('#^[a-zA-Z0-9_@[\]éè-]+$#', $name);
+					$ret_check_pattern_username = preg_match('#^[a-zA-Z0-9_@\#\*\$[\]éè-]+$#', $name);
 					if($ret_check_pattern_username){
 						if(strlen($name) >= 4 && strlen($name) <= 15){
 							$email = $_POST['email'] = secure($_POST['email']);
@@ -27,7 +27,7 @@ if(isset($_POST['reg_submit'])){
 												$_POST['r_password'] = secure($_POST['r_password']);
 												register($name, $email_hash, $password);
 												$_SESSION['name'] = $name;
-												redirect('chat');
+												redirect(1);
 											}else{
 											    $error = 'cette adresse email est déjà utilisée';
 											}

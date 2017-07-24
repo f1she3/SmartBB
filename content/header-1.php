@@ -9,6 +9,7 @@
 		<link rel="icon" href="<?= $_SESSION['host'].'/css/images/favicon.ico' ?>">
 		<title><?= $title; ?></title>
 		<link href="<?= $_SESSION['host'].'/css/bootstrap.min.css' ?>" rel="stylesheet">
+		<link href="<?= $_SESSION['host'].'/css/style.css' ?>" rel="stylesheet">
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">

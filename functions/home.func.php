@@ -23,8 +23,8 @@ function display_articles($category){
 			$text = $x.' réponse';
 		}
 		echo			"<tr>
-						<td><a href=\"#\">".$author."</a></td>
-						<td><a href=\"#\">".$title."</a></td>
+						<td><a href=\"".constant('BASE_URL')."profile&user=".$author."\">".$author."</a></td>
+						<td><a href=\"".constant('BASE_URL')."article&id=".$id."\">".$title."</a></td>
 						<td>".$text."</td>
 						<td>".$date."</td>
 					</tr>";

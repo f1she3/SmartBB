@@ -25,7 +25,6 @@ function display_category($category, $page_id){
 	mysqli_stmt_fetch($query);
 	$page_count = ceil($count / 20);
 	$position = ($page_id - 1) * 20 + 1;
-	//echo $position." ".$id." ".$count."<br>";
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'SELECT * FROM articles WHERE BINARY category = ? ORDER BY id DESC LIMIT ?, 20');
 	mysqli_stmt_bind_param($query, 'si', $category, $position);
@@ -58,9 +57,8 @@ function display_category($category, $page_id){
 			$text = $x.' réponse';
 		}
 		echo			"<tr>
-						<td><a href=\"#\">".$id."</a></td>
-						<td><a href=\"#\">".$author."</a></td>
-						<td><a href=\"#\">".$title."</a></td>
+						<td><a href=\"".constant('BASE_URL')."profile&user=".$author."\">".$author."</a></td>
+						<td><a href=\"".constant('BASE_URL')."article&id=".$id."\">".$title."</a></td>
 						<td>".$text."</td>
 						<td>".$date."</td>
 					</tr>";

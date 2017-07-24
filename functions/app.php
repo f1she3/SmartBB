@@ -8,6 +8,19 @@ function is_logged(){
 		return false;
 	}
 }
+function is_user($input){
+	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'SELECT name FROM users WHERE BINARY name = ?');
+	mysqli_stmt_bind_param($query, 's', $input);
+	mysqli_stmt_execute($query);
+	$result = mysqli_stmt_fetch($query);
+	if($result == 0){
+		return false;
+	
+	}else{
+		return true;
+	}
+}
 function define_url_base($routing_mode){
 	switch($routing_mode){
 		case('DEFAULT'):
