@@ -1,0 +1,17 @@
+- Gérer les droits pour les icones de smiley / Gérer un footer
+- Créer formulaire de création d'article
+- Ajouter les réponses à l'affichage d'article
+- Ajouter page règlement
+- Cloner système admin / modération
+- Cloner système amis
+- Créer système réputation
+- Ajouter sous catégories
+- Ajouter système de recherche
+
+
+
+
+
+
+[FAIT]- Cloner système de profil utilisateur
+[FAIT]- Ajouter page suppression compte
