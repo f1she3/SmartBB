@@ -2,6 +2,8 @@
 
 $error = '';
 $style = 'a';
+$value = array();
+$value['name'] = $value['mail'] = '';
 if(isset($_POST['reg_submit'])){
 	$style = '';
 	if(!empty($_POST['name'])){
@@ -12,9 +14,11 @@ if(isset($_POST['reg_submit'])){
 					$ret_check_pattern_username = preg_match('#^[a-zA-Z0-9_@\#\*\$[\]éè-]+$#', $name);
 					if($ret_check_pattern_username){
 						if(strlen($name) >= 4 && strlen($name) <= 15){
+							$value['name'] = $name;
 							$email = $_POST['email'] = secure($_POST['email']);
 							$ret_check_pattern_email = preg_match('#^[a-z0-9._-]+@[a-z0-9._-]{2,20}\.[a-z]{2,4}$#', $email);
 							if($ret_check_pattern_email){
+								$value['mail'] = $email;
 								if(strlen($_POST['password']) >= 6){
 									if($_POST['password'] == $_POST['r_password']){
 										$ret_is_used_username = is_used('name', $name);
@@ -27,7 +31,8 @@ if(isset($_POST['reg_submit'])){
 												$_POST['r_password'] = secure($_POST['r_password']);
 												register($name, $email_hash, $password);
 												$_SESSION['name'] = $name;
-												redirect(1);
+												header('Refresh: 3; url = '.constant('BASE_URL').'home');
+												set_error('Inscription réalisée avec succès !', 'ok', 'Vous allez être redirigé ...', 'home');
 											}else{
 											    $error = 'cette adresse email est déjà utilisée';
 											}
@@ -86,11 +91,11 @@ if(!empty($style)){
 		<form method="POST" action="">
 			<div class="form-group">
 				<label for="name_reg">Votre nom d'utilisateur :</label>
-				<input class="form-control" placeholder="4 caractères minimum" name="name" type="text" maxlength="15" autofocus required>
+				<input class="form-control" placeholder="4 caractères minimum" name="name" type="text" maxlength="15" value="<?= $value['name']; ?>" autofocus required>
 			</div>
 			<div class="form-group">
 				<label for="email_reg">Votre adresse email :</label>
-				<input class="form-control" placeholder="me@example.com" name="email" type="email" maxlength="40" required>
+				<input class="form-control" placeholder="me@example.com" name="email" type="email" maxlength="40" value="<?= $value['mail']; ?>" required>
 			</div>
 			<div class="form-group">
 				<label for="password_reg">Votre mot de passe :</label>
