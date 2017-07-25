@@ -65,12 +65,12 @@ function display_article($input_id){
 			<li><a href=\"".constant('BASE_URL')."category&cat".$infos['category']."\">".$infos['category']."</a></li>
 				<li>".$infos['title']."</li>
 			</ul>";
-		echo 	"<h4 class=\"text-center\">
+		echo 	"<h4 class=\"text-left\">
 				<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
 				<a href=\"".constant('BASE_URL')."profile&user=".$infos['author']."\"><abbr title=\"".$user_infos."\">".$infos['author']."</abbr></a>
 				".$fdate."
 			</h4>";
-		echo 	"<pre><p class=\"lead\">".$infos['content']."</p></pre><hr>";
+		echo 	"<pre><p class=\"\">".$infos['content']."</p></pre><hr>";
 		display_comments($input_id);
 	}
 }
@@ -87,7 +87,7 @@ function display_comments($parent_id){
 		$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
 		$user_infos = user_infos($author);
 		if($reply_to == 0){
-			echo 	"<p class=\"lead\">".$parent_comment['content']."</p>
+			echo 	"<p>".$parent_comment['content']."</p>
 				<h4 class=\"text-left\">
 					<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
 					<a href=\"".constant('BASE_URL')."profile&user=".$author."\"><abbr title=\"".$user_infos."\">".$author."</abbr></a>
@@ -99,7 +99,7 @@ function display_comments($parent_id){
 					".$parent_comment['content']."
 					<footer>".$parent_comment['author']."</footer>
 				</blockquote>
-				<p class=\"lead\">".$content."</p>
+				<p>".$content."</p>
 				<h4 class=\"text-left\">
 					<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
 					<a href=\"".constant('BASE_URL')."profile&user=".$author."\"><abbr title=\"".$user_infos."\">".$author."</abbr></a>
