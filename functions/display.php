@@ -30,10 +30,8 @@ function set_error($title, $icon, $content, $location){
 		$location = "<a href=\"".$_SESSION['host'].constant('BASE_URL').$location."\">
 					<img src=\"".$_SESSION['host']."/css/images/home.svg\" height=\"75\" width=\"75\" class=\"center-block\">
 				</a>";
-	
 	}else{
 		$location = '';
 	}
-	
-	echo $title.$icon.$content.$location;
+	die($title.$icon.$content.$location.file_get_contents('content/footer-1.html'));
 }
