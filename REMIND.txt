@@ -7,11 +7,12 @@
 - Créer système réputation
 - Ajouter sous catégories
 - Ajouter système de recherche
-
-
-
+- Mettre en avant page welcome
+- Ajouter système oublie mdp
 
 
 
 [FAIT]- Cloner système de profil utilisateur
 [FAIT]- Ajouter page suppression compte
+[FAIT]- Ecran de confirmation inscription
+[FAIT]- Conserver identifiants register si valides mais erreur
