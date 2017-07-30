@@ -9,7 +9,7 @@ function display_articles($category){
 	$i = 0;
 	while(mysqli_stmt_fetch($query)){
 		$link = get_link();
-		$req = mysqli_prepare($link, 'SELECT id FROM comments WHERE parent_id = ?');
+		$req = mysqli_prepare($link, 'SELECT id FROM comments WHERE article_id = ?');
 		mysqli_stmt_bind_param($req, 'i', $id);
 		mysqli_stmt_execute($req);
 		mysqli_stmt_bind_result($req, $reply_id);

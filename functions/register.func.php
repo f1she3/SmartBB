@@ -49,6 +49,5 @@ function register($name, $email, $password){
 	if($id == 1){
 		$ranks = get_rank_list();
 		set_rank($name, $ranks['max']);
-	
 	}
 }

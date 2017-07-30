@@ -72,15 +72,24 @@ function display_article($input_id){
 			</h4>";
 		echo 	"<pre><p class=\"\">".$infos['content']."</p></pre><hr>";
 		display_comments($input_id);
+		echo 	"<form method=\"POST\">
+				<div class=\"form-group\">
+					<textarea class=\"form-control\" style=\"resize:none\" name=\"comment\"></textarea>
+				</div>
+				<div class=\"form-group col-sm-7 col-sm-offset-5\">
+					<button class=\"btn btn-primary col-sm-2\">
+						<span class=\"glyphicon glyphicon-send\"></span> 
+					</button>
+				</div>
+			</form>";
 	}
 }
 function display_comments($parent_id){
 	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'SELECT * FROM  comments WHERE parent_id = ?');
+	$query = mysqli_prepare($mysqli, 'SELECT * FROM  comments WHERE article_id = ?');
 	mysqli_stmt_bind_param($query, 'i', $parent_id);
 	mysqli_stmt_execute($query);
 	mysqli_stmt_bind_result($query, $id, $parent_id, $author, $content, $reply_to, $date);
-	$i = 0;
 	while(mysqli_stmt_fetch($query)){
 		$parent_comment = comment_infos($parent_id);
 		$fdate = date_create($date);
@@ -106,9 +115,5 @@ function display_comments($parent_id){
 					".$fdate."
 				</h4><hr>";
 		}
-		$i++;
-	}
-	if($i == 0){
-		echo 'Pas de réponse';
 	}
 }

@@ -43,7 +43,7 @@ function display_category($category, $page_id){
 	$i = 0;
 	while(mysqli_stmt_fetch($query)){
 		$link = get_link();
-		$req = mysqli_prepare($link, 'SELECT id FROM comments WHERE parent_id = ?');
+		$req = mysqli_prepare($link, 'SELECT id FROM comments WHERE article_id = ?');
 		mysqli_stmt_bind_param($req, 'i', $id);
 		mysqli_stmt_execute($req);
 		mysqli_stmt_bind_result($req, $reply_id);
@@ -77,7 +77,6 @@ function display_category($category, $page_id){
 		}else{
 			echo "<li><a href=\"".constant('BASE_URL')."category&cat=".$category."&id=".$i."\">".$i."</a></li>";
 		}
-		//echo "<a href=".constant('BASE_URL')."category&cat=".$category."&id=".$i.">".$i." </a>";
 	}
 	echo 	"</ul>";
 }
