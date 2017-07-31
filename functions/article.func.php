@@ -70,14 +70,27 @@ function display_article($input_id){
 				<a href=\"".constant('BASE_URL')."profile&user=".$infos['author']."\"><abbr title=\"".$user_infos."\">".$infos['author']."</abbr></a>
 				".$fdate."
 			</h4>";
-		echo 	"<pre><p class=\"\">".$infos['content']."</p></pre><hr>";
-		display_comments($input_id);
+		echo 	"<pre><p class=\"\">".$infos['content']."</p></pre>";
+		if(get_rank($_SESSION['name']) > 0){
 		echo 	"<form method=\"POST\">
 				<div class=\"form-group\">
+					<button name=\"close_article\" class=\"btn btn-danger\">
+						<span class=\"glyphicon glyphicon-ban-circle\"></span> 
+					</button>
+					<button name=\"close_article\" class=\"btn btn-info\">
+						<span class=\"glyphicon glyphicon-ban-circle\"></span> 
+					</button>
+				</div>
+			</form><hr>";
+			
+		}
+		display_comments($input_id);
+		echo 	"<form method=\"POST\">
+				<div class=\"form-group col-md-8 col-md-offset-2\">
 					<textarea class=\"form-control\" style=\"resize:none\" name=\"comment\"></textarea>
 				</div>
-				<div class=\"form-group col-sm-7 col-sm-offset-5\">
-					<button class=\"btn btn-primary col-sm-2\">
+				<div class=\"form-group col-md-4 col-md-offset-4\">
+					<button class=\"btn btn-primary col-sm-2 col-xs-2 col-xs-offset-5\">
 						<span class=\"glyphicon glyphicon-send\"></span> 
 					</button>
 				</div>
