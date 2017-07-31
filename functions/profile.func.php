@@ -59,15 +59,65 @@ function display_user_infos($username, $flag){
 				<h3 class=\"text-center\">Informations</h3>
 			</div>
 			<h3 class=\"text-center\">".$username."</h3>
-			<pre style=\"border-radius:10px\">
-				<ul>
-					<li style=\"font-size:18px\">Pseudo : ".$username."</li>
-					<li style=\"font-size:18px\">Inscription : ".$ret_reg_date."</li>
-					<li style=\"font-size:18px\">".$msg_text." ".$ret_user_infos['article_count']."</li>
-					<li style=\"font-size:18px\">Grade : ".$ranks[$ret_user_infos['rank']]."</li>
+			<pre>
+				<ul class=\"\">
+					<li><h4>Pseudo : ".$username."</h4></li>
+					<li><h4>Inscription : ".$ret_reg_date."</h4></li>
+					<li><h4>".$msg_text." ".$ret_user_infos['article_count']."</h4></li>
+					<li><h4>Grade : ".$ranks[$ret_user_infos['rank']]."</h4></li>
 				</ul>
 			</pre>";
-	
+		$user_rank = get_rank($username);
+		$my_rank = get_rank($_SESSION['name']);
+		if($my_rank > 1 && $my_rank > $user_rank){
+			echo 	"<form method=\"POST\">";
+			$ret_is_banned = is_banned($username);
+			if($ret_is_banned){
+				echo 	"<div class=\"col-sm-4\">
+						<blockquote>".$ret_is_banned['message']."
+							<footer>Bannit par <i>".$ret_is_banned['banned_by']."</i></footer>
+						</blockquote>";
+				if($my_rank == $ranks['max']){
+					echo 	"<button name=\"submit_deban\" class=\"btn btn-warning\">
+							Débannir
+						</button>";
+				}else{
+					if($my_rank > get_rank($ret_is_banned['banned_by'])){
+						echo 	"<button name=\"submit_deban\" class=\"btn btn-warning\">
+								Débannir
+							</button>";
+					}
+				}
+				echo	"</div>";
+			}else{
+				echo 	"<div class=\"col-md-4 col-sm-4 col-xs-6\">
+						<div class=\"form-group\">
+							<input type=\"text\" name=\"ban_message\" placeholder=\"Raison\" maxlength=\"50\" class=\"form-control\">
+						</div>
+						<button name=\"submit_ban\" class=\"btn btn-danger\">Bannir</button>
+					</div>";
+			}
+			echo 		"<div class=\"col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4 col-xs-6\">
+						<div class=\"form-group\">
+							<select name=\"rank\" class=\"form-control\">";
+			if($my_rank == $ranks['max']){
+				// Only one super admin
+				$my_rank = $my_rank - 1;	
+			}
+			for($i = 0; $i <= $my_rank; $i++){
+				if($i == $user_rank){
+					echo 			"<option value=\"".$i."\" selected>".$ranks[$i]."</option>";
+					
+				}else{
+					echo 			"<option value=\"".$i."\">".$ranks[$i]."</option>";
+				}
+			}
+			echo 				"</select>
+						</div>
+						<button name=\"set_rank\" class=\"btn btn-info\">Changer</button>
+					</div>
+				</form>";
+		}
 	}else{
 		echo 	"<div class=\"icon\">
 				<a href=\"".constant('BASE_URL')."delete\">
@@ -78,7 +128,7 @@ function display_user_infos($username, $flag){
 				<h3 class=\"text-center\">Informations</h3>
 			</div>
 			<h3 class=\"text-center\">".$username."</h3>
-			<pre style=\"border-radius:10px\">
+			<pre class=\"col-sm-8 col-sm-offset-2\">
 				<ul>
 					<li style=\"font-size:18px\">Pseudo : ".$username."</li>
 					<li style=\"font-size:18px\">Inscription : ".$ret_reg_date."</li>

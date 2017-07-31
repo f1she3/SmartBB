@@ -3,40 +3,19 @@
 
 function is_banned($username){
 	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'SELECT msg FROM ban WHERE BINARY name = ?');
+	$query = mysqli_prepare($mysqli, 'SELECT msg, banned_by FROM ban WHERE BINARY name = ?');
 	mysqli_stmt_bind_param($query, 's', $username);
 	mysqli_stmt_execute($query);
-	mysqli_stmt_bind_result($query, $reason);
+	mysqli_stmt_bind_result($query, $reason, $banned_by);
 	$result = mysqli_stmt_fetch($query);
 	if(empty($result)){
 		return false;
-	
 	}else{
 		$result = array();
 		$result['message'] = $reason;
-		return $result;	
-	}
-}
-function is_mute($username){
-	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'SELECT end FROM mute WHERE BINARY name = ?');
-	mysqli_stmt_bind_param($query, 's', $username);
-	mysqli_stmt_execute($query);
-	mysqli_stmt_bind_result($query, $end);
-	$result = mysqli_stmt_fetch($query);
-	if(empty($result)){
-		return false;	
-	
-	}else{
-		$now = date('Y-m-d H:i:s');
-		if($now > $end){
-			demute($username);
+		$result['banned_by'] = $banned_by;
 
-			return false;
-		
-		}else{
-			return true;
-		}
+		return $result;
 	}
 }
 function get_rank($username){
@@ -71,6 +50,18 @@ function set_rank($username, $rank){
 	}else{
 		return false;
 	}
+}
+function ban($username, $reason){
+	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'INSERT INTO ban (name, msg, banned_by) VALUES (?, ?, ?)');
+	mysqli_stmt_bind_param($query, 'sss', $username, $reason, $_SESSION['name']);
+	mysqli_stmt_execute($query);
+}
+function deban($username){
+	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'DELETE FROM ban WHERE BINARY name = ?');
+	mysqli_stmt_bind_param($query, 's', $username);
+	mysqli_stmt_execute($query);
 }
 function check_rank($username, $rank){
 	$mysqli = get_link();

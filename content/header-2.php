@@ -33,6 +33,24 @@
 								ACCUEIL	
 							</a>
 						</li>
+						<?php
+							
+						if(get_rank($_SESSION['name']) > 0){ 
+							if(get_rank($_SESSION['name']) > 2){
+								if($page == 'admin'){
+									$class = 'active';
+								}else{
+									$class = '';
+								}
+								echo "<li class=\"".$class."\">
+										<a href=\"".$_SESSION['host'].constant('BASE_URL')."admin\">
+											<span class=\"glyphicon glyphicon-wrench\"></span> ADMINISTRATION 
+										</a>
+									</li>";
+								
+							}						
+						}
+						?>
 						<li class="<?php echo ($page == 'profile') ? ' active' : '' ?>">
 							<a href="<?= $_SESSION['host'].constant('BASE_URL').'profile' ?>">
 								<span class="glyphicon glyphicon-user"></span>
