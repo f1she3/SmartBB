@@ -47,11 +47,11 @@ function display_server_infos(){
 	}else{
 		$text = 'Membre';
 	}
-	echo "<div class=\"col-md-8 col-md-offset-2\">
+	echo 	"<div class=\"col-md-8 col-md-offset-2\">
 			<pre>
 				<ul>
-					<li class=\"lead\">".$text." : ".$infos['member_count']."</li>
-					<li class=\"lead\">Articles postés : ".$infos['articles_count']."</li>
+					<li><h4>".$text." : ".$infos['member_count']."</h4></li>
+					<li><h4>Articles postés : ".$infos['articles_count']."</h4></li>
 				</ul>
 			</pre>
 		</div>";

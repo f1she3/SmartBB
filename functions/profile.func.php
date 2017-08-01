@@ -60,7 +60,7 @@ function display_user_infos($username, $flag){
 			</div>
 			<h3 class=\"text-center\">".$username."</h3>
 			<pre>
-				<ul class=\"\">
+				<ul>
 					<li><h4>Pseudo : ".$username."</h4></li>
 					<li><h4>Inscription : ".$ret_reg_date."</h4></li>
 					<li><h4>".$msg_text." ".$ret_user_infos['article_count']."</h4></li>
