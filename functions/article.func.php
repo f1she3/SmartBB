@@ -12,7 +12,12 @@ function user_infos($user){
 	while(mysqli_stmt_fetch($query)){
 		$infos['article_count']++;
 	}
-	$result = $infos['rank']."\n".'articles postés : '.$infos['article_count']."\n";
+	if($infos['article_count'] > 0){
+		$articles_txt = 'articles postés';
+	}else{
+		$articles_txt = 'article posté';
+	}
+	$result = $infos['rank']."\n".$articles_txt.' : '.$infos['article_count']."\n";
 
 	return $result;
 }
