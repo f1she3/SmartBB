@@ -76,3 +76,12 @@ function check_rank($username, $rank){
 		return true;
 	}
 }
+function like($article_id, $user, $status){
+	// status : 
+	// 0 : like
+	// 1 : dislike
+	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'INSERT INTO likes (article_id, name, status) VALUES (?, ?, ?)');
+	mysqli_stmt_bind_param($query, 'isi', $article_id, $user, $status);
+	mysqli_stmt_execute($query);
+}

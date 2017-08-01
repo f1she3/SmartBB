@@ -1,3 +1,3 @@
 <?php 
 
-	display_home_page(); 
+display_home_page(); 
