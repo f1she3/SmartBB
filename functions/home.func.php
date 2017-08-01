@@ -35,15 +35,23 @@ function display_articles($category){
 	}
 }
 function display_home_page(){
-	$mysqli = get_link();
 	echo 	"<div class=\"page-header\">
 			<h2 class=\"text-center\">Accueil</h2>
 		</div>";
-	$query = mysqli_query($mysqli, 'SELECT name, item_count FROM categories');
+	$mysqli = get_link();
+	$query = mysqli_query($mysqli, 'SELECT * FROM categories');
 	while($result = mysqli_fetch_assoc($query)){
+		$link = get_link();
+		$req = mysqli_prepare($link, 'SELECT id FROM articles WHERE category = ?');
+		mysqli_stmt_bind_param($req, 's', $result['name']);
+		mysqli_stmt_execute($req);
+		$i = 0;
+		while(mysqli_stmt_fetch($req)){
+			$i++;
+		}
 		echo 	"<div class=\"col-sm-12\">
 				<table class=\"table table-bordered\">
-					<h3>".$result['name']." <a href=\"".constant('BASE_URL')."category&cat=".$result['name']."\">(".$result['item_count'].")</a></h3><hr>
+					<h3>".$result['name']." <a href=\"".constant('BASE_URL')."category&cat=".$result['name']."\">(".$i.")</a></h3><hr>
 						<tbody>";
 		display_articles($result['name']);
 	}

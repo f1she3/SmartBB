@@ -1,13 +1,11 @@
 - Gérer les droits pour les icones de smiley / Gérer un footer
 - Créer formulaire de création d'article
-- Ajouter les réponses à l'affichage d'article
-- Ajouter page règlement
-- Cloner système admin / modération
 - Cloner système amis
 - Créer système réputation
-- Ajouter sous catégories
+- Ajouter gestion / création catégories
 - Ajouter système de recherche
 - Mettre en avant page welcome
+- Ajouter page règlement
 - Ajouter système oublie mdp
 - Ajouter système like
 
@@ -15,9 +13,10 @@
 [EN COURS] - Utilité page admin
 [EN COURS] - Edition / suppression / création article
 
-
-
-[FAIT]- Cloner système de profil utilisateur
-[FAIT]- Ajouter page suppression compte
-[FAIT]- Ecran de confirmation inscription
-[FAIT]- Conserver identifiants register si valides mais erreur
+[FAIT] - Cloner système de profil utilisateur
+[FAIT] - Ajouter page suppression compte
+[FAIT] - Ecran de confirmation inscription
+[FAIT] - Conserver identifiants register si valides mais erreur
+[FAIT] - Disfonctionnement pagination : tous les articles pas affichés
+[FAIT] - Ajouter les réponses à l'affichage d'article
+[FAIT] - Cloner système admin / modération
