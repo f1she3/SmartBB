@@ -1,7 +1,6 @@
 <?php
 
 function user_infos($user){
-	$user = 'test';
 	$rank = get_rank($user);
 	$ranks = get_rank_list();
 	$infos['rank'] = $ranks[$rank];
