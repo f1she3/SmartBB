@@ -127,11 +127,12 @@ function display_article($input_id, $page_id){
 		$fdate = date_create($infos['date']);
 		$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
 		$user_infos = user_infos($infos['author']);
+		$infos['content'] = bb_decode($infos['content']);
 		echo 	"<div class=\"page-header\">
 				<h2 class=\"text-center\">".$infos['title']."</h2>
 			</div>";
 		echo 	"<ul class=\"breadcrumb\">
-				<li><a href=\"".constant('BASE_URL')."category&cat".$infos['category']."\">".$infos['category']."</a></li>
+				<li><a href=\"".constant('BASE_URL')."category&cat=".$infos['category']."\">".$infos['category']."</a></li>
 				<li>".$infos['title']."</li>
 			</ul>";
 		echo 	"<h4 class=\"text-left\">
