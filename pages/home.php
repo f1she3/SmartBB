@@ -7,5 +7,12 @@ if(isset($_POST['create_category'])){
 			create_category($category_name);
 		}
 	}
+}else{
+	if(isset($_POST['delete_category']) && !empty($_POST['delete_category']) && is_string($_POST['delete_category'])){
+		$delete_category = $_POST['delete_category'] = secure($_POST['delete_category']);
+		if(is_category($delete_category)){
+			delete_category($delete_category);
+		}
+	}
 }
 display_home_page(); 

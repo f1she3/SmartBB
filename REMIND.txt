@@ -9,6 +9,7 @@
 - Ajouter système oublie mdp
 - Ajouter système like
 
+[EN COURS] - Confirmation suppression catégorie
 [EN COURS] - Partie effective système de réponse
 [EN COURS] - Utilité page admin
 [EN COURS] - Edition / suppression / création article

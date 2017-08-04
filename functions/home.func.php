@@ -23,15 +23,15 @@ function display_articles($category){
 			$text = $x.' réponse';
 		}
 		echo			"<tr>
-						<td><a href=\"".constant('BASE_URL')."profile&user=".$author."\">".$author."</a></td>
-						<td><a href=\"".constant('BASE_URL')."article&id=".$id."\">".$title."</a></td>
+						<td><span class=\"glyphicon glyphicon-user\"></span><a href=\"".constant('BASE_URL')."profile&user=".$author."\"> ".$author."</a></td>
+						<td><span class=\"glyphicon glyphicon-envelope\"></span><a href=\"".constant('BASE_URL')."article&id=".$id."\"> ".$title."</a></td>
 						<td>".$text."</td>
 						<td>".$date."</td>
 					</tr>";
 		$i++;
 	}
 	if($i == 0){
-		echo "<p class=\"text-center\">Aucun article dans cette catégorie, soyez le premier à en poster un !</p>";
+		echo "Aucun article dans cette catégorie, soyez le premier à en poster un !";
 	}
 }
 function display_home_page(){
@@ -62,20 +62,24 @@ function display_home_page(){
 		while(mysqli_stmt_fetch($req)){
 			$i++;
 		}
-		echo 	"<div class=\"col-sm-12\">
-				<table class=\"table table-bordered\">
-					<h3>".$result['name']." <a href=\"".constant('BASE_URL')."category&cat=".$result['name']."\">(".$i.")</a>
-					</h3><hr>
-						<tbody>";
+		echo 	"<form method=\"POST\">
+				<h3>".$result['name']." 
+					<a href=\"".constant('BASE_URL')."category&cat=".$result['name']."\">(".$i.")</a>
+				</h3>
+				<button name=\"delete_category\" class=\"btn btn-danger\" value=\"".$result['name']."\">
+					<span class=\"glyphicon glyphicon-trash\"></span>
+				</button>
+			</form><hr>
+			<table class=\"table table-bordered\">
+				<tbody>";
 		display_articles($result['name']);
+	echo			"</tbody>
+			</table>";
 		$x++;
 	}
 	if($x == 0){
 		echo "<p class=\"text-center\">Aucune catégorie pour le moment</p>";
 	}
-	echo		"</tbody>
-		</table>
-	</div>";
 }
 function create_category($category_name){
 	$mysqli = get_link();
