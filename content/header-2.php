@@ -29,7 +29,7 @@
 					<ul class="nav navbar-nav navbar-right"> 
 						<li class="<?php echo ($page == 'home') ? 'active' : '' ?>">
 							<a href="<?= $_SESSION['host'].constant('BASE_URL').'home' ?>">
-								<span class="glyphicon glyphicon-home"></span>
+								<span class="glyphicon glyphicon-th-list"></span>
 								ACCUEIL	
 							</a>
 						</li>
