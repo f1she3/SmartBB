@@ -62,7 +62,7 @@ function display_home_page(){
 		while(mysqli_stmt_fetch($req)){
 			$i++;
 		}
-		if(check_rank($_SESSION['name']), $ranks['max']){
+		if(check_rank($_SESSION['name'], $ranks['max'])){
 			echo 	"<form method=\"POST\">
 					<h3>".$result['name']." 
 						<a href=\"".constant('BASE_URL')."category&cat=".$result['name']."\">(".$i.")</a>

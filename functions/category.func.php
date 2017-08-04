@@ -1,21 +1,5 @@
 <?php
 
-function is_category($input){
-	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'SELECT id FROM categories WHERE BINARY name = ?');
-	mysqli_stmt_bind_param($query, 's', $input);
-	mysqli_stmt_execute($query);
-	mysqli_stmt_bind_result($query, $id);
-	$i = 0;
-	while(mysqli_stmt_fetch($query)){
-		$i++;	
-	}
-	if($i == 0){
-		return false;
-	}else{
-		return true;
-	}
-}
 function display_category($category, $page_id){
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'SELECT COUNT(*) FROM articles WHERE BINARY category = ?');
@@ -58,8 +42,8 @@ function display_category($category, $page_id){
 			$text = $x.' réponse';
 		}
 		echo			"<tr>
-						<td><a href=\"".constant('BASE_URL')."profile&user=".$author."\">".$author."</a></td>
-						<td><a href=\"".constant('BASE_URL')."article&id=".$id."\">".$title."</a></td>
+						<td><span class=\"glyphicon glyphicon-user\"></span><a href=\"".constant('BASE_URL')."profile&user=".$author."\"> ".$author."</a></td>
+						<td><span class=\"glyphicon glyphicon-envelope\"></span><a href=\"".constant('BASE_URL')."article&id=".$id."\"> ".$title."</a></td>
 						<td>".$text."</td>
 						<td>".$date."</td>
 					</tr>";
