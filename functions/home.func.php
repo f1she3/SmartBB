@@ -31,15 +31,28 @@ function display_articles($category){
 		$i++;
 	}
 	if($i == 0){
-		echo 'Aucun article dans cette catégorie, soyez le premier à en poster un !';
+		echo "<p class=\"text-center\">Aucun article dans cette catégorie, soyez le premier à en poster un !</p>";
 	}
 }
 function display_home_page(){
 	echo 	"<div class=\"page-header\">
 			<h2 class=\"text-center\">Accueil</h2>
 		</div>";
+	$ranks = get_rank_list();
+	if(check_rank($_SESSION['name'], $ranks['max'])){
+	echo 	"<form method=\"POST\" class=\"form-inline\">
+			<div class=\"form-group\">
+				<input type=\"text\" name=\"category_name\" class=\"form-control input-sm\" placeholder=\"Nouvelle catégorie\" autofocus required>
+			</div>
+			<button name=\"create_category\" class=\"btn btn-success btn-sm\">
+				<span class=\"glyphicon glyphicon-plus\"></span>
+				<span class=\"glyphicon glyphicon-folder-open\"></span>
+			</button>
+		</form>";
+	}
 	$mysqli = get_link();
 	$query = mysqli_query($mysqli, 'SELECT * FROM categories');
+	$x = 0;
 	while($result = mysqli_fetch_assoc($query)){
 		$link = get_link();
 		$req = mysqli_prepare($link, 'SELECT id FROM articles WHERE category = ?');
@@ -51,11 +64,22 @@ function display_home_page(){
 		}
 		echo 	"<div class=\"col-sm-12\">
 				<table class=\"table table-bordered\">
-					<h3>".$result['name']." <a href=\"".constant('BASE_URL')."category&cat=".$result['name']."\">(".$i.")</a></h3><hr>
+					<h3>".$result['name']." <a href=\"".constant('BASE_URL')."category&cat=".$result['name']."\">(".$i.")</a>
+					</h3><hr>
 						<tbody>";
 		display_articles($result['name']);
+		$x++;
+	}
+	if($x == 0){
+		echo "<p class=\"text-center\">Aucune catégorie pour le moment</p>";
 	}
 	echo		"</tbody>
 		</table>
 	</div>";
+}
+function create_category($category_name){
+	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'INSERT INTO categories (name) VALUES (?)');
+	mysqli_stmt_bind_param($query, 's', $category_name);
+	mysqli_stmt_execute($query);
 }

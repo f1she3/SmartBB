@@ -13,6 +13,7 @@
 [EN COURS] - Utilité page admin
 [EN COURS] - Edition / suppression / création article
 
+[FAIT] - Ajouter système création catégories
 [FAIT] - Cloner système de profil utilisateur
 [FAIT] - Ajouter page suppression compte
 [FAIT] - Ecran de confirmation inscription

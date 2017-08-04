@@ -18,6 +18,21 @@ function is_banned($username){
 		return $result;
 	}
 }
+function is_category($input_name){
+	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'SELECT id FROM categories WHERE BINARY name = ?');
+	mysqli_stmt_bind_param($query, 's', $input_name);
+	mysqli_stmt_execute($query);
+	$i = 0;
+	while(mysqli_stmt_fetch($query)){
+		$i++;
+	}
+	if($i > 0){
+		return true;
+	}else{
+		return false;
+	}
+}
 function get_rank($username){
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'SELECT rank FROM users WHERE BINARY name = ?');
