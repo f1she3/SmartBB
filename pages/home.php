@@ -7,6 +7,7 @@ if(isset($_POST['create_category'])){
 			$category_name = $_POST['category_name']	= secure($_POST['category_name']);
 			if(!is_category($category_name)){
 				create_category($category_name);
+				display_home_page(); 
 			}
 		}
 	}
@@ -15,8 +16,25 @@ if(isset($_POST['create_category'])){
 	$ranks = get_rank_list();
 	if(check_rank($_SESSION['name'], $ranks['max'])){
 		if(is_category($delete_category)){
-			delete_category($delete_category);
+			display_confirm_cat_deletion_form($delete_category);
 		}
 	}
+}else if(isset($_POST['confirm_cat_del']) && !empty($_POST['confirm_cat_del']) && is_string($_POST['confirm_cat_del'])){
+	$category = $_POST['confirm_cat_del'] = secure($_POST['confirm_cat_del']);
+	if(is_category($category)){
+		if(isset($_POST['action']) && !empty($_POST['action']) && is_string($_POST['action'])){
+			$action = $_POST['action'] = secure($_POST['action']);
+			if($action == 1){
+				delete_category($category, false);
+				display_home_page(); 
+			}else{
+				if(is_category($action)){
+					delete_category($category, $action);
+					display_home_page(); 
+				}
+			}
+		}
+	}
+}else{
+	display_home_page();
 }
-display_home_page(); 

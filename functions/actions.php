@@ -100,9 +100,19 @@ function like($article_id, $user, $status){
 	mysqli_stmt_bind_param($query, 'isi', $article_id, $user, $status);
 	mysqli_stmt_execute($query);
 }
-function delete_category($category){
+function delete_category($category_name, $new_category){
+	$mysqli = get_link();
+	if(!$new_category){
+		$query = mysqli_prepare($mysqli, 'DELETE FROM articles WHERE BINARY category = ?');
+		mysqli_stmt_bind_param($query, 's', $category_name);
+		mysqli_stmt_execute($query);
+	}else{
+		$query = mysqli_prepare($mysqli, 'UPDATE articles SET category = ? WHERE BINARY category = ?');
+		mysqli_stmt_bind_param($query, 'ss', $new_category, $category_name);
+		mysqli_stmt_execute($query);
+	}
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'DELETE FROM categories WHERE BINARY name = ?');
-	mysqli_stmt_bind_param($query, 's', $category);
+	mysqli_stmt_bind_param($query, 's', $category_name);
 	mysqli_stmt_execute($query);
 }
