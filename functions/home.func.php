@@ -62,20 +62,20 @@ function display_home_page(){
 		while(mysqli_stmt_fetch($req)){
 			$i++;
 		}
+		echo 	"<form method=\"POST\">
+				<h3>".$result['name']." 
+					<a href=\"".constant('BASE_URL')."category&cat=".$result['name']."\">(".$i.")</a>
+				</h3>";
 		if(check_rank($_SESSION['name'], $ranks['max'])){
-			echo 	"<form method=\"POST\">
-					<h3>".$result['name']." 
-						<a href=\"".constant('BASE_URL')."category&cat=".$result['name']."\">(".$i.")</a>
-					</h3>
-					<button name=\"delete_category\" class=\"btn btn-danger\" value=\"".$result['name']."\">
-						<span class=\"glyphicon glyphicon-trash\"></span>
-					</button>
-				</form>";
+			echo 	"<button name=\"delete_category\" class=\"btn btn-danger\" value=\"".$result['name']."\">
+					<span class=\"glyphicon glyphicon-trash\"></span>
+				</button>";
 		}
-		echo "<hr><table class=\"table table-hover table-bordered\">
+		echo "</form><hr>
+			<table class=\"table table-hover table-bordered\">
 				<tbody>";
 		display_articles($result['name']);
-	echo			"</tbody>
+		echo		"</tbody>
 			</table>";
 		$x++;
 	}

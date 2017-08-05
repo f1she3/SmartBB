@@ -141,37 +141,29 @@ function display_article($input_id, $page_id){
 					<abbr title=\"".$user_infos."\">".$infos['author']."</abbr>
 				</a>
 				".$fdate."
-			</h4>";
-		echo "<form method=\"POST\">
-					<button name=\"send_mp\" class=\"btn btn-info\" value=\"1\">
-						<span class=\"glyphicon glyphicon-send\"> mp</span> 
-					</button>";
-		echo 		"</form>
+			</h4>
 			<pre>
 				<p>".$infos['content']."</p>
-			</pre>";
-		if(get_rank($_SESSION['name']) > 0){
-			echo 	"<form method=\"POST\">
-						<button name=\"close_article\" class=\"btn btn-primary\">
-							<span class=\"glyphicon glyphicon-share\"> répondre</span>
-						</button>
-						<button name=\"like\" class=\"btn btn-success\">
-							<span class=\"glyphicon glyphicon-thumbs-up\"></span>
-						</button>
-						<button name=\"dislike\" class=\"btn btn-warning\">
-							<span class=\"glyphicon glyphicon-thumbs-down\"></span>
-						</button>";
-
-			$user_rank = get_rank($infos['author']);
-			$my_rank = get_rank($_SESSION['name']);
-			$ranks = get_rank_list();
-			if($my_rank == $ranks['max'] || $my_rank > $user_rank){
-				echo 		"<button name=\"close_article\" class=\"btn btn-danger pull-right\">
-							<span class=\"glyphicon glyphicon-ban-circle\"> fermer</span> 
-						</button>";
-			}
-			echo "	</form><hr>";
+			</pre>
+			<form method=\"POST\">";
+		$user_rank = get_rank($infos['author']);
+		$my_rank = get_rank($_SESSION['name']);
+		$ranks = get_rank_list();
+		if($my_rank == $ranks['max'] || $my_rank > $user_rank){
+			echo 	"<button name=\"close_article\" class=\"btn btn-danger pull-right\">
+					<span class=\"glyphicon glyphicon-ban-circle\"> fermer</span> 
+				</button>";
 		}
+		echo 		"<button name=\"send_mp\" class=\"btn btn-info\" value=\"1\">
+					<span class=\"glyphicon glyphicon-send\"> mp</span> 
+				</button>
+				<button name=\"like\" class=\"btn btn-success\">
+					<span class=\"glyphicon glyphicon-thumbs-up\"></span>
+				</button>
+				<button name=\"dislike\" class=\"btn btn-warning\">
+					<span class=\"glyphicon glyphicon-thumbs-down\"></span>
+				</button>
+			</form><hr>";
 		display_comments($input_id, $page_id);
 		echo 	"<form method=\"POST\">
 				<div class=\"form-group col-md-8 col-md-offset-2\">
