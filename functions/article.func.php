@@ -12,7 +12,7 @@ function user_infos($user){
 	while(mysqli_stmt_fetch($query)){
 		$infos['article_count']++;
 	}
-	if($infos['article_count'] > 0){
+	if($infos['article_count'] > 1){
 		$articles_txt = 'articles postés';
 	}else{
 		$articles_txt = 'article posté';
@@ -43,14 +43,23 @@ function comment_infos($comment_id){
 	mysqli_stmt_bind_param($query, 'i', $comment_id);
 	mysqli_stmt_execute($query);
 	mysqli_stmt_bind_result($query, $infos['id'], $infos['parent_id'], $infos['author'], $infos['content'], $infos['reply_to'], $infos['date']);
+	mysqli_stmt_fetch($query);
+
+	return $infos;
+}
+function is_comment($input_id){
+	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'SELECT id FROM comments WHERE id = ?');
+	mysqli_stmt_bind_param($query, 'i', $input_id);
+	mysqli_stmt_execute($query);
 	$i = 0;
 	while(mysqli_stmt_fetch($query)){
-		$i++;	
+		$i++;
 	}
-	if($i == 0){
-		return false;
+	if($i > 0){
+		return true;
 	}else{
-		return $infos;
+		return false;
 	}
 }
 function display_comments($article_id, $page_id){
@@ -80,31 +89,36 @@ function display_comments($article_id, $page_id){
 			</ul>";
 	}
 	while(mysqli_stmt_fetch($query)){
-		$parent_comment = comment_infos($id);
 		$fdate = date_create($date);
 		$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
 		$user_infos = user_infos($author);
+		$content = bb_decode($content);
+		echo	"<h4 class=\"text-left\">
+				<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
+				<a href=\"".constant('BASE_URL')."profile&user=".$author."\">
+					<abbr title=\"".$user_infos."\">".$author."</abbr>
+				</a>
+				".$fdate."
+			</h4>";
 		if($reply_to == 0){
-			echo 	"<pre>".bb_decode($parent_comment['content'])."</pre>
-				<h4 class=\"text-left\">
-					<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
-					<a href=\"".constant('BASE_URL')."profile&user=".$author."\"><abbr title=\"".$user_infos."\">".$author."</abbr></a>
-					".$fdate."
-				</h4>
-				<hr>";
-			
-		}else{
+			echo 	"<pre>".$content."</pre>";
+		}else if(is_comment($reply_to)){
+			$parent_comment = comment_infos($reply_to);
+			$parent_comment['content'] = bb_decode($parent_comment['content']);
 			echo 	"<blockquote>
 					".$parent_comment['content']."
 					<footer>".$parent_comment['author']."</footer>
 				</blockquote>
-				<p>".$content."</p>
-				<h4 class=\"text-left\">
-					<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
-					<a href=\"".constant('BASE_URL')."profile&user=".$author."\"><abbr title=\"".$user_infos."\">".$author."</abbr></a>
-					".$fdate."
-				</h4><hr>";
+				<pre>".$content."</pre>";
 		}
+		echo 	"<form method=\"POST\">
+				<button name=\"answer\" class=\"btn btn-primary\" value=\"".$id."\">
+					<span class=\"glyphicon glyphicon-share\"> répondre</span> 
+				</button>
+				<button name=\"send_mp\" class=\"btn btn-info\">
+					<span class=\"glyphicon glyphicon-send\"> mp</span> 
+				</button>
+			</form><hr>";
 	}
 	if($page_count > 1){
 		echo "<ul class=\"pagination\">";
@@ -117,6 +131,16 @@ function display_comments($article_id, $page_id){
 		}
 		echo 	"</ul>";
 	}
+	echo 	"<form method=\"POST\">
+			<div class=\"form-group col-md-8 col-md-offset-2\">
+				<textarea class=\"form-control\" style=\"resize:none\" name=\"comment\" maxlength=\"500\" required></textarea>
+			</div>
+			<div class=\"form-group col-md-4 col-md-offset-4\">
+				<button class=\"btn btn-primary col-sm-2 col-xs-2 col-xs-offset-5\" name=\"submit_comment\">
+					<span class=\"glyphicon glyphicon-send\"></span> 
+				</button>
+			</div>
+		</form>";
 }
 function display_article($input_id, $page_id){
 	$mysqli = get_link();
@@ -165,16 +189,6 @@ function display_article($input_id, $page_id){
 				</button>
 			</form><hr>";
 		display_comments($input_id, $page_id);
-		echo 	"<form method=\"POST\">
-				<div class=\"form-group col-md-8 col-md-offset-2\">
-					<textarea class=\"form-control\" style=\"resize:none\" name=\"comment\" maxlength=\"500\" required></textarea>
-				</div>
-				<div class=\"form-group col-md-4 col-md-offset-4\">
-					<button class=\"btn btn-primary col-sm-2 col-xs-2 col-xs-offset-5\" name=\"submit_comment\">
-						<span class=\"glyphicon glyphicon-send\"></span> 
-					</button>
-				</div>
-			</form>";
 	}
 }
 function post_comment($parent_id, $author, $content, $reply_to){
