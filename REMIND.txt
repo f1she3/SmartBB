@@ -11,10 +11,10 @@
 - Ajouter fonctionnalités page mon compte -> Cacher email
 							-> Autoriser autres membres mp
 
-[EN COURS] - Partie effective système de réponse
 [EN COURS] - Utilité page admin
-[EN COURS] - Edition / suppression / création article
+[EN COURS] - Edition / suppression / création articles / commentaires
 
+[FAIT] - Partie effective système de réponse
 [FAIT] - Confirmation suppression catégorie
 [FAIT] - Ajouter système création catégories
 [FAIT] - Cloner système de profil utilisateur

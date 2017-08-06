@@ -62,85 +62,133 @@ function is_comment($input_id){
 		return false;
 	}
 }
-function display_comments($article_id, $page_id){
+function display_comment($comment_id, $article_id, $page_id){
 	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'SELECT COUNT(*) FROM comments WHERE article_id = ?');
-	mysqli_stmt_bind_param($query, 'i', $article_id);
-	mysqli_stmt_execute($query);
-	mysqli_stmt_bind_result($query, $count);
-	mysqli_stmt_fetch($query);
-	$per_page = 8;
-	$page_count = ceil($count / $per_page);
-	$position = ($page_id - 1) * $per_page;
-	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'SELECT * FROM  comments WHERE article_id = ? LIMIT ?, ?');
-	mysqli_stmt_bind_param($query, 'iii', $article_id, $position, $per_page);
-	mysqli_stmt_execute($query);
-	mysqli_stmt_bind_result($query, $id, $parent_id, $author, $content, $reply_to, $date);
-	if($page_id > 1){
-		$infos = article_infos($article_id);
-		echo 	"<div class=\"page-header\">
-				<h2 class=\"text-center\">".$infos['title']."</h2>
-			</div>
-			<ul class=\"breadcrumb\">
-				<li><a href=\"".constant('BASE_URL')."category&cat".$infos['category']."\">".$infos['category']."</a></li>
-				<li><a href=\"".constant('BASE_URL')."article&id=".$article_id."\">".$infos['title']."</a></li>
-				<li>".$page_id."</li>
-			</ul>";
-	}
-	while(mysqli_stmt_fetch($query)){
-		$fdate = date_create($date);
-		$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
-		$user_infos = user_infos($author);
-		$content = bb_decode($content);
-		echo	"<h4 class=\"text-left\">
-				<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
-				<a href=\"".constant('BASE_URL')."profile&user=".$author."\">
-					<abbr title=\"".$user_infos."\">".$author."</abbr>
-				</a>
-				".$fdate."
-			</h4>";
-		if($reply_to == 0){
-			echo 	"<pre>".$content."</pre>";
-		}else if(is_comment($reply_to)){
-			$parent_comment = comment_infos($reply_to);
-			$parent_comment['content'] = bb_decode($parent_comment['content']);
-			echo 	"<blockquote>
-					".$parent_comment['content']."
-					<footer>".$parent_comment['author']."</footer>
-				</blockquote>
-				<pre>".$content."</pre>";
+	if($comment_id){
+		$query = mysqli_prepare($mysqli, 'SELECT * FROM comments WHERE id = ?');
+		mysqli_stmt_bind_param($query, 'i', $comment_id);
+		mysqli_stmt_execute($query);
+		mysqli_stmt_bind_result($query, $id, $article_id, $author, $content, $reply_to, $date);
+		while(mysqli_stmt_fetch($query)){
+			$fdate = date_create($date);
+			$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
+			$user_infos = user_infos($author);
+			$content = bb_decode($content);
+			echo	"<h4 class=\"text-left\">
+					<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
+					<a href=\"".constant('BASE_URL')."profile&user=".$author."\">
+						<abbr title=\"".$user_infos."\">".$author."</abbr>
+					</a>
+					".$fdate."
+				</h4>";
+			if($reply_to == 0){
+				echo 	"<pre>".$content."</pre>";
+			}else if(is_comment($reply_to)){
+				$parent_comment = comment_infos($reply_to);
+				$parent_comment['content'] = bb_decode($parent_comment['content']);
+				echo 	"<blockquote>
+						".$parent_comment['content']."
+						<footer>".$parent_comment['author']."</footer>
+					</blockquote>
+					<pre>".$content."</pre>";
+			}
+			echo 	"<form method=\"POST\">
+					<a href=\"#\" class=\"btn btn-info\">
+						<span class=\"glyphicon glyphicon-send\"> mp</span> 
+					</a>
+				</form><hr>
+				<form method=\"POST\">
+					<input type=\"hidden\" name=\"parent_comment\" value=\"".$comment_id."\">
+					<div class=\"form-group col-md-8 col-md-offset-2\">
+						<textarea class=\"form-control\" style=\"resize:none\" name=\"answer\" maxlength=\"500\" placeholder=\"répondre à ".$author."\" autofocus required></textarea>
+					</div>
+					<div class=\"form-group col-md-4 col-md-offset-4\">
+						<button class=\"btn btn-primary col-sm-2 col-xs-2 col-xs-offset-5\" name=\"submit_answer\">
+							<span class=\"glyphicon glyphicon-send\"></span> 
+						</button>
+					</div>
+				</form>";
+		}
+	}else{
+		$query = mysqli_prepare($mysqli, 'SELECT COUNT(*) FROM comments WHERE article_id = ?');
+		mysqli_stmt_bind_param($query, 'i', $article_id);
+		mysqli_stmt_execute($query);
+		mysqli_stmt_bind_result($query, $count);
+		mysqli_stmt_fetch($query);
+		$per_page = 8;
+		$page_count = ceil($count / $per_page);
+		$position = ($page_id - 1) * $per_page;
+		$mysqli = get_link();
+		$query = mysqli_prepare($mysqli, 'SELECT * FROM  comments WHERE article_id = ? LIMIT ?, ?');
+		mysqli_stmt_bind_param($query, 'iii', $article_id, $position, $per_page);
+		mysqli_stmt_execute($query);
+		mysqli_stmt_bind_result($query, $id, $parent_id, $author, $content, $reply_to, $date);
+		if($page_id > 1){
+			$infos = article_infos($article_id);
+			echo 	"<div class=\"page-header\">
+					<h2 class=\"text-center\">".$infos['title']."</h2>
+				</div>
+				<ul class=\"breadcrumb\">
+					<li><a href=\"".constant('BASE_URL')."category&cat".$infos['category']."\">".$infos['category']."</a></li>
+					<li><a href=\"".constant('BASE_URL')."article&id=".$article_id."\">".$infos['title']."</a></li>
+					<li>".$page_id."</li>
+				</ul>";
+		}
+		while(mysqli_stmt_fetch($query)){
+			$fdate = date_create($date);
+			$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
+			$user_infos = user_infos($author);
+			$content = bb_decode($content);
+			echo	"<h4 class=\"text-left\">
+					<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
+					<a href=\"".constant('BASE_URL')."profile&user=".$author."\">
+						<abbr title=\"".$user_infos."\">".$author."</abbr>
+					</a>
+					".$fdate."
+				</h4>";
+			if($reply_to == 0){
+				echo 	"<pre>".$content."</pre>";
+			}else if(is_comment($reply_to)){
+				$parent_comment = comment_infos($reply_to);
+				$parent_comment['content'] = bb_decode($parent_comment['content']);
+				echo 	"<blockquote>
+						".$parent_comment['content']."
+						<footer>".$parent_comment['author']."</footer>
+					</blockquote>
+					<pre>".$content."</pre>";
+			}
+			echo 	"<form method=\"POST\">
+					<button name=\"reply\" class=\"btn btn-primary\" value=\"".$id."\">
+						<span class=\"glyphicon glyphicon-share\"></span> 
+						répondre
+					</button>
+					<a href=\"#\" class=\"btn btn-info\">
+						<span class=\"glyphicon glyphicon-send\"> mp</span> 
+					</a>
+				</form><hr>";
+		}
+		if($page_count > 1){
+			echo "<ul class=\"pagination\">";
+			for($i = 1; $i <= $page_count; $i++){
+				if($i == $page_id){
+					echo "<li class=\"active\"><a href=\"".constant('BASE_URL')."article&id=".$article_id."&pid=".$i."\">".$i."</a></li>";
+				}else{
+					echo "<li><a href=\"".constant('BASE_URL')."article&id=".$article_id."&pid=".$i."\">".$i."</a></li>";
+				}
+			}
+			echo 	"</ul>";
 		}
 		echo 	"<form method=\"POST\">
-				<button name=\"answer\" class=\"btn btn-primary\" value=\"".$id."\">
-					<span class=\"glyphicon glyphicon-share\"> répondre</span> 
-				</button>
-				<button name=\"send_mp\" class=\"btn btn-info\">
-					<span class=\"glyphicon glyphicon-send\"> mp</span> 
-				</button>
-			</form><hr>";
+				<div class=\"form-group col-md-8 col-md-offset-2\">
+					<textarea class=\"form-control\" style=\"resize:none\" name=\"comment\" maxlength=\"500\" required></textarea>
+				</div>
+				<div class=\"form-group col-md-4 col-md-offset-4\">
+					<button class=\"btn btn-primary col-sm-2 col-xs-2 col-xs-offset-5\" name=\"submit_comment\">
+						<span class=\"glyphicon glyphicon-send\"></span> 
+					</button>
+				</div>
+			</form>";
 	}
-	if($page_count > 1){
-		echo "<ul class=\"pagination\">";
-		for($i = 1; $i <= $page_count; $i++){
-			if($i == $page_id){
-				echo "<li class=\"active\"><a href=\"".constant('BASE_URL')."article&id=".$article_id."&pid=".$i."\">".$i."</a></li>";
-			}else{
-				echo "<li><a href=\"".constant('BASE_URL')."article&id=".$article_id."&pid=".$i."\">".$i."</a></li>";
-			}
-		}
-		echo 	"</ul>";
-	}
-	echo 	"<form method=\"POST\">
-			<div class=\"form-group col-md-8 col-md-offset-2\">
-				<textarea class=\"form-control\" style=\"resize:none\" name=\"comment\" maxlength=\"500\" required></textarea>
-			</div>
-			<div class=\"form-group col-md-4 col-md-offset-4\">
-				<button class=\"btn btn-primary col-sm-2 col-xs-2 col-xs-offset-5\" name=\"submit_comment\">
-					<span class=\"glyphicon glyphicon-send\"></span> 
-				</button>
-			</div>
-		</form>";
 }
 function display_article($input_id, $page_id){
 	$mysqli = get_link();
@@ -154,12 +202,12 @@ function display_article($input_id, $page_id){
 		$infos['content'] = bb_decode($infos['content']);
 		echo 	"<div class=\"page-header\">
 				<h2 class=\"text-center\">".$infos['title']."</h2>
-			</div>";
-		echo 	"<ul class=\"breadcrumb\">
+			</div>
+			<ul class=\"breadcrumb\">
 				<li><a href=\"".constant('BASE_URL')."category&cat=".$infos['category']."\">".$infos['category']."</a></li>
-				<li>".$infos['title']."</li>
-			</ul>";
-		echo 	"<h4 class=\"text-left\">
+				<li><a href=\"".constant('BASE_URL')."article&id=".$infos['id']."\">".$infos['title']."</a></li>
+			</ul>
+			<h4 class=\"text-left\">
 				<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
 				<a href=\"".constant('BASE_URL')."profile&user=".$infos['author']."\">
 					<abbr title=\"".$user_infos."\">".$infos['author']."</abbr>
@@ -178,9 +226,9 @@ function display_article($input_id, $page_id){
 					<span class=\"glyphicon glyphicon-ban-circle\"> fermer</span> 
 				</button>";
 		}
-		echo 		"<button name=\"send_mp\" class=\"btn btn-info\" value=\"1\">
+		echo 		"<a href=\"#\" class=\"btn btn-info\">
 					<span class=\"glyphicon glyphicon-send\"> mp</span> 
-				</button>
+				</a>
 				<button name=\"like\" class=\"btn btn-success\">
 					<span class=\"glyphicon glyphicon-thumbs-up\"></span>
 				</button>
@@ -188,7 +236,9 @@ function display_article($input_id, $page_id){
 					<span class=\"glyphicon glyphicon-thumbs-down\"></span>
 				</button>
 			</form><hr>";
-		display_comments($input_id, $page_id);
+		if($page_id){
+			display_comment(false, $input_id, $page_id);
+		}
 	}
 }
 function post_comment($parent_id, $author, $content, $reply_to){
@@ -196,4 +246,8 @@ function post_comment($parent_id, $author, $content, $reply_to){
 	$query = mysqli_prepare($mysqli, 'INSERT INTO comments (article_id, author, content, reply_to, date) VALUES (?, ?, ?, ?, NOW())');
 	mysqli_stmt_bind_param($query, 'isss', $parent_id, $author, $content, $reply_to);
 	mysqli_stmt_execute($query);
+}
+function display_reply_form($article_id, $comment_id){
+	display_article($article_id, false);
+	display_comment($comment_id, false, false);
 }
