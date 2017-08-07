@@ -10,10 +10,12 @@
 - Ajouter système like
 - Ajouter fonctionnalités page mon compte -> Cacher email
 							-> Autoriser autres membres mp
+[A VOIR] - Système présentation membres
 
 [EN COURS] - Utilité page admin
 [EN COURS] - Edition / suppression / création articles / commentaires
 
+[FAIT] - Affichage des articles épinglés
 [FAIT] - Partie effective système de réponse
 [FAIT] - Confirmation suppression catégorie
 [FAIT] - Ajouter système création catégories

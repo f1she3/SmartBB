@@ -2,10 +2,10 @@
 
 function display_articles($category){
 	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'SELECT id, author, title, content, date FROM articles WHERE category = ? ORDER BY id DESC LIMIT 12');
+	$query = mysqli_prepare($mysqli, 'SELECT * FROM articles WHERE category = ? ORDER BY is_pinned DESC, id DESC LIMIT 12');
 	mysqli_stmt_bind_param($query, 's', $category);
 	mysqli_stmt_execute($query);
-	mysqli_stmt_bind_result($query, $id, $author, $title, $content, $date);
+	mysqli_stmt_bind_result($query, $id, $category, $author, $title, $content, $date, $is_pinned);
 	$i = 0;
 	while(mysqli_stmt_fetch($query)){
 		$link = get_link();
@@ -22,7 +22,12 @@ function display_articles($category){
 		}else{
 			$text = $x.' réponse';
 		}
-		echo			"<tr>
+		if($is_pinned == 1){
+			$tr_class = 'info';
+		}else{
+			$tr_class = '';
+		}
+		echo			"<tr class=\"".$tr_class."\">
 						<td class=\"col-sm-2\"><span class=\"glyphicon glyphicon-user\"></span><a href=\"".constant('BASE_URL')."profile&user=".$author."\"> ".$author."</a></td>
 						<td class=\"col-sm-5\"><span class=\"glyphicon glyphicon-envelope\"></span><a href=\"".constant('BASE_URL')."article&id=".$id."\"> ".$title."</a></td>
 						<td class=\"col-sm-2\">".$text."</td>
