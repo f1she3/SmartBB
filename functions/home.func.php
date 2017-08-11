@@ -31,13 +31,18 @@ function display_home_page(){
 		echo 	"<form method=\"POST\">
 				<h3>
 					".$result['name']."
-					<a href=\"".constant('BASE_URL')."category&cat=".$result['name']."\">(".$i.")</a>
-				</h3>";
+					<a href=\"".get_base_url()."category&cat=".$result['name']."\">(".$i.")</a>
+				</h3>
+				<button name=\"write_article\" class=\"btn btn-success\" value=\"".$result['name']."\">
+					<span class=\"glyphicon glyphicon-pencil\"></span>
+					<span class=\"glyphicon glyphicon-plus\"></span>
+				</button> ";
 		if(check_rank($_SESSION['name'], $ranks['max'])){
 			echo 	"<button name=\"delete_category\" class=\"btn btn-danger\" value=\"".$result['name']."\">
 					<span class=\"glyphicon glyphicon-trash\"></span>
-				</button><hr>";
+				</button>";
 		}
+		echo "<hr>";
 		display_articles($result['name'], false);
 		$x++;
 	}
@@ -60,14 +65,9 @@ function display_confirm_cat_deletion_form($category_name){
 					<label>Articles de cette catégorie : </label>
 					<select name=\"action\" class=\"form-control\">
 						<option value=\"1\" selected>Supprimer</option>";
-	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'SELECT name FROM categories WHERE BINARY name != ?');
-	mysqli_stmt_bind_param($query, 's', $category_name);
-	mysqli_stmt_execute($query);
-	mysqli_stmt_bind_result($query, $name);
-	while(mysqli_stmt_fetch($query)){
+	$categories = get_category_list();
+	foreach($categories as $name){
 		echo 				"<option value=\"".$name."\">Déplacer vers \"".$name."\"</option>";
-		
 	}
 	echo				"</select>
 				</div>

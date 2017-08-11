@@ -1,6 +1,14 @@
 <?php 
 
-if(isset($_POST['create_category'])){
+if(isset($_POST['write_article']) && !empty($_POST['write_article']) && is_string($_POST['write_article'])){
+	$parent_category = $_POST['write_article'] = secure($_POST['write_article']);
+	if(is_category($parent_category)){
+		display_article_writing_form($parent_category);
+	}else{
+		set_error('Erreur', 'zoom-out', 'Cette catégorie n\'éxiste pas', 'home');
+	}
+	
+}else if(isset($_POST['create_category'])){
 	if(isset($_POST['category_name']) && !empty($_POST['category_name']) && is_string($_POST['category_name'])){
 		$ranks = get_rank_list();
 		if(check_rank($_SESSION['name'], $ranks['max'])){
