@@ -33,7 +33,6 @@ if(isset($_GET['page']) && !empty($_GET['page']) && is_string($_GET['page'])){
 					}
 				}
 			}
-			
 		}else{
 			if($page != 'login' && $page != 'register' && $page != 'welcome' &&
 				$page != 'error404' && $page != 'error403'){
@@ -46,7 +45,6 @@ if(isset($_GET['page']) && !empty($_GET['page']) && is_string($_GET['page'])){
 		$page = 'error404';
 		$file_type = 'php';
 	}
-	
 }else if(is_logged()){
 	redirect(1);
 	
@@ -56,7 +54,7 @@ if(isset($_GET['page']) && !empty($_GET['page']) && is_string($_GET['page'])){
 // Enf of access right check
 // Inclusion of several files, the order is important
 if(is_logged()){
-	$title = 'Project @'.$_SESSION['name']; 
+	$title = get_project_name().' @'.$_SESSION['name']; 
 	require 'content/header-2.php';
 }else{
 	$title = 'Project | '.$page;
@@ -67,12 +65,4 @@ if(in_array($page.'.func.php',$pages)){
 	require 'functions/'.$page.'.func.php';
 }
 require 'pages/'.$page.'.'.$file_type;
-if($page == 'home'){
-	require 'content/footer-1.html';
-}else{
-	require 'content/footer-1.html';
-}/*
-else{
-	require 'content/footer-2.html';
-	
-}*/
+require 'content/footer-1.html';

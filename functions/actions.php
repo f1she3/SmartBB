@@ -33,6 +33,26 @@ function is_category($input_name){
 		return false;
 	}
 }
+function is_logged(){
+	if(isset($_SESSION['name']) && !empty($_SESSION['name'])){
+		return true;
+
+	}else{
+		return false;
+	}
+}
+function is_user($input){
+	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'SELECT name FROM users WHERE BINARY name = ?');
+	mysqli_stmt_bind_param($query, 's', $input);
+	mysqli_stmt_execute($query); $result = mysqli_stmt_fetch($query);
+	if($result == 0){
+		return false;
+	
+	}else{
+		return true;
+	}
+}
 function get_rank($username){
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'SELECT rank FROM users WHERE BINARY name = ?');
@@ -115,4 +135,16 @@ function delete_category($category_name, $new_category){
 	$query = mysqli_prepare($mysqli, 'DELETE FROM categories WHERE BINARY name = ?');
 	mysqli_stmt_bind_param($query, 's', $category_name);
 	mysqli_stmt_execute($query);
+}
+function get_category_list(){
+	$mysqli = get_link();
+	$query = mysqli_query($mysqli, 'SELECT name FROM categories');
+	$result = array();
+	$i = 0;
+	while($tmp = mysqli_fetch_assoc($query)){
+		$result[$i] = $tmp['name'];
+		$i++;
+	}
+
+	return $result;
 }

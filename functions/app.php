@@ -1,27 +1,6 @@
 <?php
 
-function is_logged(){
-	if(isset($_SESSION['name']) && !empty($_SESSION['name'])){
-		return true;
-
-	}else{
-		return false;
-	}
-}
-function is_user($input){
-	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'SELECT name FROM users WHERE BINARY name = ?');
-	mysqli_stmt_bind_param($query, 's', $input);
-	mysqli_stmt_execute($query);
-	$result = mysqli_stmt_fetch($query);
-	if($result == 0){
-		return false;
-	
-	}else{
-		return true;
-	}
-}
-function define_url_base($routing_mode){
+function define_base_url($routing_mode){
 	switch($routing_mode){
 		case('DEFAULT'):
 			$base = '/index.php?page=';
@@ -38,6 +17,15 @@ function define_url_base($routing_mode){
 	}
 	
 	define('BASE_URL', $base);
+}
+function get_base_url(){
+	return constant('BASE_URL');
+}
+function get_root_url(){
+	return '//'.$_SERVER['HTTP_HOST'];
+}
+function get_project_name(){
+	return constant('PROJECT_NAME');
 }
 function redirect($location){
 	if(is_numeric($location)){
@@ -59,7 +47,7 @@ function redirect($location){
 				break;
 		}
 	}
-	header('Location:'.$_SESSION['host'].constant('BASE_URL').$location);
+	header('Location:'.get_root_url().get_base_url().$location);
 }
 function get_link(){
 	$mysqli = mysqli_connect(constant('HOST'), constant('USER'), constant('PASSWORD'),
@@ -69,8 +57,10 @@ function get_link(){
 }
 function secure($var){
 	$mysqli = get_link();
+	$var = trim($var);
 	$var = htmlspecialchars($var);
-	$var = stripslashes(mysqli_escape_string($mysqli, htmlspecialchars(trim($var))));
+	$var = mysqli_escape_string($mysqli, $var);
+	$var = stripslashes($var);
 	
 	return $var;
 }

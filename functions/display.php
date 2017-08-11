@@ -28,8 +28,8 @@ function set_error($title, $icon, $content, $location){
 		$content = '';
 	}
 	if($location){
-		$location = 	"<a href=\"".$_SESSION['host'].constant('BASE_URL').$location."\">
-					<img src=\"".$_SESSION['host']."/css/images/home.svg\" height=\"75\" width=\"75\" class=\"center-block\">
+		$location = 	"<a href=\"".get_root_url().get_base_url().$location."\">
+					<img src=\"".get_root_url()."/css/images/home.svg\" height=\"75\" width=\"75\" class=\"center-block\">
 				</a>";
 	}else{
 		$location = '';
@@ -56,7 +56,7 @@ function datalist_options($username, $rank_restriction){
 	
 	return $result;
 }
-function bb_decode($text){
+function format_text($text){
 	$pattern_1 = '#https?://[a-zA-Z0-9-\.]+\.[a-zA-Z]{2,4}(/\S*)?#';
 	$pattern_2 = '#https?://[0-9]{1,3}+(\.[0-9]{1,3}){3}#';
 	$text = htmlspecialchars_decode($text);
@@ -129,8 +129,8 @@ function display_articles($category, $page_id){
 			$tr_class = '';
 		}
 		echo			"<tr class=\"".$tr_class."\">
-						<td class=\"col-sm-6\"><span class=\"glyphicon glyphicon-envelope\"></span><a href=\"".constant('BASE_URL')."article&id=".$id."\"> ".$title."</a></td>
-						<td><span class=\"glyphicon glyphicon-user\"></span><a href=\"".constant('BASE_URL')."profile&user=".$author."\"> ".$author."</a></td>
+						<td class=\"col-sm-6\"><span class=\"glyphicon glyphicon-envelope\"></span><a href=\"".get_base_url()."article&id=".$id."\"> ".$title."</a></td>
+						<td><span class=\"glyphicon glyphicon-user\"></span><a href=\"".get_base_url()."profile&user=".$author."\"> ".$author."</a></td>
 						<td>".$text."</td>
 						<td>".$date."</td>
 					</tr>";
@@ -147,12 +147,37 @@ function display_articles($category, $page_id){
 			echo 	"<ul class=\"pagination pagination-sm\">";
 			for($i = 1; $i <= $page_count; $i++){
 				if($i == $page_id){
-					echo "<li class=\"active\"><a href=\"".constant('BASE_URL')."category&cat=".$category."&id=".$i."\">".$i."</a></li>";
+					echo "<li class=\"active\"><a href=\"".get_base_url()."category&cat=".$category."&id=".$i."\">".$i."</a></li>";
 				}else{
-					echo "<li><a href=\"".constant('BASE_URL')."category&cat=".$category."&id=".$i."\">".$i."</a></li>";
+					echo "<li><a href=\"".get_base_url()."category&cat=".$category."&id=".$i."\">".$i."</a></li>";
 				}
 			}
 			echo 	"</ul>";
 		}
 	}
+}
+function display_article_writing_form($category_name){
+	echo 	"<div class=\"page-header\">
+			<h3 class=\"text-center\">Poster un article</h3>
+		</div>
+		<form method=\"POST\">
+			<div class=\"form-group col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2\">
+				<label>Titre : </label>
+				<input class=\"form-control\" autofocus required>
+			</div>
+			<div class=\"form-group col-sm-4 col-sm-offset-3 col-xs-6 col-xs-offset-2\">
+				<label>Catégorie : </label>
+				<select class=\"form-control\">";
+	$categories = get_category_list();
+	foreach($categories as $name){
+		if($name == $category_name){
+			$attribute = 'selected';
+		}else{
+			$attribute = '';
+		}
+		echo 			"<option value=\"".$name."\" ".$attribute.">".$name."</option>";
+	}
+	echo			"</select>
+			</div>
+		</form>";
 }
