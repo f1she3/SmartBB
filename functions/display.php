@@ -136,12 +136,12 @@ function display_articles($category, $page_id){
 					</tr>";
 		$i++;
 	}
+	echo			"</tbody>
+			</table>";
 	if($i == 0){
 		echo 'Aucun article dans cette catégorie, soyez le premier à en poster un !';
 	}
-	echo			"</tbody>
-			</table>
-		</div>";
+	echo 	"</div>";
 	if($page_id){
 		if($page_count > 1){
 			echo 	"<ul class=\"pagination pagination-sm\">";

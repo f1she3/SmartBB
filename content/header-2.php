@@ -6,10 +6,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="description" content="Open source real time web chat">
 		<meta name="author" content="f1she3">
-		<link rel="icon" href="<?= $_SESSION['host'].'/css/images/favicon.ico' ?>">
+		<link rel="icon" href="<?= get_root_url().'/css/images/favicon.ico' ?>">
 		<title><?= $title; ?></title>
-		<link href="<?= $_SESSION['host'].'/css/bootstrap.min.css' ?>" rel="stylesheet">
-		<link href="<?= $_SESSION['host'].'/css/style.css' ?>" rel="stylesheet">
+		<link href="<?= get_root_url().'/css/bootstrap.min.css' ?>" rel="stylesheet">
+		<link href="<?= get_root_url().'/css/style.css' ?>" rel="stylesheet">
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
@@ -21,14 +21,14 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="<?= $_SESSION['host'].constant('BASE_URL').'welcome' ?>">
+					<a class="navbar-brand" href="<?= get_root_url().get_base_url().'welcome' ?>">
 						Project	
 					</a>
 				</div>
 				<div id="navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav navbar-right"> 
 						<li class="<?php echo ($page == 'home') ? 'active' : '' ?>">
-							<a href="<?= $_SESSION['host'].constant('BASE_URL').'home' ?>">
+							<a href="<?= get_root_url().get_base_url().'home' ?>">
 								<span class="glyphicon glyphicon-th-list"></span>
 								ACCUEIL	
 							</a>
@@ -43,22 +43,21 @@
 									$class = '';
 								}
 								echo "<li class=\"".$class."\">
-										<a href=\"".$_SESSION['host'].constant('BASE_URL')."admin\">
+										<a href=\"".get_root_url().get_base_url()."admin\">
 											<span class=\"glyphicon glyphicon-wrench\"></span> ADMINISTRATION 
 										</a>
 									</li>";
-								
 							}						
 						}
 						?>
 						<li class="<?php echo ($page == 'profile') ? ' active' : '' ?>">
-							<a href="<?= $_SESSION['host'].constant('BASE_URL').'profile' ?>">
+							<a href="<?= get_root_url().get_base_url().'profile' ?>">
 								<span class="glyphicon glyphicon-user"></span>
 								COMPTE
 							</a>
 						</li>
 						<li>
-							<a href="<?= $_SESSION['host'].constant('BASE_URL').'logout' ?>">
+							<a href="<?= get_root_url().get_base_url().'logout' ?>">
 								<span class="glyphicon glyphicon-off"></span>
 							</a>
 						</li>
