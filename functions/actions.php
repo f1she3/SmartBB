@@ -1,6 +1,5 @@
 <?php
 
-
 function is_banned($username){
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'SELECT msg, banned_by FROM ban WHERE BINARY name = ?');
@@ -56,8 +55,8 @@ function is_user($input){
 function is_rank($input_rank){
 	$ranks = get_rank_list();
 	$result = false;
-	foreach($ranks as $rank){
-		if($rank == $input_rank){
+	foreach($ranks as $key => $value){
+		if($ranks[$key] == $input_rank){
 			$result = true;
 			break;
 		}
@@ -85,6 +84,14 @@ function get_rank_list(){
 	$ranks['max'] = 3;
 
 	return $ranks;
+}
+function get_rank_id($rank_name){
+	$ranks = get_rank_list();
+	foreach($ranks as $key => $value){
+		if($ranks[$key] == $rank_name){
+			return $key;
+		}
+	}
 }
 function set_rank($username, $rank){
 	$ranks = get_rank_list();
@@ -123,6 +130,9 @@ function check_rank($username, $rank){
 		return true;
 	}
 }
+function post_article($author, $category_name, $title, $content){
+	$mysqli = get_link();
+}
 function like($article_id, $user, $status){
 	// status : 
 	// 0 : like
@@ -150,11 +160,10 @@ function delete_category($category_name, $new_category){
 }
 function get_category_list(){
 	$mysqli = get_link();
-	$query = mysqli_query($mysqli, 'SELECT name FROM categories');
-	$result = array();
+	$query = mysqli_query($mysqli, 'SELECT name, rank_restriction, rank_owner FROM categories');
 	$i = 0;
 	while($tmp = mysqli_fetch_assoc($query)){
-		$result[$i] = $tmp['name'];
+		$result[$i] = $tmp;
 		$i++;
 	}
 

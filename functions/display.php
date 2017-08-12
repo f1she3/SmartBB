@@ -41,7 +41,6 @@ function datalist_options($username, $rank_restriction){
 	if($rank_restriction){
 		$query = mysqli_prepare($mysqli, 'SELECT name FROM users WHERE BINARY name != ? AND rank < ?');
 		mysqli_stmt_bind_param($query, 'ss', $username, $rank_restriction);
-
 	}else{
 		$query = mysqli_prepare($mysqli, 'SELECT name FROM users WHERE BINARY name != ?');
 		mysqli_stmt_bind_param($query, 's', $username);
@@ -51,7 +50,8 @@ function datalist_options($username, $rank_restriction){
 	$i = 0;
 	$result = array();
 	while(mysqli_stmt_fetch($query)){
-		$result[$i] = "<option value=\"".$r."\">\n"; $i++;
+		$result[$i] = $r;
+		$i++;
 	}
 	
 	return $result;
@@ -139,7 +139,7 @@ function display_articles($category, $page_id){
 	echo			"</tbody>
 			</table>";
 	if($i == 0){
-		echo 'Aucun article dans cette catégorie, soyez le premier à en poster un !';
+		echo "<p>Aucun article dans cette catégorie, soyez le premier à en poster un !</p>";
 	}
 	echo 	"</div>";
 	if($page_id){
@@ -161,23 +161,33 @@ function display_article_writing_form($category_name){
 			<h3 class=\"text-center\">Poster un article</h3>
 		</div>
 		<form method=\"POST\">
-			<div class=\"form-group col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2\">
+			<div class=\"form-group col-md-4 col-md-offset-1 col-sm-6 col-sm-offset-1 col-xs-6\">
 				<label>Titre : </label>
-				<input class=\"form-control\" autofocus required>
+				<input name=\"article_title\" class=\"form-control\" maxlength=\"100\" autofocus required>
 			</div>
-			<div class=\"form-group col-sm-4 col-sm-offset-3 col-xs-6 col-xs-offset-2\">
+			<div class=\"form-group col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-1 col-xs-4 col-xs-offset-2\">
 				<label>Catégorie : </label>
-				<select class=\"form-control\">";
+				<select name=\"article_category\" class=\"form-control\">";
 	$categories = get_category_list();
-	foreach($categories as $name){
-		if($name == $category_name){
-			$attribute = 'selected';
-		}else{
-			$attribute = '';
+	$user_rank = get_rank($_SESSION['name']);
+	foreach($categories as $category){
+		if($user_rank >= $category['rank_restriction']){
+			if($category['name'] == $category_name){
+				$attribute = 'selected';
+			}else{
+				$attribute = '';
+			}
+			echo 			"<option value=\"".$category['name']."\" ".$attribute.">".$category['name']."</option>";
 		}
-		echo 			"<option value=\"".$name."\" ".$attribute.">".$name."</option>";
 	}
 	echo			"</select>
 			</div>
+			<div class=\"form-group col-sm-10 col-sm-offset-1\">
+				<textarea name=\"article_content\" class=\"form-control\" rows=\"10\" placeholder=\"[h1 center]Mon article[/h1]\" maxlength=\"1000\" required></textarea>
+			</div>
+			<button name=\"submit_article\" class=\"btn btn-primary col-sm-2 col-sm-offset-5 col-xs-2 col-xs-offset-5\">
+				<span class=\"glyphicon glyphicon-pencil\"></span>
+				Publier
+			</button>
 		</form>";
 }

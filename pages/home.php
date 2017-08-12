@@ -1,6 +1,4 @@
-<?php 
-
-if(isset($_POST['new_category'])){
+<?php if(isset($_POST['new_category'])){
 	$ranks = get_rank_list();
 	if(check_rank($_SESSION['name'], $ranks['max'])){
 		display_new_cat_form();
@@ -12,22 +10,54 @@ if(isset($_POST['new_category'])){
 	}else{
 		set_error('Erreur', 'zoom-out', 'Cette catégorie n\'éxiste pas', 'home');
 	}
-	
+}else if(isset($_POST['submit_article'])){
+	if(isset($_POST['article_title']) && !empty($_POST['article_title']) && is_string($_POST['article_title']) && mb_strlen($_POST['article_title'] <= 100)){
+		$article_title = $_POST['article_title'] = secure($_POST['article_title']);
+		if(isset($_POST['article_category']) && !empty($_POST['article_category']) && is_string($_POST['article_category'])){
+			$article_category = $_POST['article_category'] = secure($_POST['article_category']);
+			if(is_category($article_category)){
+				$categories = get_category_list();
+				$result = false;
+				foreach($categories as $key => $value){
+					if($categories[$key]['name'] == $article_category){
+						if($categories[$key]['rank_restriction'] <= get_rank($_SESSION['name'])){
+							$result = true;
+						}
+						break;
+					}
+				}
+				if($result){
+					if(isset($_POST['article_content']) && !empty($_POST['article_content']) && is_string($_POST['article_content']) && mb_strlen($_POST['article_content'] <= 1000)){
+						$article_content = $_POST['article_content'] = secure($_POST['article_content']);
+						post_article($_SESSION['name'], $article_category, $article_title, $article_content);
+					}else{
+						set_error('Erreur', 'exclamation-sign', 'Erreur avec le contenu de l\'article', 'home');
+					}
+				}else{
+					set_error('Erreur', 'exclamation-sign', 'Erreur avec la catégorie de l\'article', 'home');
+				}
+			}else{
+				set_error('Erreur', 'exclamation-sign', 'Erreur avec la catégorie de l\'article', 'home');
+			}
+		}
+	}else{
+		set_error('Erreur', 'exclamation-sign', 'Erreur avec le titre de l\'article', 'home');
+	}
 }else if(isset($_POST['submit_cat_creation'])){
 	if(isset($_POST['category_name']) && !empty($_POST['category_name']) && is_string($_POST['category_name'])){
 		$ranks = get_rank_list();
 		if(check_rank($_SESSION['name'], $ranks['max'])){
 			$category_name = $_POST['category_name']	= secure($_POST['category_name']);
 			if(!is_category($category_name)){
-				if(isset($_POST['rank_restriction']) && !empty($_POST['rank_restriction']) && is_string($_POST['rank_restriction'])){
+				if(isset($_POST['rank_restriction']) && is_string($_POST['rank_restriction'])){
 					$rank_restriction = $_POST['rank_restriction'] = secure($_POST['rank_restriction']);
 					if(!is_rank($rank_restriction)){
-						$rank_restriction = $ranks[0];
+						$rank_restriction = 0;
 					}
-					if(isset($_POST['owned_by']) && !empty($_POST['owned_by']) && is_string($_POST['owned_by'])){
+					if(isset($_POST['owned_by']) && is_string($_POST['owned_by'])){
 						$owned_by = $_POST['owned_by'] = secure($_POST['owned_by']);
 						if(!is_rank($owned_by)){
-							$owned_by = $ranks[0];
+							$owned_by = 0;
 						}
 						create_category($category_name, $rank_restriction, $owned_by);
 						display_home_page(); 
