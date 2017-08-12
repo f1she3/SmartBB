@@ -53,6 +53,18 @@ function is_user($input){
 		return true;
 	}
 }
+function is_rank($input_rank){
+	$ranks = get_rank_list();
+	$result = false;
+	foreach($ranks as $rank){
+		if($rank == $input_rank){
+			$result = true;
+			break;
+		}
+	}
+
+	return $result;
+}
 function get_rank($username){
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'SELECT rank FROM users WHERE BINARY name = ?');

@@ -14,6 +14,8 @@
 
 [EN COURS] - Utilité page admin
 [EN COURS] - Edition / suppression / création articles / commentaires
+[EN COURS] - Système propriétaire de catégorie, par défault modos propriétaires
+toutes catégories, membre ou rang
 
 [FAIT] - Affichage des articles épinglés
 [FAIT] - Partie effective système de réponse
