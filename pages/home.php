@@ -20,7 +20,7 @@
 				$result = false;
 				foreach($categories as $key => $value){
 					if($categories[$key]['name'] == $article_category){
-						if($categories[$key]['rank_restriction'] <= get_rank($_SESSION['name'])){
+						if($categories[$key]['post_restriction'] <= get_rank($_SESSION['name'])){
 							$result = true;
 						}
 						break;
@@ -50,28 +50,47 @@
 		if(check_rank($_SESSION['name'], $ranks['max'])){
 			$category_name = $_POST['category_name']	= secure($_POST['category_name']);
 			if(!is_category($category_name)){
-				if(isset($_POST['rank_restriction']) && is_string($_POST['rank_restriction'])){
-					$rank_restriction = $_POST['rank_restriction'] = secure($_POST['rank_restriction']);
-					if(!is_rank($rank_restriction)){
-						$rank_restriction = 0;
+				if(isset($_POST['access_restriction']) && is_string($_POST['access_restriction'])){
+					$access_restriction = $_POST['access_restriction'] = secure($_POST['access_restriction']);
+					if(!is_rank($access_restriction)){
+						set_error('Erreur', 'exclamation-sign', 'Erreur avec la limite d\'accès', 'home');
 					}
-					if(isset($_POST['owned_by']) && is_string($_POST['owned_by'])){
-						$owned_by = $_POST['owned_by'] = secure($_POST['owned_by']);
-						if(!is_rank($owned_by)){
-							$owned_by = 0;
-						}
-						if($owned_by >= $rank_restriction){
-							create_category($category_name, $rank_restriction, $owned_by);
-							display_home_page(); 
-						}else{
-							set_error('Erreur', 'exclamation-sign', 'Le rang des propriétaires de la catégorie est trop faible', 'home')		;
-						}
+				}else{
+					set_error('Erreur', 'exclamation-sign', 'Erreur avec la limite d\'accès', 'home');
+				}
+				if(isset($_POST['post_restriction']) && is_string($_POST['post_restriction'])){
+					$post_restriction = $_POST['post_restriction'] = secure($_POST['post_restriction']);
+					if(!is_rank($post_restriction)){
+						set_error('Erreur', 'exclamation-sign', 'Erreur avec la limite de poste', 'home');
 					}
+					if($post_restriction < $access_restriction){
+						set_error('Erreur', 'exclamation-sign', 'Le rang des posteurs de la catégorie est trop faible', 'home')		;
+					}
+				}else{
+					set_error('Erreur', 'exclamation-sign', 'Erreur avec la limite de poste', 'home');
+				}
+				if(isset($_POST['owned_by']) && is_string($_POST['owned_by'])){
+					$owned_by = $_POST['owned_by'] = secure($_POST['owned_by']);
+					if(!is_rank($owned_by)){
+						set_error('Erreur', 'exclamation-sign', 'Erreur avec les propriétaires de la catégorie', 'home');
+					}
+					if($owned_by >= $post_restriction){
+						create_category($category_name, $access_restriction, $post_restriction, $owned_by);
+						display_home_page(); 
+					}else{
+						set_error('Erreur', 'exclamation-sign', 'Le rang des propriétaires de la catégorie est trop faible', 'home')		;
+					}
+				}else{
+					set_error('Erreur', 'exclamation-sign', 'Erreur avec les propriétaires de la catégorie', 'home');
 				}
 			}else{
 				set_error('Erreur', 'exclamation-sign', 'Cette catégorie éxiste déjà', 'home')		;
 			}
+		}else{
+			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour effectuer cette action', 'home');
 		}
+	}else{
+		set_error('Erreur', 'exclamation-sign', 'Erreur avec le nom de catégorie', 'home');
 	}
 }else if(isset($_POST['delete_category']) && !empty($_POST['delete_category']) && is_string($_POST['delete_category'])){
 	$delete_category = $_POST['delete_category'] = secure($_POST['delete_category']);

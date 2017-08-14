@@ -170,12 +170,26 @@ function delete_category($category_name, $new_category){
 }
 function get_category_list(){
 	$mysqli = get_link();
-	$query = mysqli_query($mysqli, 'SELECT name, rank_restriction, rank_owner FROM categories');
+	$query = mysqli_query($mysqli, 'SELECT * FROM categories');
 	$i = 0;
+	$my_rank = get_rank($_SESSION['name']);
 	while($tmp = mysqli_fetch_assoc($query)){
-		$result[$i] = $tmp;
-		$i++;
+		if($my_rank >= $result['post_restriction']){
+			$result[$i] = $tmp;
+			$i++;
+		}
 	}
 
+	return $result;
+}
+function category_infos($category){
+	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'SELECT * FROM categories WHERE BINARY name = ?');
+	mysqli_stmt_bind_param($query, 's', $category);
+	mysqli_stmt_execute($query);
+	$result = array();
+	mysqli_stmt_bind_result($query, $result['id'], $result['name'], $result['access_restriction'], $result['post_restriction'], $result['rank_owner']);
+	mysqli_stmt_fetch($query);
+	
 	return $result;
 }

@@ -21,6 +21,21 @@ function user_infos($user){
 
 	return $result;
 }
+function is_article($input_id){
+	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'SELECT id FROM articles WHERE id = ?');
+	mysqli_stmt_bind_param($query, 'i', $input_id);
+	mysqli_stmt_execute($query);
+	$i = 0;
+	while(mysqli_stmt_fetch($query)){
+		$i++;
+	}
+	if($i > 0){
+		return true;
+	}else{
+		return false;
+	}
+}
 function article_infos($article_id){
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'SELECT * FROM articles WHERE id = ?');
@@ -28,14 +43,9 @@ function article_infos($article_id){
 	mysqli_stmt_execute($query);
 	mysqli_stmt_bind_result($query, $infos['id'], $infos['category'], $infos['author'], $infos['title'], $infos['content'], $infos['date'], $infos['is_pinned']);
 	$i = 0;
-	while(mysqli_stmt_fetch($query)){
-		$i++;	
-	}
-	if($i == 0){
-		return false;
-	}else{
-		return $infos;
-	}
+	mysqli_stmt_fetch($query);
+
+	return $infos;
 }
 function comment_infos($comment_id){
 	$mysqli = get_link();
@@ -124,13 +134,13 @@ function display_comment($comment_id, $article_id, $page_id){
 		mysqli_stmt_execute($query);
 		mysqli_stmt_bind_result($query, $id, $parent_id, $author, $content, $reply_to, $date);
 		if($page_id > 1){
-			$infos = article_infos($article_id);
+			$article_infos = article_infos($article_id);
 			echo 	"<div class=\"page-header\">
-					<h2 class=\"text-center\">".$infos['title']."</h2>
+					<h2 class=\"text-center\">".$article_infos['title']."</h2>
 				</div>
 				<ul class=\"breadcrumb\">
-					<li><a href=\"".get_base_url()."category&cat".$infos['category']."\">".$infos['category']."</a></li>
-					<li><a href=\"".get_base_url()."article&id=".$article_id."\">".$infos['title']."</a></li>
+					<li><a href=\"".get_base_url()."category&cat".$article_infos['category']."\">".$article_infos['category']."</a></li>
+					<li><a href=\"".get_base_url()."article&id=".$article_id."\">".$article_infos['title']."</a></li>
 					<li>".$page_id."</li>
 				</ul>";
 		}
@@ -157,12 +167,17 @@ function display_comment($comment_id, $article_id, $page_id){
 					</blockquote>
 					<pre>".$content."</pre>";
 			}
-			echo 	"<form method=\"POST\">
-					<button name=\"reply\" class=\"btn btn-primary\" value=\"".$id."\">
+			echo 	"<form method=\"POST\">";
+			$article_infos = article_infos($article_id);
+			$my_rank = get_rank($_SESSION['name']);
+			$category_infos = category_infos($article_infos['category']);
+			if($my_rank >= $category_infos['post_restriction']){
+				echo "<button name=\"reply\" class=\"btn btn-primary\" value=\"".$id."\">
 						<span class=\"glyphicon glyphicon-share\"></span> 
 						répondre
-					</button>
-					<a href=\"#\" class=\"btn btn-info\">
+					</button>";
+			}
+			echo		"<a href=\"#\" class=\"btn btn-info\">
 						<span class=\"glyphicon glyphicon-send\"> mp</span> 
 					</a>
 				</form><hr>";
@@ -178,6 +193,7 @@ function display_comment($comment_id, $article_id, $page_id){
 			}
 			echo 	"</ul>";
 		}
+		if($my_rank >= $category_infos['post_restriction']){
 		echo 	"<form method=\"POST\">
 				<div class=\"form-group col-md-8 col-md-offset-2\">
 					<textarea class=\"form-control\" style=\"resize:none\" name=\"comment\" maxlength=\"500\" required></textarea>
@@ -188,57 +204,55 @@ function display_comment($comment_id, $article_id, $page_id){
 					</button>
 				</div>
 			</form>";
+		}
 	}
 }
 function display_article($input_id, $page_id){
 	$mysqli = get_link();
-	$infos = article_infos($input_id);
-	if(!$infos){
-		set_error('Erreur 404', 'zoom-out', 'L\'article que vous recherchez n\'éxiste pas', 'home');
-	}else{
-		$fdate = date_create($infos['date']);
-		$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
-		$user_infos = user_infos($infos['author']);
-		$infos['content'] = format_text($infos['content']);
-		echo 	"<div class=\"page-header\">
-				<h2 class=\"text-center\">".$infos['title']."</h2>
-			</div>
-			<ul class=\"breadcrumb\">
-				<li><a href=\"".get_base_url()."category&cat=".$infos['category']."\">".$infos['category']."</a></li>
-				<li><a href=\"".get_base_url()."article&id=".$infos['id']."\">".$infos['title']."</a></li>
-			</ul>
-			<h4 class=\"text-left\">
-				<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
-				<a href=\"".get_base_url()."profile&user=".$infos['author']."\">
-					<abbr title=\"".$user_infos."\">".$infos['author']."</abbr>
-				</a>
-				".$fdate."
-			</h4>
-			<pre>
-				<p>".$infos['content']."</p>
-			</pre>
-			<form method=\"POST\">";
-		$author_rank = get_rank($infos['author']);
-		$my_rank = get_rank($_SESSION['name']);
-		$ranks = get_rank_list();
-		if($my_rank == $ranks['max'] || $my_rank > $author_rank){
-			echo 	"<button name=\"close_article\" class=\"btn btn-danger pull-right\">
-					<span class=\"glyphicon glyphicon-ban-circle\"> fermer</span> 
-				</button>";
-		}
-		echo 		"<a href=\"#\" class=\"btn btn-info\">
-					<span class=\"glyphicon glyphicon-send\"> mp</span> 
-				</a>
-				<button name=\"like\" class=\"btn btn-success\">
-					<span class=\"glyphicon glyphicon-thumbs-up\"></span>
-				</button>
-				<button name=\"dislike\" class=\"btn btn-warning\">
-					<span class=\"glyphicon glyphicon-thumbs-down\"></span>
-				</button>
-			</form><hr>";
-		if($page_id){
-			display_comment(false, $input_id, $page_id);
-		}
+	$article_infos = article_infos($input_id);
+	$category_infos = category_infos($article_infos['category']);
+	$fdate = date_create($article_infos['date']);
+	$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
+	$user_infos = user_infos($article_infos['author']);
+	$article_infos['content'] = format_text($article_infos['content']);
+	echo 	"<div class=\"page-header\">
+			<h2 class=\"text-center\">".$article_infos['title']."</h2>
+		</div>
+		<ul class=\"breadcrumb\">
+			<li><a href=\"".get_base_url()."category&cat=".$article_infos['category']."\">".$article_infos['category']."</a></li>
+			<li><a href=\"".get_base_url()."article&id=".$article_infos['id']."\">".$article_infos['title']."</a></li>
+		</ul>
+		<h4 class=\"text-left\">
+			<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
+			<a href=\"".get_base_url()."profile&user=".$article_infos['author']."\">
+				<abbr title=\"".$user_infos."\">".$article_infos['author']."</abbr>
+			</a>
+			".$fdate."
+		</h4>
+		<pre>
+			<p>".$article_infos['content']."</p>
+		</pre>
+		<form method=\"POST\">";
+	$author_rank = get_rank($article_infos['author']);
+	$my_rank = get_rank($_SESSION['name']);
+	$ranks = get_rank_list();
+	if($my_rank == $ranks['max'] || $my_rank >= $category_infos['rank_owner']){
+		echo 	"<button name=\"close_article\" class=\"btn btn-danger pull-right\">
+				<span class=\"glyphicon glyphicon-ban-circle\"> fermer</span> 
+			</button>";
+	}
+	echo 		"<a href=\"#\" class=\"btn btn-info\">
+				<span class=\"glyphicon glyphicon-send\"> mp</span> 
+			</a>
+			<button name=\"like\" class=\"btn btn-success\">
+				<span class=\"glyphicon glyphicon-thumbs-up\"></span>
+			</button>
+			<button name=\"dislike\" class=\"btn btn-warning\">
+				<span class=\"glyphicon glyphicon-thumbs-down\"></span>
+			</button>
+		</form><hr>";
+	if($page_id){
+		display_comment(false, $input_id, $page_id);
 	}
 }
 function post_comment($parent_id, $author, $content, $reply_to){

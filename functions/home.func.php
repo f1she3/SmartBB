@@ -14,9 +14,13 @@ function display_home_page(){
 			</form>";
 	}
 	$mysqli = get_link();
-	$query = mysqli_query($mysqli, 'SELECT * FROM categories');
+	$my_rank = get_rank($_SESSION['name']);
+	$query = mysqli_prepare($mysqli, 'SELECT * FROM categories WHERE access_restriction <= ?');
+	mysqli_stmt_bind_param($query, 'i', $my_rank);
+	mysqli_stmt_execute($query);
+	mysqli_stmt_bind_result($query, $result['id'], $result['name'], $result['access_restriction'], $result['post_restriction'], $result['rank_owner']);
 	$x = 0;
-	while($result = mysqli_fetch_assoc($query)){
+	while(mysqli_stmt_fetch($query)){
 		$link = get_link();
 		$req = mysqli_prepare($link, 'SELECT id FROM articles WHERE category = ?');
 		mysqli_stmt_bind_param($req, 's', $result['name']);
@@ -30,7 +34,7 @@ function display_home_page(){
 					".$result['name']."
 					<a href=\"".get_base_url()."category&cat=".$result['name']."\">(".$i.")</a>
 				</h3>";
-		if(get_rank($_SESSION['name']) >= intval($result['rank_restriction'])){
+		if(get_rank($_SESSION['name']) >= intval($result['post_restriction'])){
 			echo "<button name=\"write_article\" class=\"btn btn-success btn-sm\" value=\"".$result['name']."\">
 					<span class=\"glyphicon glyphicon-pencil\"></span>
 					<span class=\"glyphicon glyphicon-plus\"></span>
@@ -62,8 +66,19 @@ function display_new_cat_form(){
 				<input type=\"text\" name=\"category_name\" class=\"form-control\" placeholder=\"Nouvelle catégorie\" autofocus required>
 			</div>
 			<div class=\"form-group\">
-				<label>Restriction de rang :</label>
-				<select name=\"rank_restriction\" class=\"form-control\">";
+				<label>Rang minimum d'accès :</label>
+				<select name=\"access_restriction\" class=\"form-control\">";
+	$ranks = get_rank_list();
+	foreach($ranks as $key => $value){
+		if($value != $ranks['max']){
+			echo 			"<option value=\"".$key."\">".$value."</option>";
+		}
+	}
+	echo 			"</select>
+			</div>
+			<div class=\"form-group\">
+				<label>Rang minimum pour poster :</label>
+				<select name=\"post_restriction\" class=\"form-control\">";
 	$ranks = get_rank_list();
 	foreach($ranks as $key => $value){
 		if($value != $ranks['max']){
@@ -98,10 +113,10 @@ function display_new_cat_form(){
 		</form>";
 	
 }
-function create_category($category_name, $rank_restriction, $owned_by){
+function create_category($category_name, $access_restriction, $post_restriction, $owned_by){
 	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'INSERT INTO categories (name, rank_restriction, rank_owner) VALUES (?, ?, ?)');
-	mysqli_stmt_bind_param($query, 'sii', $category_name, $rank_restriction, $owned_by);
+	$query = mysqli_prepare($mysqli, 'INSERT INTO categories (name, access_restriction, post_restriction, rank_owner) VALUES (?, ?, ?, ?)');
+	mysqli_stmt_bind_param($query, 'siii', $category_name, $access_restriction, $post_restriction, $owned_by);
 	mysqli_stmt_execute($query);
 }
 function display_confirm_cat_del_form($category_name){
