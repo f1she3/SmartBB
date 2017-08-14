@@ -31,7 +31,7 @@ if(isset($_POST['reg_submit'])){
 												$_POST['r_password'] = secure($_POST['r_password']);
 												register($name, $email_hash, $password);
 												$_SESSION['name'] = $name;
-												header('Refresh: 3; url = '.constant('BASE_URL').'home');
+												header('Refresh: 3; url = '.get_base_url().'home');
 												set_error('Inscription réalisée avec succès !', 'ok', 'Vous allez être redirigé ...', 'home');
 											}else{
 											    $error = 'cette adresse email est déjà utilisée';

@@ -120,7 +120,7 @@ function display_user_infos($username, $flag){
 		}
 	}else{
 		echo 	"<div class=\"icon\">
-				<a href=\"".constant('BASE_URL')."delete\">
+				<a href=\"".get_base_url()."delete\">
 					<span class=\"glyphicon glyphicon-trash\"></span>
 				</a>
 			</div>";

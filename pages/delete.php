@@ -26,7 +26,11 @@ if(isset($_POST['submit'])){
 <div class="col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3">
 	<div class="alert alert-warning">
 		<span class="glyphicon glyphicon-alert"></span>
-		<b>Important</b> : Seuls vos identifiants seront supprimés. Votre nom d'utilisateur ainsi que vos publications sur ce forum <b><a href="<?= constant('BASE_URL')?>rules">seront conservées</a></b>.
+		<b>Important</b> : 
+			Seuls vos identifiants seront supprimés. Votre nom d'utilisateur ainsi que vos publications sur ce forum 
+			<b>
+				<a href="<?= get_base_url() ?>rules">seront conservées</a>
+			</b>.
 	</div>
 </div>
 <div class="col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3">

@@ -76,7 +76,7 @@ function display_comment($comment_id, $article_id, $page_id){
 			$content = bb_decode($content);
 			echo	"<h4 class=\"text-left\">
 					<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
-					<a href=\"".constant('BASE_URL')."profile&user=".$author."\">
+					<a href=\"".get_base_url()."profile&user=".$author."\">
 						<abbr title=\"".$user_infos."\">".$author."</abbr>
 					</a>
 					".$fdate."
@@ -129,8 +129,8 @@ function display_comment($comment_id, $article_id, $page_id){
 					<h2 class=\"text-center\">".$infos['title']."</h2>
 				</div>
 				<ul class=\"breadcrumb\">
-					<li><a href=\"".constant('BASE_URL')."category&cat".$infos['category']."\">".$infos['category']."</a></li>
-					<li><a href=\"".constant('BASE_URL')."article&id=".$article_id."\">".$infos['title']."</a></li>
+					<li><a href=\"".get_base_url()."category&cat".$infos['category']."\">".$infos['category']."</a></li>
+					<li><a href=\"".get_base_url()."article&id=".$article_id."\">".$infos['title']."</a></li>
 					<li>".$page_id."</li>
 				</ul>";
 		}
@@ -141,7 +141,7 @@ function display_comment($comment_id, $article_id, $page_id){
 			$content = format_text($content);
 			echo	"<h4 class=\"text-left\">
 					<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
-					<a href=\"".constant('BASE_URL')."profile&user=".$author."\">
+					<a href=\"".get_base_url()."profile&user=".$author."\">
 						<abbr title=\"".$user_infos."\">".$author."</abbr>
 					</a>
 					".$fdate."
@@ -171,9 +171,9 @@ function display_comment($comment_id, $article_id, $page_id){
 			echo "<ul class=\"pagination\">";
 			for($i = 1; $i <= $page_count; $i++){
 				if($i == $page_id){
-					echo "<li class=\"active\"><a href=\"".constant('BASE_URL')."article&id=".$article_id."&pid=".$i."\">".$i."</a></li>";
+					echo "<li class=\"active\"><a href=\"".get_base_url()."article&id=".$article_id."&pid=".$i."\">".$i."</a></li>";
 				}else{
-					echo "<li><a href=\"".constant('BASE_URL')."article&id=".$article_id."&pid=".$i."\">".$i."</a></li>";
+					echo "<li><a href=\"".get_base_url()."article&id=".$article_id."&pid=".$i."\">".$i."</a></li>";
 				}
 			}
 			echo 	"</ul>";
@@ -204,12 +204,12 @@ function display_article($input_id, $page_id){
 				<h2 class=\"text-center\">".$infos['title']."</h2>
 			</div>
 			<ul class=\"breadcrumb\">
-				<li><a href=\"".constant('BASE_URL')."category&cat=".$infos['category']."\">".$infos['category']."</a></li>
-				<li><a href=\"".constant('BASE_URL')."article&id=".$infos['id']."\">".$infos['title']."</a></li>
+				<li><a href=\"".get_base_url()."category&cat=".$infos['category']."\">".$infos['category']."</a></li>
+				<li><a href=\"".get_base_url()."article&id=".$infos['id']."\">".$infos['title']."</a></li>
 			</ul>
 			<h4 class=\"text-left\">
 				<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
-				<a href=\"".constant('BASE_URL')."profile&user=".$infos['author']."\">
+				<a href=\"".get_base_url()."profile&user=".$infos['author']."\">
 					<abbr title=\"".$user_infos."\">".$infos['author']."</abbr>
 				</a>
 				".$fdate."
@@ -218,10 +218,10 @@ function display_article($input_id, $page_id){
 				<p>".$infos['content']."</p>
 			</pre>
 			<form method=\"POST\">";
-		$user_rank = get_rank($infos['author']);
+		$author_rank = get_rank($infos['author']);
 		$my_rank = get_rank($_SESSION['name']);
 		$ranks = get_rank_list();
-		if($my_rank == $ranks['max'] || $my_rank > $user_rank){
+		if($my_rank == $ranks['max'] || $my_rank > $author_rank){
 			echo 	"<button name=\"close_article\" class=\"btn btn-danger pull-right\">
 					<span class=\"glyphicon glyphicon-ban-circle\"> fermer</span> 
 				</button>";
