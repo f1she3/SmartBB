@@ -138,7 +138,7 @@ function display_comment($comment_id, $article_id, $page_id){
 			$fdate = date_create($date);
 			$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
 			$user_infos = user_infos($author);
-			$content = bb_decode($content);
+			$content = format_text($content);
 			echo	"<h4 class=\"text-left\">
 					<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
 					<a href=\"".constant('BASE_URL')."profile&user=".$author."\">
@@ -150,7 +150,7 @@ function display_comment($comment_id, $article_id, $page_id){
 				echo 	"<pre>".$content."</pre>";
 			}else if(is_comment($reply_to)){
 				$parent_comment = comment_infos($reply_to);
-				$parent_comment['content'] = bb_decode($parent_comment['content']);
+				$parent_comment['content'] = format_text($parent_comment['content']);
 				echo 	"<blockquote>
 						".$parent_comment['content']."
 						<footer>".$parent_comment['author']."</footer>
@@ -199,7 +199,7 @@ function display_article($input_id, $page_id){
 		$fdate = date_create($infos['date']);
 		$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
 		$user_infos = user_infos($infos['author']);
-		$infos['content'] = bb_decode($infos['content']);
+		$infos['content'] = format_text($infos['content']);
 		echo 	"<div class=\"page-header\">
 				<h2 class=\"text-center\">".$infos['title']."</h2>
 			</div>

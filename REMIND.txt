@@ -15,6 +15,7 @@
 [EN COURS] - Edition / suppression / création articles / commentaires
 [EN COURS] - Système propriétaire de catégorie, par défault modos propriétaires
 toutes catégories, membre ou rang
+[BUG] - Forcer les articles à wrapper, couper les lignes longues
 
 [FAIT] - Cat ne peut être gérée par membres en dessous limite
 [FAIT] - Affichage des articles épinglés
