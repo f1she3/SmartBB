@@ -17,6 +17,7 @@
 toutes catégories, membre ou rang
 [BUG] - Forcer les articles à wrapper, couper les lignes longues
 
+[FAIT] - Rediriger auteur vers son article après post
 [FAIT] - Cat ne peut être gérée par membres en dessous limite
 [FAIT] - Affichage des articles épinglés
 [FAIT] - Partie effective système de réponse

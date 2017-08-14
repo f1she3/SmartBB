@@ -132,6 +132,16 @@ function check_rank($username, $rank){
 }
 function post_article($author, $category_name, $title, $content){
 	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'INSERT INTO articles (author, category, title, content, date) VALUES (?, ?, ?, ?, NOW())');
+	mysqli_stmt_bind_param($query, 'ssss', $author, $category_name, $title, $content);
+	mysqli_stmt_execute($query);
+	$query = mysqli_prepare($mysqli, 'SELECT id FROM articles WHERE BINARY author = ? ORDER BY id DESC');
+	mysqli_stmt_bind_param($query, 's', $author);
+	mysqli_stmt_execute($query);
+	mysqli_stmt_bind_result($query, $id);
+	mysqli_stmt_fetch($query);
+
+	return $id;
 }
 function like($article_id, $user, $status){
 	// status : 

@@ -29,7 +29,8 @@
 				if($result){
 					if(isset($_POST['article_content']) && !empty($_POST['article_content']) && is_string($_POST['article_content']) && mb_strlen($_POST['article_content'] <= 1000)){
 						$article_content = $_POST['article_content'] = secure($_POST['article_content']);
-						post_article($_SESSION['name'], $article_category, $article_title, $article_content);
+						$article_id = post_article($_SESSION['name'], $article_category, $article_title, $article_content);
+						redirect('article&id='.$article_id);
 					}else{
 						set_error('Erreur', 'exclamation-sign', 'Erreur avec le contenu de l\'article', 'home');
 					}
