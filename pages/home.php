@@ -59,10 +59,16 @@
 						if(!is_rank($owned_by)){
 							$owned_by = 0;
 						}
-						create_category($category_name, $rank_restriction, $owned_by);
-						display_home_page(); 
+						if($owned_by >= $rank_restriction){
+							create_category($category_name, $rank_restriction, $owned_by);
+							display_home_page(); 
+						}else{
+							set_error('Erreur', 'exclamation-sign', 'Le rang des propriétaires de la catégorie est trop faible', 'home')		;
+						}
 					}
 				}
+			}else{
+				set_error('Erreur', 'exclamation-sign', 'Cette catégorie éxiste déjà', 'home')		;
 			}
 		}
 	}

@@ -56,7 +56,7 @@ function is_rank($input_rank){
 	$ranks = get_rank_list();
 	$result = false;
 	foreach($ranks as $key => $value){
-		if($ranks[$key] == $input_rank){
+		if(isset($ranks[$key])){
 			$result = true;
 			break;
 		}

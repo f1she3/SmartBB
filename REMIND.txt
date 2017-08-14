@@ -11,12 +11,12 @@
 - Ajouter fonctionnalités page mon compte -> Cacher email
 							-> Autoriser autres membres mp
 [A VOIR] - Système présentation membres
-[BUG] - Cat ne peut être gérée par membres en dessous limite
 [EN COURS] - Utilité page admin
 [EN COURS] - Edition / suppression / création articles / commentaires
 [EN COURS] - Système propriétaire de catégorie, par défault modos propriétaires
 toutes catégories, membre ou rang
 
+[FAIT] - Cat ne peut être gérée par membres en dessous limite
 [FAIT] - Affichage des articles épinglés
 [FAIT] - Partie effective système de réponse
 [FAIT] - Confirmation suppression catégorie
