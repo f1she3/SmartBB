@@ -15,31 +15,24 @@
 		$article_title = $_POST['article_title'] = secure($_POST['article_title']);
 		if(isset($_POST['article_category']) && !empty($_POST['article_category']) && is_string($_POST['article_category'])){
 			$article_category = $_POST['article_category'] = secure($_POST['article_category']);
-			if(is_category($article_category)){
-				$categories = get_category_list();
-				$result = false;
-				foreach($categories as $key => $value){
-					if($categories[$key]['name'] == $article_category){
-						if($categories[$key]['post_restriction'] <= get_rank($_SESSION['name'])){
-							$result = true;
-						}
-						break;
-					}
-				}
-				if($result){
-					if(isset($_POST['article_content']) && !empty($_POST['article_content']) && is_string($_POST['article_content']) && mb_strlen($_POST['article_content'] <= 1000)){
-						$article_content = $_POST['article_content'] = secure($_POST['article_content']);
-						$article_id = post_article($_SESSION['name'], $article_category, $article_title, $article_content);
-						redirect('article&id='.$article_id);
-					}else{
-						set_error('Erreur', 'exclamation-sign', 'Erreur avec le contenu de l\'article', 'home');
-					}
-				}else{
-					set_error('Erreur', 'exclamation-sign', 'Erreur avec la catégorie de l\'article', 'home');
-				}
-			}else{
+			if(!is_category($article_category)){
 				set_error('Erreur', 'exclamation-sign', 'Erreur avec la catégorie de l\'article', 'home');
 			}
+			$categories = get_category_list();
+			$category_infos = get_category_infos($article_category);
+			$my_rank = get_rank($_SESSION['name']);
+			if($my_rank < $category_infos['post_restriction']){
+				set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour poster ici', 'home');
+			}
+			if(isset($_POST['article_content']) && !empty($_POST['article_content']) && is_string($_POST['article_content']) && mb_strlen($_POST['article_content'] <= 1000)){
+				$article_content = $_POST['article_content'] = secure($_POST['article_content']);
+				$article_id = post_article($_SESSION['name'], $article_category, $article_title, $article_content);
+				redirect('article&id='.$article_id);
+			}else{
+				set_error('Erreur', 'exclamation-sign', 'Erreur avec le contenu de l\'article', 'home');
+			}
+		}else{
+			set_error('Erreur', 'exclamation-sign', 'Erreur avec la catégorie de l\'article', 'home');
 		}
 	}else{
 		set_error('Erreur', 'exclamation-sign', 'Erreur avec le titre de l\'article', 'home');
