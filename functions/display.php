@@ -185,7 +185,7 @@ function display_article_writing_form($category_name){
 			<div class=\"form-group col-sm-10 col-sm-offset-1\">
 				<textarea name=\"article_content\" class=\"form-control\" rows=\"10\" placeholder=\"[h1 center]Mon article[/h1]\" maxlength=\"1000\" required></textarea>
 			</div>
-			<button name=\"submit_article\" class=\"btn btn-primary col-sm-2 col-sm-offset-5 col-xs-2 col-xs-offset-5\">
+			<button name=\"submit_article\" class=\"btn btn-primary col-sm-2 col-sm-offset-5 col-xs-4 col-xs-offset-4\">
 				<span class=\"glyphicon glyphicon-pencil\"></span>
 				Publier
 			</button>

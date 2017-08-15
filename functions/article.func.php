@@ -1,6 +1,6 @@
 <?php
 
-function user_infos($user){
+function get_user_infos($user){
 	$rank = get_rank($user);
 	$ranks = get_rank_list();
 	$infos['rank'] = $ranks[$rank];
@@ -36,7 +36,7 @@ function is_article($input_id){
 		return false;
 	}
 }
-function article_infos($article_id){
+function get_article_infos($article_id){
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'SELECT * FROM articles WHERE id = ?');
 	mysqli_stmt_bind_param($query, 'i', $article_id);
@@ -78,7 +78,7 @@ function display_comment($comment_id, $article_id, $page_id){
 		$comment_infos = get_comment_infos($comment_id);
 		$fdate = date_create($comment_infos['date']);
 		$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
-		$user_infos = user_infos($comment_infos['author']);
+		$user_infos = get_user_infos($comment_infos['author']);
 		$content = format_text($comment_infos['content']);
 		echo	"<h4 class=\"text-left\">
 				<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
@@ -98,11 +98,20 @@ function display_comment($comment_id, $article_id, $page_id){
 				</blockquote>
 				<pre>".$content."</pre>";
 		}
-		echo 	"<form method=\"POST\">
-				<a href=\"#\" class=\"btn btn-info\">
+		echo 	"<form method=\"POST\">";
+		if($comment_infos['author'] == $_SESSION['name']){
+			if($article_infos['status'] === 0){
+				echo 	"<button name=\"edit_reply\" class=\"btn btn-primary\">
+						<span class=\"glyphicon glyphicon-pencil\"></span>
+						éditer
+					</button> ";
+			}
+		}else{
+			echo 	"<a href=\"#\" class=\"btn btn-info\">
 					<span class=\"glyphicon glyphicon-send\"> mp</span> 
-				</a>
-			</form><hr>
+				</a>";
+		}
+		echo 	"</form><hr>
 			<form method=\"POST\">
 				<input type=\"hidden\" name=\"parent_comment\" value=\"".$comment_id."\">
 				<div class=\"form-group col-md-8 col-md-offset-2\">
@@ -130,7 +139,7 @@ function display_comment($comment_id, $article_id, $page_id){
 		mysqli_stmt_execute($query);
 		mysqli_stmt_bind_result($query, $id, $parent_id, $author, $content, $reply_to, $date);
 		if($page_id > 1){
-			$article_infos = article_infos($article_id);
+			$article_infos = get_article_infos($article_id);
 			echo 	"<div class=\"page-header\">
 					<h2 class=\"text-center\">".$article_infos['title']."</h2>
 				</div>
@@ -143,7 +152,7 @@ function display_comment($comment_id, $article_id, $page_id){
 		while(mysqli_stmt_fetch($query)){
 			$fdate = date_create($date);
 			$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
-			$user_infos = user_infos($author);
+			$user_infos = get_user_infos($author);
 			$content = format_text($content);
 			echo	"<h4 class=\"text-left\">
 					<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
@@ -164,22 +173,33 @@ function display_comment($comment_id, $article_id, $page_id){
 					<pre>".$content."</pre>";
 			}
 			echo 	"<form method=\"POST\">";
-			$article_infos = article_infos($article_id);
+			$article_infos = get_article_infos($article_id);
 			$my_rank = get_rank($_SESSION['name']);
 			$category_infos = get_category_infos($article_infos['category']);
-			if($article_infos['status'] === 0){
-				if($my_rank >= $category_infos['post_restriction']){
-					echo "<button name=\"reply\" class=\"btn btn-primary\" value=\"".$id."\">
-							<span class=\"glyphicon glyphicon-share\"></span> 
+			$comment_infos = get_comment_infos($id);
+			if($comment_infos['author'] != $_SESSION['name']){
+				if($article_infos['status'] === 0){
+					if($my_rank >= $category_infos['post_restriction']){
+						echo 	"<button name=\"reply\" class=\"btn btn-primary\" value=\"".$id."\">
+								<span class=\"glyphicon glyphicon-share\"></span> 
 								répondre
 							</button> ";
+					}
 				}
-					
+			}else if($comment_infos['author'] == $_SESSION['name']){
+				if($article_infos['status'] === 0){
+					echo 		"<button name=\"edit_comment\" class=\"btn btn-primary\">
+								<span class=\"glyphicon glyphicon-pencil\"></span>
+								éditer
+							</button> ";
+				}
 			}
-			echo		"<a href=\"#\" class=\"btn btn-info\">
-						<span class=\"glyphicon glyphicon-send\"> mp</span> 
-					</a>
-				</form><hr>";
+			if($comment_infos['author'] != $_SESSION['name']){
+				echo		"<a href=\"#\" class=\"btn btn-info\">
+							<span class=\"glyphicon glyphicon-send\"> mp</span> 
+						</a>";
+			}
+			echo	"</form><hr>";
 		}
 		if($page_count > 1){
 			echo "<ul class=\"pagination\">";
@@ -192,7 +212,7 @@ function display_comment($comment_id, $article_id, $page_id){
 			}
 			echo 	"</ul>";
 		}
-		$article_infos = article_infos($article_id);
+		$article_infos = get_article_infos($article_id);
 		$my_rank = get_rank($_SESSION['name']);
 		$category_infos = get_category_infos($article_infos['category']);
 		if($article_infos['status'] === 0){
@@ -213,11 +233,11 @@ function display_comment($comment_id, $article_id, $page_id){
 }
 function display_article($input_id, $page_id){
 	$mysqli = get_link();
-	$article_infos = article_infos($input_id);
+	$article_infos = get_article_infos($input_id);
 	$category_infos = get_category_infos($article_infos['category']);
 	$fdate = date_create($article_infos['date']);
 	$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
-	$user_infos = user_infos($article_infos['author']);
+	$user_infos = get_user_infos($article_infos['author']);
 	$article_infos['content'] = format_text($article_infos['content']);
 	echo 	"<div class=\"page-header\">
 			<h2 class=\"text-center\">".$article_infos['title']."</h2>
@@ -251,16 +271,23 @@ function display_article($input_id, $page_id){
 				</button>";
 		}
 	}
-	echo 		"<a href=\"#\" class=\"btn btn-info\">
-				<span class=\"glyphicon glyphicon-send\"> mp</span> 
-			</a>
-			<button name=\"like\" class=\"btn btn-success\">
-				<span class=\"glyphicon glyphicon-thumbs-up\"></span>
-			</button>
-			<button name=\"dislike\" class=\"btn btn-warning\">
-				<span class=\"glyphicon glyphicon-thumbs-down\"></span>
-			</button>
-		</form><hr>";
+	if($article_infos['author'] == $_SESSION['name']){
+		echo 		"<button name=\"edit_article\" class=\"btn btn-primary\">
+					<span class=\"glyphicon glyphicon-pencil\"></span>
+					éditer
+				</button> ";
+	}else{
+		echo 		"<a href=\"#\" class=\"btn btn-info\">
+					<span class=\"glyphicon glyphicon-send\"> mp</span> 
+				</a>
+				<button name=\"like\" class=\"btn btn-success\">
+					<span class=\"glyphicon glyphicon-thumbs-up\"></span>
+				</button>
+				<button name=\"dislike\" class=\"btn btn-danger\">
+					<span class=\"glyphicon glyphicon-thumbs-down\"></span>
+				</button>";
+	}
+	echo	"</form><hr>";
 	if($page_id){
 		display_comment(false, $input_id, $page_id);
 	}
@@ -282,5 +309,31 @@ function set_article_status($article_id, $status){
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'UPDATE articles SET status = ? WHERE id = ?');
 	mysqli_stmt_bind_param($query, 'ii', $status, $article_id);
+	mysqli_stmt_execute($query);
+}
+function display_article_edition_form($article_id){
+	$article_infos = get_article_infos($article_id);
+	echo 	"<div class=\"page-header\">
+			<h3 class=\"text-center\">Editer mon article</h3>
+		</div>
+		<form method=\"POST\">
+			<div class=\"form-group col-md-4 col-md-offset-1 col-sm-6 col-sm-offset-1 col-xs-6\">
+				<label>Titre : </label>
+				<input name=\"new_article_title\" class=\"form-control\" maxlength=\"100\" value=\"".$article_infos['title']."\" autofocus required>
+			</div>
+			<div class=\"form-group col-sm-10 col-sm-offset-1\">
+				<textarea name=\"new_article_content\" class=\"form-control\" rows=\"10\" placeholder=\"[h1 center]Mon article[/h1]\" maxlength=\"1000\" required>".$article_infos['content']."</textarea>
+			</div>
+			<button name=\"submit_article_edition\" class=\"btn btn-primary col-sm-2 col-sm-offset-5 col-xs-4 col-xs-offset-4\">
+				<span class=\"glyphicon glyphicon-pencil\"></span>
+				Publier	
+			</button>
+		</form>";
+
+}
+function update_article($article_id, $new_title, $new_content){
+	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'UPDATE articles SET title = ?, content = ? WHERE id = ?');
+	mysqli_stmt_bind_param($query, 'ssi', $new_title, $new_content, $article_id);
 	mysqli_stmt_execute($query);
 }
