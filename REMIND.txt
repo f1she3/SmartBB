@@ -15,10 +15,11 @@
 [A VOIR] - Système présentation membres
 
 [EN COURS] - Utilité page admin
-[EN COURS] - Edition / suppression / création articles / commentaires
-[EN COURS] - Système propriétaire de catégorie, par défault modos propriétaires
-toutes catégories, membre ou rang
+[EN COURS] - Suppression commentaires, édition articles / commentaires
 
+[FAIT] - Création : articles / commentaires
+[FAIT] - Système propriétaire de catégorie, par défault modos propriétaires
+toutes catégories, membre ou rang
 [FAIT] - Système de fermeture / ré-ouverture d'article
 [FAIT] - Rediriger auteur vers son article après post
 [FAIT] - Cat ne peut être gérée par membres en dessous limite
