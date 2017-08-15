@@ -17,6 +17,7 @@
 [EN COURS] - Système propriétaire de catégorie, par défault modos propriétaires
 toutes catégories, membre ou rang
 [BUG] - Forcer les articles à wrapper, couper les lignes longues
+[BUG] - Gérer les retours à la ligne dans les articles & commentaires
 
 [FAIT] - Rediriger auteur vers son article après post
 [FAIT] - Cat ne peut être gérée par membres en dessous limite

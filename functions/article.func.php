@@ -175,7 +175,7 @@ function display_comment($comment_id, $article_id, $page_id){
 				echo "<button name=\"reply\" class=\"btn btn-primary\" value=\"".$id."\">
 						<span class=\"glyphicon glyphicon-share\"></span> 
 						répondre
-					</button>";
+					</button> ";
 			}
 			echo		"<a href=\"#\" class=\"btn btn-info\">
 						<span class=\"glyphicon glyphicon-send\"> mp</span> 
@@ -193,6 +193,9 @@ function display_comment($comment_id, $article_id, $page_id){
 			}
 			echo 	"</ul>";
 		}
+		$article_infos = article_infos($article_id);
+		$my_rank = get_rank($_SESSION['name']);
+		$category_infos = get_category_infos($article_infos['category']);
 		if($my_rank >= $category_infos['post_restriction']){
 		echo 	"<form method=\"POST\">
 				<div class=\"form-group col-md-8 col-md-offset-2\">
