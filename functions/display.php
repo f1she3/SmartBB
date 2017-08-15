@@ -103,7 +103,7 @@ function display_articles($category, $page_id){
 		mysqli_stmt_bind_param($query, 's', $category);
 	}
 	mysqli_stmt_execute($query);
-	mysqli_stmt_bind_result($query, $id, $category, $author, $title, $content, $date, $is_pinned);
+	mysqli_stmt_bind_result($query, $id, $category, $author, $title, $content, $date, $is_pinned, $status);
 	echo	"<div class=\"col-sm-12\">
 			<table class=\"table table-bordered\">
 				<tbody>";

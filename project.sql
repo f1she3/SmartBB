@@ -16,6 +16,7 @@ CREATE TABLE `articles` (
   `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` datetime NOT NULL,
   `is_pinned` tinyint(4) NOT NULL DEFAULT '0',
+  `status` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -113,4 +114,4 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
--- 2017-08-14 21:40:12
+-- 2017-08-15 11:21:52
