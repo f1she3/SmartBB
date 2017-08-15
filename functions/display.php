@@ -171,7 +171,7 @@ function display_article_writing_form($category_name){
 	$categories = get_category_list();
 	$user_rank = get_rank($_SESSION['name']);
 	foreach($categories as $category){
-		if($user_rank >= $category['rank_restriction']){
+		if($user_rank >= $category['post_restriction']){
 			if($category['name'] == $category_name){
 				$attribute = 'selected';
 			}else{
