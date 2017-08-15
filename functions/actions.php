@@ -182,7 +182,7 @@ function get_category_list(){
 
 	return $result;
 }
-function category_infos($category){
+function get_category_infos($category){
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'SELECT * FROM categories WHERE BINARY name = ?');
 	mysqli_stmt_bind_param($query, 's', $category);

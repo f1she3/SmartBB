@@ -170,7 +170,7 @@ function display_comment($comment_id, $article_id, $page_id){
 			echo 	"<form method=\"POST\">";
 			$article_infos = article_infos($article_id);
 			$my_rank = get_rank($_SESSION['name']);
-			$category_infos = category_infos($article_infos['category']);
+			$category_infos = get_category_infos($article_infos['category']);
 			if($my_rank >= $category_infos['post_restriction']){
 				echo "<button name=\"reply\" class=\"btn btn-primary\" value=\"".$id."\">
 						<span class=\"glyphicon glyphicon-share\"></span> 
@@ -210,7 +210,7 @@ function display_comment($comment_id, $article_id, $page_id){
 function display_article($input_id, $page_id){
 	$mysqli = get_link();
 	$article_infos = article_infos($input_id);
-	$category_infos = category_infos($article_infos['category']);
+	$category_infos = get_category_infos($article_infos['category']);
 	$fdate = date_create($article_infos['date']);
 	$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
 	$user_infos = user_infos($article_infos['author']);

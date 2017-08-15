@@ -8,7 +8,7 @@ if(isset($_GET['cat']) && !empty($_GET['cat']) && is_string($_GET['cat'])){
 	}
 	$category = $_GET['cat'] = secure($_GET['cat']);
 	if(is_category($category)){
-		$category_infos = category_infos($category);
+		$category_infos = get_category_infos($category);
 		$my_rank = get_rank($_SESSION['name']);
 		if($my_rank < $category_infos['access_restriction']){
 			set_error('Erreur 404', 'zoom-out', 'La catégorie que vous recherchez n\'éxiste pas', 'home');

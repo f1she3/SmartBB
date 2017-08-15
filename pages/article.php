@@ -12,7 +12,7 @@ if(isset($_GET['id']) && !empty($_GET['id']) && ctype_digit($_GET['id'])){
 	}
 	$article_infos = article_infos($id);
 	$my_rank = get_rank($_SESSION['name']);
-	$category_infos = category_infos($article_infos['category']);
+	$category_infos = get_category_infos($article_infos['category']);
 	if($my_rank < $category_infos['access_restriction']){
 		set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour accéder à cet article', 'home');
 	}
