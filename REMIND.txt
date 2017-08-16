@@ -7,12 +7,12 @@
 - Mettre en avant page welcome
 - Ajouter page règlement
 - Ajouter système oublie mdp
-- Ajouter système like
 - Ajouter fonctionnalités page mon compte -> Cacher email
+[A VOIR] - Ajouter système like
+[A VOIR] - Système présentation membres
 							-> Autoriser autres membres mp
 [BUG] - Forcer les articles à wrapper, couper les lignes longues
 [BUG] - Gérer les retours à la ligne dans les articles & commentaires
-[A VOIR] - Système présentation membres
 
 [EN COURS] - Utilité page admin
 [EN COURS] - Suppression commentaires, édition articles / commentaires

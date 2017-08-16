@@ -279,13 +279,7 @@ function display_article($input_id, $page_id){
 	}else{
 		echo 		"<a href=\"#\" class=\"btn btn-info\">
 					<span class=\"glyphicon glyphicon-send\"> mp</span> 
-				</a>
-				<button name=\"like\" class=\"btn btn-success\">
-					<span class=\"glyphicon glyphicon-thumbs-up\"></span>
-				</button>
-				<button name=\"dislike\" class=\"btn btn-danger\">
-					<span class=\"glyphicon glyphicon-thumbs-down\"></span>
-				</button>";
+				</a>";
 	}
 	echo	"</form><hr>";
 	if($page_id){

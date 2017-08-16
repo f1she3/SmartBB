@@ -69,16 +69,6 @@ CREATE TABLE `friends` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-DROP TABLE IF EXISTS `likes`;
-CREATE TABLE `likes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `article_id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(4) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
 DROP TABLE IF EXISTS `mute`;
 CREATE TABLE `mute` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -114,4 +104,4 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
--- 2017-08-15 11:21:52
+-- 2017-08-16 08:34:55
