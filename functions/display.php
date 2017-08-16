@@ -139,7 +139,7 @@ function display_articles($category, $page_id){
 	echo			"</tbody>
 			</table>";
 	if($i == 0){
-		echo "<p>Aucun article dans cette catégorie, soyez le premier à en poster un !</p>";
+		echo "<p class=\"text-center\">Aucun article dans cette catégorie, soyez le premier à en poster un !</p>";
 	}
 	echo 	"</div>";
 	if($page_id){

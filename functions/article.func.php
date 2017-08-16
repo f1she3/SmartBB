@@ -272,10 +272,12 @@ function display_article($input_id, $page_id){
 		}
 	}
 	if($article_infos['author'] == $_SESSION['name']){
-		echo 		"<button name=\"edit_article\" class=\"btn btn-primary\">
+		if($article_infos['status'] === 0){
+			echo 	"<button name=\"edit_article\" class=\"btn btn-primary\">
 					<span class=\"glyphicon glyphicon-pencil\"></span>
 					éditer
 				</button> ";
+		}
 	}else{
 		echo 		"<a href=\"#\" class=\"btn btn-info\">
 					<span class=\"glyphicon glyphicon-send\"> mp</span> 
