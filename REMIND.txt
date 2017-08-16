@@ -17,6 +17,7 @@
 [EN COURS] - Utilité page admin
 [EN COURS] - Suppression commentaires, édition articles / commentaires
 
+[FAIT] - Edition catégorie
 [FAIT] - Création : articles / commentaires
 [FAIT] - Système propriétaire de catégorie, par défault modos propriétaires
 toutes catégories, membre ou rang
