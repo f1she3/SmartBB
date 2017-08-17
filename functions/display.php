@@ -126,14 +126,12 @@ function display_articles($category, $page_id){
 		}else{
 			$text = $x.' réponse';
 		}
-		$glyphicon = 'envelope';
 		if($is_pinned == 1){
 			$tr_class = 'info';
 			$glyphicon = 'paperclip';
-		}else if($category_infos['is_pinned'] == 1){
-			$tr_class = 'active';
 		}else{
-			$tr_class = '';
+			$tr_class = 'active';
+			$glyphicon = 'envelope';
 		}
 		if($status === 1){
 			$prefix = '<kbd>Fermé</kbd> ';
