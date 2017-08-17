@@ -117,19 +117,6 @@ function deban($username){
 	mysqli_stmt_bind_param($query, 's', $username);
 	mysqli_stmt_execute($query);
 }
-function check_rank($username, $rank){
-	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'SELECT id FROM users WHERE BINARY name = ? AND rank = ?');
-	mysqli_stmt_bind_param($query, 'ss', $username, $rank);
-	mysqli_stmt_execute($query);
-	$result = mysqli_stmt_fetch($query);
-	if($result == 0){
-		return false;
-	
-	}else{
-		return true;
-	}
-}
 function post_article($author, $category_name, $title, $content){
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'INSERT INTO articles (author, category, title, content, date) VALUES (?, ?, ?, ?, NOW())');

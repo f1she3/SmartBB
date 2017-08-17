@@ -2,7 +2,7 @@
 
 if(isset($_POST['new_category'])){
 	$ranks = get_rank_list();
-	if(check_rank($_SESSION['name'], $ranks['max'])){
+	if(get_rank($_SESSION['name']) == $ranks['max']){
 		display_new_cat_form(false);
 	}
 }else if(isset($_POST['edit_category']) && !empty($_POST['edit_category']) && is_string($_POST['edit_category'])){
@@ -96,7 +96,7 @@ if(isset($_POST['new_category'])){
 }else if(isset($_POST['delete_category']) && !empty($_POST['delete_category']) && is_string($_POST['delete_category'])){
 	$delete_category = $_POST['delete_category'] = secure($_POST['delete_category']);
 	$ranks = get_rank_list();
-	if(check_rank($_SESSION['name'], $ranks['max'])){
+	if(get_rank($_SESSION['name']) == $ranks['max']){
 		if(is_category($delete_category)){
 			display_confirm_cat_del_form($delete_category);
 		}

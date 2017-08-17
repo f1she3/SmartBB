@@ -5,7 +5,7 @@ function display_home_page(){
 			<h2 class=\"text-center\">Accueil</h2>
 		</div>";
 	$ranks = get_rank_list();
-	if(check_rank($_SESSION['name'], $ranks['max'])){
+	if(get_rank($_SESSION['name']) == $ranks['max']){
 		echo "<form method=\"POST\">
 				<button name=\"new_category\" class=\"btn btn-default\">
 					<span class=\"glyphicon glyphicon-plus\"></span>
@@ -40,7 +40,7 @@ function display_home_page(){
 					<span class=\"glyphicon glyphicon-plus\"></span>
 				</button> ";
 		}
-		if(check_rank($_SESSION['name'], $ranks['max'])){
+		if(get_rank($_SESSION['name']) == $ranks['max']){
 			echo 	"<button name=\"edit_category\" class=\"btn btn-primary btn-sm\" value=\"".$result['name']."\">
 					<span class=\"glyphicon glyphicon-wrench\"></span>
 				</button>
@@ -148,12 +148,17 @@ function update_category($old_category_name, $category_name, $access_restriction
 		$query = mysqli_prepare($mysqli, 'UPDATE categories SET name = ?, access_restriction = ?, post_restriction = ?, 
 			rank_owner = ? WHERE BINARY name = ?');
 		mysqli_stmt_bind_param($query, 'siiis', $category_name, $access_restriction, $post_restriction, $rank_owner, $old_category_name);
+		mysqli_stmt_execute($query);
+		$mysqli = get_link();
+		$query = mysqli_prepare($mysqli, 'UPDATE articles SET category = ? WHERE BINARY category = ?');
+		mysqli_stmt_bind_param($query, 'ss', $category_name, $old_category_name);
+		mysqli_stmt_execute($query);
 	}else{
 		$query = mysqli_prepare($mysqli, 'INSERT INTO categories (name, access_restriction, post_restriction, 
 			rank_owner) VALUES (?, ?, ?, ?)');
 		mysqli_stmt_bind_param($query, 'siii', $category_name, $access_restriction, $post_restriction, $rank_owner);
+		mysqli_stmt_execute($query);
 	}
-	mysqli_stmt_execute($query);
 }
 function display_confirm_cat_del_form($category_name){
 	echo 	"<div class=\"page-header\">

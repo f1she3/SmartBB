@@ -8,6 +8,7 @@
 - Ajouter page règlement
 - Ajouter système oublie mdp
 - Ajouter fonctionnalités page mon compte -> Cacher email
+- Ajouter système d'épinglage aux catégories
 [A VOIR] - Ajouter système like
 [A VOIR] - Système présentation membres
 							-> Autoriser autres membres mp
