@@ -179,9 +179,9 @@ function display_confirm_cat_del_form($category_name){
 					<select name=\"action\" class=\"form-control\">
 						<option value=\"1\" selected>Supprimer</option>";
 	$categories = get_category_list();
-	foreach($categories as $name){
+	foreach($categories as $key => $value){
 		if($name != $category_name){
-			echo 				"<option value=\"".$name."\">Déplacer vers \"".$name."\"</option>";
+			echo 				"<option value=\"".$categories[$key]['name']."\">Déplacer vers \"".$categories[$key]['name']."\"</option>";
 		}
 	}
 	echo				"</select>

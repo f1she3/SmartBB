@@ -157,7 +157,7 @@ function delete_category($category_name, $new_category){
 }
 function get_category_list(){
 	$mysqli = get_link();
-	$query = mysqli_query($mysqli, 'SELECT * FROM categories');
+	$query = mysqli_query($mysqli, 'SELECT * FROM categories ORDER BY is_pinned DESC, id');
 	$i = 0;
 	$my_rank = get_rank($_SESSION['name']);
 	while($tmp = mysqli_fetch_assoc($query)){
