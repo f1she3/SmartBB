@@ -13,7 +13,7 @@ define('ROUTING_MODE', 'DEFAULT_SHORT');
 // Define root url according to ROUTING_MODE
 define_base_url(constant('ROUTING_MODE'));
 session_start();
-define('PROJECT_NAME', 'Project');
+define('PROJECT_NAME', '[DEV]');
 define('HOST', 'p:127.0.0.1');
 define('USER', 'project_usr');
 define('PASSWORD', 'roka304@');

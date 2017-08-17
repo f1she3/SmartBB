@@ -139,8 +139,8 @@ function display_articles($category, $page_id){
 			$prefix = '';
 		}
 		echo			"<tr class=\"".$tr_class."\">
-						<td class=\"col-sm-6\"><span class=\"glyphicon glyphicon-".$glyphicon."\"></span> ".$prefix."<a href=\"".get_base_url()."article&id=".$id."\"> ".$title."</a></td>
 						<td><span class=\"glyphicon glyphicon-user\"></span><a href=\"".get_base_url()."profile&user=".$author."\"> ".$author."</a></td>
+						<td class=\"col-sm-6\"><span class=\"glyphicon glyphicon-".$glyphicon."\"></span> ".$prefix."<a href=\"".get_base_url()."article&id=".$id."\"> ".$title."</a></td>
 						<td>".$text."</td>
 						<td>".$date."</td>
 					</tr>";
