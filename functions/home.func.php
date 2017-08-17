@@ -15,10 +15,11 @@ function display_home_page(){
 	}
 	$mysqli = get_link();
 	$my_rank = get_rank($_SESSION['name']);
-	$query = mysqli_prepare($mysqli, 'SELECT * FROM categories WHERE access_restriction <= ?');
+	$query = mysqli_prepare($mysqli, 'SELECT * FROM categories WHERE access_restriction <= ? ORDER BY is_pinned DESC');
 	mysqli_stmt_bind_param($query, 'i', $my_rank);
 	mysqli_stmt_execute($query);
-	mysqli_stmt_bind_result($query, $result['id'], $result['name'], $result['access_restriction'], $result['post_restriction'], $result['rank_owner']);
+	mysqli_stmt_bind_result($query, $result['id'], $result['name'], $result['access_restriction'], 
+		$result['post_restriction'], $result['rank_owner'], $result['is_pinned']);
 	$x = 0;
 	while(mysqli_stmt_fetch($query)){
 		$link = get_link();
@@ -126,7 +127,15 @@ function display_new_cat_form($category_name){
 			echo 			"<option value=\"".$key."\" ".$attribute.">".$value."</option>";
 		}
 	}
+	if($category_infos['is_pinned'] === 1){
+		$attribute = 'checked';
+	}else{
+		$attribute = '';
+	}
 	echo 			"</select>
+			</div>
+			<div class=\"checkbox\">
+				<label><input type=\"checkbox\" name=\"is_pinned\" ".$attribute.">Épingler</label>
 			</div>
 			<button name=\"".$button_name."\" class=\"btn btn-success col-sm-2 col-xs-3\">
 				<span class=\"glyphicon glyphicon-plus\"></span>
@@ -142,12 +151,12 @@ function display_new_cat_form($category_name){
 	echo	"</form>";
 	
 }
-function update_category($old_category_name, $category_name, $access_restriction, $post_restriction, $rank_owner){
+function update_category($old_category_name, $category_name, $access_restriction, $post_restriction, $rank_owner, $is_pinned){
 	$mysqli = get_link();
 	if($old_category_name){
 		$query = mysqli_prepare($mysqli, 'UPDATE categories SET name = ?, access_restriction = ?, post_restriction = ?, 
-			rank_owner = ? WHERE BINARY name = ?');
-		mysqli_stmt_bind_param($query, 'siiis', $category_name, $access_restriction, $post_restriction, $rank_owner, $old_category_name);
+			rank_owner = ?, is_pinned = ? WHERE BINARY name = ?');
+		mysqli_stmt_bind_param($query, 'siiiis', $category_name, $access_restriction, $post_restriction, $rank_owner, $is_pinned, $old_category_name);
 		mysqli_stmt_execute($query);
 		$mysqli = get_link();
 		$query = mysqli_prepare($mysqli, 'UPDATE articles SET category = ? WHERE BINARY category = ?');
@@ -155,8 +164,8 @@ function update_category($old_category_name, $category_name, $access_restriction
 		mysqli_stmt_execute($query);
 	}else{
 		$query = mysqli_prepare($mysqli, 'INSERT INTO categories (name, access_restriction, post_restriction, 
-			rank_owner) VALUES (?, ?, ?, ?)');
-		mysqli_stmt_bind_param($query, 'siii', $category_name, $access_restriction, $post_restriction, $rank_owner);
+			rank_owner, is_pinned) VALUES (?, ?, ?, ?, ?)');
+		mysqli_stmt_bind_param($query, 'siii', $category_name, $access_restriction, $post_restriction, $rank_owner, $is_pinned);
 		mysqli_stmt_execute($query);
 	}
 }

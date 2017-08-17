@@ -77,11 +77,15 @@ if(isset($_POST['new_category'])){
 	if($owned_by < $post_restriction){
 		set_error('Erreur', 'exclamation-sign', 'Le rang des propriétaires de la catégorie est trop faible', 'home');
 	}
+	$is_pinned = 0;
+	if(isset($_POST['is_pinned'])){
+		$is_pinned = 1;
+	}
 	if(isset($_POST['submit_cat_creation'])){
 		if(is_category($category_name)){
 			set_error('Erreur', 'exclamation-sign', 'Cette catégorie éxiste déjà', 'home');
 		}
-		update_category(false, $category_name, $access_restriction, $post_restriction, $owned_by);
+		update_category(false, $category_name, $access_restriction, $post_restriction, $owned_by, $is_pinned);
 	}else if(isset($_POST['submit_cat_edition'])){
 		if(!isset($_POST['old_cat_name']) || empty($_POST['old_cat_name']) || !is_string($_POST['old_cat_name'])){
 			set_error('Erreur', 'exclamation-sign', 'Erreur avec l\'ancien nom de catégorie', 'home');
@@ -90,7 +94,7 @@ if(isset($_POST['new_category'])){
 		if(!is_category($old_cat_name)){
 			set_error('Erreur', 'exclamation-sign', 'Erreur avec l\'ancien nom de catégorie', 'home');
 		}
-		update_category($old_cat_name, $category_name, $access_restriction, $post_restriction, $owned_by);
+		update_category($old_cat_name, $category_name, $access_restriction, $post_restriction, $owned_by, $is_pinned);
 	}
 	display_home_page(); 
 }else if(isset($_POST['delete_category']) && !empty($_POST['delete_category']) && is_string($_POST['delete_category'])){

@@ -8,7 +8,6 @@
 - Ajouter page règlement
 - Ajouter système oublie mdp
 - Ajouter fonctionnalités page mon compte -> Cacher email
-- Ajouter système d'épinglage aux catégories
 [A VOIR] - Ajouter système like
 [A VOIR] - Système présentation membres
 							-> Autoriser autres membres mp
@@ -18,6 +17,7 @@
 [EN COURS] - Utilité page admin
 [EN COURS] - Suppression commentaires, édition articles / commentaires
 
+[FAIT] - Ajouter système d'épinglage aux catégories
 [FAIT] - Edition catégorie
 [FAIT] - Création : articles / commentaires
 [FAIT] - Système propriétaire de catégorie, par défault modos propriétaires

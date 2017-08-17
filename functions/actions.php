@@ -175,7 +175,8 @@ function get_category_infos($category){
 	mysqli_stmt_bind_param($query, 's', $category);
 	mysqli_stmt_execute($query);
 	$result = array();
-	mysqli_stmt_bind_result($query, $result['id'], $result['name'], $result['access_restriction'], $result['post_restriction'], $result['rank_owner']);
+	mysqli_stmt_bind_result($query, $result['id'], $result['name'], $result['access_restriction'], 
+		$result['post_restriction'], $result['rank_owner'], $result['is_pinned']);
 	mysqli_stmt_fetch($query);
 	
 	return $result;

@@ -85,6 +85,7 @@ function format_text($text){
 	return $text;
 }
 function display_articles($category, $page_id){
+	$category_infos = get_category_infos($category);
 	$mysqli = get_link();
 	if($page_id){
 		$query = mysqli_prepare($mysqli, 'SELECT COUNT(*) FROM articles WHERE BINARY category = ?');
@@ -125,6 +126,8 @@ function display_articles($category, $page_id){
 		}
 		if($is_pinned == 1){
 			$tr_class = 'info';
+		}else if($category_infos['is_pinned'] == 1){
+			$tr_class = 'active';
 		}else{
 			$tr_class = '';
 		}
