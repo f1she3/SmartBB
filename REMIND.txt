@@ -8,6 +8,8 @@
 - Ajouter page règlement
 - Ajouter système oublie mdp
 - Ajouter fonctionnalités page mon compte -> Cacher email
+- Supprimer article après fermeture
+- Déplacer / épingler un article (par modo of course)
 [A VOIR] - Ajouter système like
 [A VOIR] - Système présentation membres
 							-> Autoriser autres membres mp

@@ -1,15 +1,15 @@
 <div class="page-header">
-	<h1 class="text-center">Bienvenue sur Project !</h1>
+	<h1 class="text-center">Bienvenue sur <?= get_project_name() ?> !</h1>
 </div>
 <p class="lead text-center">
-	Nous sommes heureux de vous accueillir sur Project !<br>
+	Nous sommes heureux de vous accueillir sur <?= get_project_name() ?> !<br>
 </p>
 <p class="text-justify">
-Project est un <b>forum francophone de <a
+<?= get_project_name() ?> est un <b>forum francophone de <a
    href="https://fr.wikipedia.org/wiki/Cybers%C3%A9curit%C3%A9">cyber-sécurité</a></b>
 	où vous pouvez apprendre et partager sur différents sujets, liés de
 	près ou de loin à l'informatique et à la cyber-sécurité, avec d'autres
-	membres passionnés. Project a pour but de créer une communauté de
+	membres passionnés. <?= get_project_name() ?> a pour but de créer une communauté de
 	passionnés où l'on partage et s'entraide afin de permettre à tout le
 	monde de progresser, chacun à son niveau.
 </p>
@@ -41,4 +41,4 @@ Project est un <b>forum francophone de <a
 	Nous vous souhaitons une bonne navigation et un bon
 	partage avec les autres membres, 
 </h3><br>
-<h3><u>Project</u></h3>
+<h3><u><?= get_project_name() ?></u></h3>

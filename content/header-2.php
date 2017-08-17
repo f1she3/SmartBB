@@ -22,7 +22,7 @@
 						<span class="icon-bar"></span>
 					</button>
 					<a class="navbar-brand" href="<?= get_root_url().get_base_url().'welcome' ?>">
-						Project	
+						<?= get_project_name() ?>
 					</a>
 				</div>
 				<div id="navbar" class="collapse navbar-collapse">
