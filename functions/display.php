@@ -97,10 +97,12 @@ function display_articles($category, $page_id){
 		$per_page = 20;
 		$page_count = ceil($count / $per_page);
 		$position = ($page_id - 1) * $per_page;
-		$query = mysqli_prepare($mysqli, 'SELECT * FROM articles WHERE BINARY category = ? ORDER BY is_pinned DESC, id DESC LIMIT ?, ?');
+		$query = mysqli_prepare($mysqli, 'SELECT * FROM articles WHERE BINARY category = ? ORDER BY is_pinned DESC, 
+			status, id DESC LIMIT ?, ?');
 		mysqli_stmt_bind_param($query, 'sii', $category, $position, $per_page);
 	}else{
-		$query = mysqli_prepare($mysqli, 'SELECT * FROM articles WHERE BINARY category = ? ORDER BY is_pinned DESC, id DESC LIMIT 12');
+		$query = mysqli_prepare($mysqli, 'SELECT * FROM articles WHERE BINARY category = ? ORDER BY is_pinned DESC, 
+			status, id DESC LIMIT 12');
 		mysqli_stmt_bind_param($query, 's', $category);
 	}
 	mysqli_stmt_execute($query);
@@ -124,15 +126,22 @@ function display_articles($category, $page_id){
 		}else{
 			$text = $x.' réponse';
 		}
+		$glyphicon = 'envelope';
 		if($is_pinned == 1){
 			$tr_class = 'info';
+			$glyphicon = 'paperclip';
 		}else if($category_infos['is_pinned'] == 1){
 			$tr_class = 'active';
 		}else{
 			$tr_class = '';
 		}
+		if($status === 1){
+			$prefix = '<kbd>Fermé</kbd> ';
+		}else{
+			$prefix = '';
+		}
 		echo			"<tr class=\"".$tr_class."\">
-						<td class=\"col-sm-6\"><span class=\"glyphicon glyphicon-envelope\"></span><a href=\"".get_base_url()."article&id=".$id."\"> ".$title."</a></td>
+						<td class=\"col-sm-6\"><span class=\"glyphicon glyphicon-".$glyphicon."\"></span> ".$prefix."<a href=\"".get_base_url()."article&id=".$id."\"> ".$title."</a></td>
 						<td><span class=\"glyphicon glyphicon-user\"></span><a href=\"".get_base_url()."profile&user=".$author."\"> ".$author."</a></td>
 						<td>".$text."</td>
 						<td>".$date."</td>

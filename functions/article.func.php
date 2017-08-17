@@ -102,7 +102,7 @@ function display_comment($comment_id, $article_id, $page_id){
 		if($comment_infos['author'] == $_SESSION['name']){
 			if($article_infos['status'] === 0){
 				echo 	"<button name=\"edit_reply\" class=\"btn btn-primary\">
-						<span class=\"glyphicon glyphicon-pencil\"></span>
+						<span class=\"glyphicon glyphicon-edit\"></span>
 						éditer
 					</button> ";
 			}
@@ -144,6 +144,7 @@ function display_comment($comment_id, $article_id, $page_id){
 					<h2 class=\"text-center\">".$article_infos['title']."</h2>
 				</div>
 				<ul class=\"breadcrumb\">
+					<li><a href=\"".get_base_url()."home\">Accueil</a></li>
 					<li><a href=\"".get_base_url()."category&cat".$article_infos['category']."\">".$article_infos['category']."</a></li>
 					<li><a href=\"".get_base_url()."article&id=".$article_id."\">".$article_infos['title']."</a></li>
 					<li>".$page_id."</li>
@@ -189,7 +190,7 @@ function display_comment($comment_id, $article_id, $page_id){
 			}else if($comment_infos['author'] == $_SESSION['name']){
 				if($article_infos['status'] === 0){
 					echo 		"<button name=\"edit_comment\" class=\"btn btn-primary\">
-								<span class=\"glyphicon glyphicon-pencil\"></span>
+								<span class=\"glyphicon glyphicon-edit\"></span>
 								éditer
 							</button> ";
 				}
@@ -231,18 +232,24 @@ function display_comment($comment_id, $article_id, $page_id){
 		}
 	}
 }
-function display_article($input_id, $page_id){
+function display_article($article_id, $page_id){
 	$mysqli = get_link();
-	$article_infos = get_article_infos($input_id);
+	$article_infos = get_article_infos($article_id);
 	$category_infos = get_category_infos($article_infos['category']);
 	$fdate = date_create($article_infos['date']);
 	$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
 	$user_infos = get_user_infos($article_infos['author']);
 	$article_infos['content'] = format_text($article_infos['content']);
+	if($article_infos['status'] === 1){
+		$prefix = "<kbd>Fermé</kbd>";
+	}else{
+		$prefix = '';
+	}
 	echo 	"<div class=\"page-header\">
-			<h2 class=\"text-center\">".$article_infos['title']."</h2>
+			<h2 class=\"text-center\">".$prefix." ".$article_infos['title']."</h2>
 		</div>
 		<ul class=\"breadcrumb\">
+			<li><a href=\"".get_base_url()."home\">Accueil</a></li>
 			<li><a href=\"".get_base_url()."category&cat=".$article_infos['category']."\">".$article_infos['category']."</a></li>
 			<li><a href=\"".get_base_url()."article&id=".$article_infos['id']."\">".$article_infos['title']."</a></li>
 		</ul>
@@ -274,7 +281,7 @@ function display_article($input_id, $page_id){
 	if($article_infos['author'] == $_SESSION['name']){
 		if($article_infos['status'] === 0){
 			echo 	"<button name=\"edit_article\" class=\"btn btn-primary\">
-					<span class=\"glyphicon glyphicon-pencil\"></span>
+					<span class=\"glyphicon glyphicon-edit\"></span>
 					éditer
 				</button> ";
 		}
@@ -285,7 +292,7 @@ function display_article($input_id, $page_id){
 	}
 	echo	"</form><hr>";
 	if($page_id){
-		display_comment(false, $input_id, $page_id);
+		display_comment(false, $article_id, $page_id);
 	}
 }
 function post_comment($parent_id, $author, $content, $reply_to){
