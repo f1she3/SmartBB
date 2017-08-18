@@ -14,13 +14,15 @@
 	<body>
 		<nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
 			<div class="container-fluid">
+				<input type="checkbox" id="navbar-toggle-cbox">
 				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+					<label for="navbar-toggle-cbox" class="navbar-toggle collapsed" data-toggle="collapse" 
+						data-target="#navbar" aria-expanded="false" aria-controls="navbar">
 						<span class="sr-only"></span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
-					</button>
+					</label>
 					<a class="navbar-brand" href="<?= get_root_url().get_base_url().'welcome' ?>">
 						<?= get_project_name() ?>
 					</a>

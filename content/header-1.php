@@ -12,21 +12,23 @@
 		<link href="<?= get_root_url().'/css/style.css' ?>" rel="stylesheet">
 	</head>
 	<body>
-		<nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
+		<nav class="navbar navbar-default navbar-inverse navbar-static-top">
 			<div class="container-fluid">
+				<input type="checkbox" id="navbar-toggle-cbox">
 				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
-						<span class="sr-only"></span>
+					<label for="navbar-toggle-cbox" class="navbar-toggle collapsed" data-toggle="collapse" 
+						data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
-					</button>
+					</label>
 					<a class="navbar-brand" href="<?= get_root_url().get_base_url().'welcome' ?>">
 						<?= get_project_name() ?>
 					</a>
 				</div>
-				<div id="navbar" class="collapse navbar-collapse">
-					<ul class="nav navbar-nav navbar-right"> 
+				<div id="navbar" class="navbar-collapse collapse">
+					<ul class="nav navbar-nav navbar-right">
 						<li class="<?php echo ($page == 'register') ? 'active' : '' ?>">
 							<a href="<?= get_root_url().get_base_url().'register' ?>">
 								<span class="glyphicon glyphicon-user"></span>
