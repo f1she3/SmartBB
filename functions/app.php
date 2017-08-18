@@ -59,8 +59,8 @@ function secure($var){
 	$mysqli = get_link();
 	$var = trim($var);
 	$var = htmlspecialchars($var);
-	$var = mysqli_escape_string($mysqli, $var);
-	$var = stripslashes($var);
+	$var = mysqli_real_escape_string($mysqli, $var);
+	//$var = stripslashes($var);
 	
 	return $var;
 }

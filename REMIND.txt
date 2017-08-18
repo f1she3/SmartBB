@@ -12,12 +12,13 @@
 [A VOIR] - Ajouter système like
 [A VOIR] - Système présentation membres
 							-> Autoriser autres membres mp
-[BUG] - Forcer les articles à wrapper, couper les lignes longues
-[BUG] - Gérer les retours à la ligne dans les articles & commentaires
+[BUG] - Impossible éditer articles 
 
+[EN COURS] - Gérer les retours à la ligne dans les articles & commentaires
 [EN COURS] - Utilité page admin
 [EN COURS] - Suppression commentaires, édition articles / commentaires
 
+[FAIT] - Forcer les articles à wrapper, couper les lignes longues
 [FAIT] - Epingler un article (par modo of course)
 [FAIT] - Déplacer un article (par modo of course)
 [FAIT] - Ajouter système d'épinglage aux catégories

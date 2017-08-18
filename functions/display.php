@@ -56,9 +56,15 @@ function datalist_options($username, $rank_restriction){
 	
 	return $result;
 }
+function new_line_to_br($text){
+	$text = str_ireplace( '\r\n', "<br>", $text);
+	
+	return $text;	
+}
 function format_text($text){
 	$pattern_1 = '#https?://[a-zA-Z0-9-\.]+\.[a-zA-Z]{2,4}(/\S*)?#';
 	$pattern_2 = '#https?://[0-9]{1,3}+(\.[0-9]{1,3}){3}#';
+	$text = new_line_to_br($text);
 	$text = htmlspecialchars_decode($text);
 	if(preg_match($pattern_1, $text)){
 		$text = strtolower($text);

@@ -261,7 +261,7 @@ function display_article($article_id, $page_id){
 			".$fdate."
 		</h4>
 		<pre>
-			<p>".$article_infos['content']."</p>
+			<p style=\"white-space: pre-wrap;\">".$article_infos['content']."</p>
 		</pre>
 		<form method=\"POST\">";
 	$author_rank = get_rank($article_infos['author']);
@@ -361,6 +361,7 @@ function display_article_edition_form($article_id, $editor){
 		echo		"</select>
 			</div>";
 	}
+		$article_infos['content'] = new_line_to_br($article_infos['content']);
 		echo	"<div class=\"form-group col-sm-10 col-sm-offset-1\">
 				<textarea name=\"new_article_content\" class=\"form-control\" rows=\"10\" placeholder=\"[h1 center]Mon article[/h1]\" maxlength=\"1000\" ".$textarea_attribute.">".$article_infos['content']."</textarea>
 			</div>";
