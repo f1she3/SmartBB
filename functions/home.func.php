@@ -175,24 +175,24 @@ function display_confirm_cat_del_form($category_name){
 		</div>
 			<form method=\"POST\" class=\"col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2\">
 				<div class=\"form-group\">
-					<label>Articles de cette catégorie : </label>
+					<label>Articles de cette catégorie :</label>
 					<select name=\"action\" class=\"form-control\">
 						<option value=\"1\" selected>Supprimer</option>";
 	$categories = get_category_list();
-	foreach($categories as $key => $value){
-		if($name != $category_name){
-			echo 				"<option value=\"".$categories[$key]['name']."\">Déplacer vers \"".$categories[$key]['name']."\"</option>";
+	foreach($categories as $category){
+		if($category['name'] != $category_name){
+			echo 				"<option value=\"".$category['name']."\">Déplacer vers \"".$category['name']."\"</option>";
 		}
 	}
 	echo				"</select>
 				</div>
 				<button name=\"confirm_cat_del\" class=\"btn btn-danger\" value=\"".$category_name."\">
-						<span class=\"glyphicon glyphicon-trash\"></span>
-						Supprimer
+					<span class=\"glyphicon glyphicon-trash\"></span>
+					Supprimer
 				</button>
 				<a class=\"btn btn-default\" href=\"".get_base_url()."home\">
-						<span class=\"glyphicon glyphicon-remove\"></span>
-						Annuler
+					<span class=\"glyphicon glyphicon-remove\"></span>
+					Annuler
 				</a>
 			</form>";
 }

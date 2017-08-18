@@ -161,7 +161,7 @@ function get_category_list(){
 	$i = 0;
 	$my_rank = get_rank($_SESSION['name']);
 	while($tmp = mysqli_fetch_assoc($query)){
-		if($my_rank >= $result['post_restriction']){
+		if($my_rank >= $tmp['post_restriction']){
 			$result[$i] = $tmp;
 			$i++;
 		}
