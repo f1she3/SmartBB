@@ -13,12 +13,13 @@ if(isset($_POST['new_category'])){
 }else if(isset($_POST['write_article']) && !empty($_POST['write_article']) && is_string($_POST['write_article'])){
 	$parent_category = $_POST['write_article'] = secure($_POST['write_article']);
 	if(is_category($parent_category)){
-		display_article_writing_form($parent_category);
+		display_article_creation_form($parent_category);
 	}else{
 		set_error('Erreur', 'zoom-out', 'Cette catégorie n\'éxiste pas', 'home');
 	}
 }else if(isset($_POST['submit_article'])){
-	if(!isset($_POST['article_title']) || empty($_POST['article_title']) || !is_string($_POST['article_title']) || mb_strlen($_POST['article_title'] > 100)){
+	if(!isset($_POST['article_title']) || empty($_POST['article_title']) || !is_string($_POST['article_title']) || 
+		mb_strlen($_POST['article_title'] > 100)){
 		set_error('Erreur', 'exclamation-sign', 'Erreur avec le titre de l\'article', 'home');
 	}
 	$article_title = $_POST['article_title'] = secure($_POST['article_title']);
@@ -35,12 +36,18 @@ if(isset($_POST['new_category'])){
 	if($my_rank < $category_infos['post_restriction']){
 		set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour poster ici', 'home');
 	}
-	if(!isset($_POST['article_content']) || empty($_POST['article_content']) || !is_string($_POST['article_content']) || mb_strlen($_POST['article_content'] > 1000)){
+	if(!isset($_POST['article_content']) || empty($_POST['article_content']) || !is_string($_POST['article_content']) || 
+		mb_strlen($_POST['article_content'] > 1000)){
 		set_error('Erreur', 'exclamation-sign', 'Erreur avec le contenu de l\'article', 'home');
 	}
-		$article_content = $_POST['article_content'] = secure($_POST['article_content']);
-		$article_id = post_article($_SESSION['name'], $article_category, $article_title, $article_content);
-		redirect('article&id='.$article_id);
+	if(isset($_POST['pin']) && $my_rank >= $category_infos['rank_owner']){
+		$pin = 1;
+	}else{
+		$pin = 0;
+	}
+	$article_content = $_POST['article_content'] = secure($_POST['article_content']);
+	$article_id = post_article($_SESSION['name'], $article_category, $article_title, $article_content, $pin);
+	redirect('article&id='.$article_id);
 }else if(isset($_POST['submit_cat_creation']) || isset($_POST['submit_cat_edition'])){
 	if(!isset($_POST['category_name']) || empty($_POST['category_name']) || !is_string($_POST['category_name'])){
 		set_error('Erreur', 'exclamation-sign', 'Erreur avec le nom de catégorie', 'home');

@@ -117,10 +117,10 @@ function deban($username){
 	mysqli_stmt_bind_param($query, 's', $username);
 	mysqli_stmt_execute($query);
 }
-function post_article($author, $category_name, $title, $content){
+function post_article($author, $category_name, $title, $content, $is_pinned){
 	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'INSERT INTO articles (author, category, title, content, date) VALUES (?, ?, ?, ?, NOW())');
-	mysqli_stmt_bind_param($query, 'ssss', $author, $category_name, $title, $content);
+	$query = mysqli_prepare($mysqli, 'INSERT INTO articles (author, category, title, content, is_pinned, date) VALUES (?, ?, ?, ?, ?, NOW())');
+	mysqli_stmt_bind_param($query, 'ssssi', $author, $category_name, $title, $content, $is_pinned);
 	mysqli_stmt_execute($query);
 	$query = mysqli_prepare($mysqli, 'SELECT id FROM articles WHERE BINARY author = ? ORDER BY id DESC');
 	mysqli_stmt_bind_param($query, 's', $author);
@@ -130,10 +130,10 @@ function post_article($author, $category_name, $title, $content){
 
 	return $id;
 }
+// status : 
+// 0 : like
+// 1 : dislike
 function like($article_id, $user, $status){
-	// status : 
-	// 0 : like
-	// 1 : dislike
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'INSERT INTO likes (article_id, name, status) VALUES (?, ?, ?)');
 	mysqli_stmt_bind_param($query, 'isi', $article_id, $user, $status);

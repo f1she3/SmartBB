@@ -92,6 +92,12 @@ if(isset($_GET['id']) && !empty($_GET['id']) && ctype_digit($_GET['id'])){
 		}
 		display_article_edition_form($id, $_SESSION['name']);
 	}else if(isset($_POST['submit_article_edition'])){
+		if($_SESSION['name'] != $article_infos['author']){
+			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour effectuer cette action', 'article&id='.$id.'&pid='.$pid);
+		}
+		if($my_rank < $category_infos['post_restriction']){
+			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour effectuer cette action', 'article&id='.$id.'&pid='.$pid);
+		}
 		if(!isset($_POST['new_article_title']) || empty($_POST['new_article_title']) || 
 			!is_string($_POST['new_article_title']) || mb_strlen($_POST['new_article_title']) > 100){
 			set_error('Erreur', 'exclamation-sign', 'Erreur avec le nouveau titre de l\'article', 'article&id='.$id);
@@ -100,12 +106,20 @@ if(isset($_GET['id']) && !empty($_GET['id']) && ctype_digit($_GET['id'])){
 			!is_string($_POST['new_article_content']) || mb_strlen($_POST['new_article_content']) > 1000){
 			set_error('Erreur', 'exclamation-sign', 'Erreur avec le nouveau contenu de l\'article', 'article&id='.$id);
 		}
+		$pin = NULL;
+		if(isset($_POST['pin'])){
+			$pin = 1;
+		}else{
+			$pin = 0;
+		}
 		$new_article_title = $_POST['new_article_title'] = secure($_POST['new_article_title']);
 		$new_article_content = $_POST['new_article_content'] = secure($_POST['new_article_content']);
 		if($new_article_title != $article_infos['title']){
-			update_article($id, $new_article_title, $new_article_content, false);
+			update_article($id, $new_article_title, $new_article_content, false, $pin);
 		}else if($new_article_content != $article_infos['content']){
-			update_article($id, $new_article_title, $new_article_content, false);
+			update_article($id, $new_article_title, $new_article_content, false, $pin);
+		}else if(!is_null($pin)){
+			update_article($id, false, false, false, $pin);
 		}
 		display_article($id, $pid);
 	}else if(isset($_POST['submit_move_article'])){

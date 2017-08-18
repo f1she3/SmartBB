@@ -99,7 +99,7 @@ function display_comment($comment_id, $article_id, $page_id){
 				<pre>".$content."</pre>";
 		}
 		echo 	"<form method=\"POST\">";
-		if($comment_infos['author'] == $_SESSION['name']){
+		if($comment_infos['author'] == $_SESSION['name'] && $my_rank >= $category_infos['post_restriction']){
 			if($article_infos['status'] === 0){
 				echo 	"<button name=\"edit_reply\" class=\"btn btn-primary\">
 						<span class=\"glyphicon glyphicon-edit\"></span>
@@ -145,7 +145,7 @@ function display_comment($comment_id, $article_id, $page_id){
 				</div>
 				<ul class=\"breadcrumb\">
 					<li><a href=\"".get_base_url()."home\">Accueil</a></li>
-					<li><a href=\"".get_base_url()."category&cat".$article_infos['category']."\">".$article_infos['category']."</a></li>
+					<li><a href=\"".get_base_url()."category&cat=".$article_infos['category']."\">".$article_infos['category']."</a></li>
 					<li><a href=\"".get_base_url()."article&id=".$article_id."\">".$article_infos['title']."</a></li>
 					<li>".$page_id."</li>
 				</ul>";
@@ -187,7 +187,7 @@ function display_comment($comment_id, $article_id, $page_id){
 							</button> ";
 					}
 				}
-			}else if($comment_infos['author'] == $_SESSION['name']){
+			}else if($comment_infos['author'] == $_SESSION['name'] && $my_rank >= $category_infos['post_restriction']){
 				if($article_infos['status'] === 0){
 					echo 		"<button name=\"edit_comment\" class=\"btn btn-primary\">
 								<span class=\"glyphicon glyphicon-edit\"></span>
@@ -278,8 +278,8 @@ function display_article($article_id, $page_id){
 				</button>";
 		}
 	}
-	if($article_infos['author'] == $_SESSION['name'] || $my_rank >= $category_infos['rank_owner']){
-		if($article_infos['status'] === 0){
+	if($article_infos['author'] == $_SESSION['name']){
+		if($article_infos['status'] === 0 && $my_rank >= $category_infos['post_restriction']){
 			echo 	"<button name=\"edit_article\" class=\"btn btn-primary\">
 					<span class=\"glyphicon glyphicon-edit\"></span>
 					éditer
@@ -316,25 +316,30 @@ function set_article_status($article_id, $status){
 }
 function display_article_edition_form($article_id, $editor){
 	$article_infos = get_article_infos($article_id);
+	$category_infos = get_category_infos($article_infos['category']);
+	$my_rank = get_rank($editor);
 	if($article_infos['author'] != $editor){
-		$attribute = 'disabled';
-		$glyphicon = 'share-alt';
+		$title_attribute = 'disabled';
+		$textarea_attribute = 'disabled';
 		$button_name = 'submit_move_article';
-		$button_content = 'Déplacer';
 	}else{
-		$attribute = '';
-		$glyphicon = 'pencil';
+		$title_attribute = 'autofocus required';
+		$textarea_attribute = 'required';
 		$button_name = 'submit_article_edition';
-		$button_content = 'Publier';
 	}
 	echo 	"<div class=\"page-header\">
-			<h3 class=\"text-center\">Editer mon article</h3>
+			<h3 class=\"text-center\">Éditer mon article</h3>
 		</div>
+		<ul class=\"breadcrumb\">
+			<li><a href=\"".get_base_url()."home\">Accueil</a></li>
+			<li><a href=\"".get_base_url()."category&cat=".$article_infos['category']."\">".$article_infos['category']."</a></li>
+			<li><a href=\"".get_base_url()."article&id=".$article_id."\">".$article_infos['title']."</a></li>
+		</ul>
 		<form method=\"POST\">
 			<div class=\"form-group col-md-4 col-md-offset-1 col-sm-6 col-sm-offset-1 col-xs-6\">
 				<label>Titre : </label>
 				<input name=\"new_article_title\" class=\"form-control\" maxlength=\"100\" 
-					value=\"".$article_infos['title']."\" autofocus required ".$attribute.">
+					value=\"".$article_infos['title']."\" ".$title_attribute.">
 			</div>";
 	if($article_infos['author'] != $editor){
 		echo 	"<div class=\"form-group col-md-2 col-md-offset-4 col-sm-3 col-sm-offset-1 col-xs-5 col-xs-offset-1\">
@@ -356,17 +361,27 @@ function display_article_edition_form($article_id, $editor){
 		echo		"</select>
 			</div>";
 	}
-	echo		"<div class=\"form-group col-sm-10 col-sm-offset-1\">
-				<textarea name=\"new_article_content\" class=\"form-control\" rows=\"10\" placeholder=\"[h1 center]Mon article[/h1]\" maxlength=\"1000\" required ".$attribute.">".$article_infos['content']."</textarea>
-			</div>
-			<button name=\"".$button_name."\" class=\"btn btn-primary col-sm-2 col-sm-offset-5 col-xs-4 col-xs-offset-4\">
-				<span class=\"glyphicon glyphicon-".$glyphicon."\"></span>
-				".$button_content."
+		echo	"<div class=\"form-group col-sm-10 col-sm-offset-1\">
+				<textarea name=\"new_article_content\" class=\"form-control\" rows=\"10\" placeholder=\"[h1 center]Mon article[/h1]\" maxlength=\"1000\" ".$textarea_attribute.">".$article_infos['content']."</textarea>
+			</div>";
+		if($my_rank >= $category_infos['rank_owner']){
+			if($article_infos['is_pinned'] === 1){
+				$checkbox_attribute = 'checked';
+			}else{
+				$checkbox_attribute = '';
+			}
+			echo	"<div class=\"checkbox col-sm-8 col-sm-offset-1\">
+					<label><input type=\"checkbox\" name=\"pin\" ".$checkbox_attribute."> Épingler</label>
+				</div>";
+		}		
+		echo "<button name=\"".$button_name."\" class=\"btn btn-primary col-sm-2 col-sm-offset-5 col-xs-4 col-xs-offset-4\">
+				<span class=\"glyphicon glyphicon-pencil\"></span>
+				Publier
 			</button>
 		</form>";
 
 }
-function update_article($article_id, $new_title, $new_content, $new_category){
+function update_article($article_id, $new_title, $new_content, $new_category, $is_pinned){
 	if($new_title){
 		$mysqli = get_link();
 		$query = mysqli_prepare($mysqli, 'UPDATE articles SET title = ? WHERE id = ?');
@@ -384,6 +399,12 @@ function update_article($article_id, $new_title, $new_content, $new_category){
 		$mysqli = get_link();
 		$query = mysqli_prepare($mysqli, 'UPDATE articles SET category = ? WHERE id = ?');
 		mysqli_stmt_bind_param($query, 'si', $new_category, $article_id);
+		mysqli_stmt_execute($query);
+	}
+	if(!is_null($is_pinned)){
+		$mysqli = get_link();
+		$query = mysqli_prepare($mysqli, 'UPDATE articles SET is_pinned = ? WHERE id = ?');
+		mysqli_stmt_bind_param($query, 'ii', $is_pinned, $article_id);
 		mysqli_stmt_execute($query);
 	}
 }

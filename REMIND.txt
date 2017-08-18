@@ -17,8 +17,8 @@
 
 [EN COURS] - Utilité page admin
 [EN COURS] - Suppression commentaires, édition articles / commentaires
-[EN COURS] - Epingler un article (par modo of course)
 
+[FAIT] - Epingler un article (par modo of course)
 [FAIT] - Déplacer un article (par modo of course)
 [FAIT] - Ajouter système d'épinglage aux catégories
 [FAIT] - Edition catégorie

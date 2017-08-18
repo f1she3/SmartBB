@@ -166,7 +166,7 @@ function display_articles($category, $page_id){
 		}
 	}
 }
-function display_article_writing_form($category_name){
+function display_article_creation_form($category_name){
 	echo 	"<div class=\"page-header\">
 			<h3 class=\"text-center\">Poster un article</h3>
 		</div>
@@ -179,7 +179,7 @@ function display_article_writing_form($category_name){
 				<label>Catégorie : </label>
 				<select name=\"article_category\" class=\"form-control\">";
 	$categories = get_category_list();
-	$user_rank = get_rank($_SESSION['name']);
+	$my_rank = get_rank($_SESSION['name']);
 	foreach($categories as $category){
 		if($user_rank >= $category['post_restriction']){
 			if($category['name'] == $category_name){
@@ -194,8 +194,13 @@ function display_article_writing_form($category_name){
 			</div>
 			<div class=\"form-group col-sm-10 col-sm-offset-1\">
 				<textarea name=\"article_content\" class=\"form-control\" rows=\"10\" placeholder=\"[h1 center]Mon article[/h1]\" maxlength=\"1000\" required></textarea>
-			</div>
-			<button name=\"submit_article\" class=\"btn btn-primary col-sm-2 col-sm-offset-5 col-xs-4 col-xs-offset-4\">
+			</div>";
+	if($my_rank >= $category_infos['rank_owner']){
+		echo 	"<div class=\"checkbox col-sm-8 col-sm-offset-1\">
+				<label><input type=\"checkbox\" name=\"pin\">Épingler</label>
+			</div>";
+	}
+	echo 		"<button name=\"submit_article\" class=\"btn btn-primary col-sm-2 col-sm-offset-5 col-xs-4 col-xs-offset-4\">
 				<span class=\"glyphicon glyphicon-pencil\"></span>
 				Publier
 			</button>
