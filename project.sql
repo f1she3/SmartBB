@@ -10,9 +10,9 @@ SET NAMES utf8mb4;
 DROP TABLE IF EXISTS `articles`;
 CREATE TABLE `articles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'NULL',
-  `author` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'NULL',
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'NULL',
+  `category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `author` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` datetime NOT NULL,
   `is_pinned` tinyint(4) NOT NULL DEFAULT '0',
@@ -38,6 +38,7 @@ CREATE TABLE `categories` (
   `access_restriction` int(11) NOT NULL DEFAULT '0',
   `post_restriction` int(11) NOT NULL DEFAULT '0',
   `rank_owner` int(11) NOT NULL DEFAULT '1',
+  `is_pinned` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -45,10 +46,10 @@ CREATE TABLE `categories` (
 DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `article_id` int(11) NOT NULL,
+  `parent_id` int(11) NOT NULL,
   `author` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `reply_to` int(11) NOT NULL,
+  `reply_to` int(11) NOT NULL DEFAULT '0',
   `date` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -87,7 +88,6 @@ CREATE TABLE `private` (
   `message` text NOT NULL,
   `date` datetime NOT NULL,
   `viewed` tinyint(4) NOT NULL DEFAULT '0',
-  `is_typing` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -104,4 +104,4 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
--- 2017-08-16 08:34:55
+-- 2017-08-19 21:34:07

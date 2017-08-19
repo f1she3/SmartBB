@@ -133,7 +133,7 @@ function display_articles($category, $page_id){
 	$i = 0;
 	while(mysqli_stmt_fetch($query)){
 		$link = get_link();
-		$req = mysqli_prepare($link, 'SELECT id FROM comments WHERE article_id = ?');
+		$req = mysqli_prepare($link, 'SELECT id FROM comments WHERE parent_id = ?');
 		mysqli_stmt_bind_param($req, 'i', $id);
 		mysqli_stmt_execute($req);
 		mysqli_stmt_bind_result($req, $reply_id);
@@ -187,9 +187,15 @@ function display_articles($category, $page_id){
 	}
 }
 function display_article_creation_form($category_name){
+	$category_infos = get_category_infos($category_name);
 	echo 	"<div class=\"page-header\">
 			<h3 class=\"text-center\">Poster un article</h3>
 		</div>
+		<ul class=\"breadcrumb\">
+			<li><a href=\"".get_base_url()."home\">Accueil</a></li>
+			<li><a href=\"".get_base_url()."category&cat=".$category_name."\">".$category_name."</a></li>
+			<li>Nouvel article</li>
+		</ul>
 		<form method=\"POST\">
 			<div class=\"form-group col-md-4 col-md-offset-1 col-sm-6 col-sm-offset-1 col-xs-6\">
 				<label>Titre : </label>
@@ -201,7 +207,7 @@ function display_article_creation_form($category_name){
 	$categories = get_category_list();
 	$my_rank = get_rank($_SESSION['name']);
 	foreach($categories as $category){
-		if($user_rank >= $category['post_restriction']){
+		if($my_rank >= $category['post_restriction']){
 			if($category['name'] == $category_name){
 				$attribute = 'selected';
 			}else{
