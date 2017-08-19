@@ -56,16 +56,30 @@ function datalist_options($username, $rank_restriction){
 	
 	return $result;
 }
-function new_line_to_br($text){
-	$text = str_ireplace( '\r\n', "<br>", $text);
+function format_new_line($text){
+	$text = str_ireplace( '\r\n', "\r\n", $text);
+
+	return $text;
+}
+function bb_decode($text){
+	$text = str_ireplace('[h1]', "<h3>", $text);
+	$text = str_ireplace('[h1 center]', "<h3 class=\"text-center\">", $text);
+	$text = str_ireplace('[/h1]', "</h3>", $text);
+	$text = str_ireplace('[code]', "<kbd>", $text);
+	$text = str_ireplace('[/code]', "</kbd>", $text);
+	$text = str_ireplace('[p]', "<p style=\"white-space: pre-wrap\">", $text);
+	$text = str_ireplace('[p center]', "<p class=\"text-center\" style=\"white-space: pre-wrap\">", $text);
+	$text = str_ireplace('[p justify]', "<p class=\"text-justify\" style=\"white-space: pre-wrap\">", $text);
+	$text = str_ireplace('[p left]', "<p class=\"text-left\" style=\"white-space: pre-wrap\">", $text);
+	$text = str_ireplace('[p right]', "<p class=\"text-right\" style=\"white-space: pre-wrap\">", $text);
+	$text = str_ireplace('[/p]', "</p>", $text);
 	
 	return $text;	
 }
 function format_text($text){
+	$text = bb_decode($text);
 	$pattern_1 = '#https?://[a-zA-Z0-9-\.]+\.[a-zA-Z]{2,4}(/\S*)?#';
 	$pattern_2 = '#https?://[0-9]{1,3}+(\.[0-9]{1,3}){3}#';
-	$text = new_line_to_br($text);
-	$text = htmlspecialchars_decode($text);
 	if(preg_match($pattern_1, $text)){
 		$text = strtolower($text);
 		$text = preg_replace($pattern_1, '<a href="$0" target="_blank">$0</a>', $text);
@@ -79,14 +93,14 @@ function format_text($text){
 	if(!isset($i)){
 		$text = str_ireplace( ':/', '<img src="../css/images/emojis/e_p.svg" height="16" width="16">', $text);
 	}
-	$text = str_ireplace( ';)', '<img src="../css/images/emojis/e_o.svg" height="16" width="16">', $text);
-	$text = str_ireplace( ':)', '<img src="../css/images/emojis/e_c.svg" height="16" width="16">', $text);
-	$text = str_ireplace( ':(', '<img src="../css/images/emojis/e_s.svg" height="16" width="16">', $text);
-	$text = str_ireplace( ':p', '<img src="../css/images/emojis/e_l.svg" height="16" width="16">', $text);
-	$text = str_ireplace( ':\\', '<img src="../css/images/emojis/e_p.svg" height="16" width="16">', $text);
-	$text = str_ireplace( ':D', '<img src="../css/images/emojis/e_b.svg" height="16" width="16">', $text);
-	$text = str_ireplace( ':-D', '<img src="../css/images/emojis/e_x.svg" height="16" width="16">', $text);
-	$text = str_ireplace( ':-)', '<img src="../css/images/emojis/e_x.svg" height="16" width="16">', $text);
+	$text = str_ireplace(';)', '<img src="../css/images/emojis/e_o.svg" height="16" width="16">', $text);
+	$text = str_ireplace(':)', '<img src="../css/images/emojis/e_c.svg" height="16" width="16">', $text);
+	$text = str_ireplace(':(', '<img src="../css/images/emojis/e_s.svg" height="16" width="16">', $text);
+	$text = str_ireplace(':p', '<img src="../css/images/emojis/e_l.svg" height="16" width="16">', $text);
+	$text = str_ireplace(':\\', '<img src="../css/images/emojis/e_p.svg" height="16" width="16">', $text);
+	$text = str_ireplace(':D', '<img src="../css/images/emojis/e_b.svg" height="16" width="16">', $text);
+	$text = str_ireplace(':-D', '<img src="../css/images/emojis/e_x.svg" height="16" width="16">', $text);
+	$text = str_ireplace(':-)', '<img src="../css/images/emojis/e_x.svg" height="16" width="16">', $text);
 	
 	return $text;
 }

@@ -60,7 +60,8 @@ function secure($var){
 	$var = trim($var);
 	$var = htmlspecialchars($var);
 	$var = mysqli_real_escape_string($mysqli, $var);
-	//$var = stripslashes($var);
+	$var = format_new_line($var);
+	$var = stripslashes($var);
 	
 	return $var;
 }

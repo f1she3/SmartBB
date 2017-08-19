@@ -14,10 +14,10 @@
 							-> Autoriser autres membres mp
 [BUG] - Impossible éditer articles 
 
-[EN COURS] - Gérer les retours à la ligne dans les articles & commentaires
 [EN COURS] - Utilité page admin
 [EN COURS] - Suppression commentaires, édition articles / commentaires
 
+[FAIT] - Gérer les retours à la ligne dans les articles & commentaires
 [FAIT] - Forcer les articles à wrapper, couper les lignes longues
 [FAIT] - Epingler un article (par modo of course)
 [FAIT] - Déplacer un article (par modo of course)
