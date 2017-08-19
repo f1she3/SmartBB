@@ -67,7 +67,8 @@ if(isset($_GET['id']) && !empty($_GET['id']) && ctype_digit($_GET['id'])){
 		}
 	}else if(isset($_POST['close_article'])){
 		if($my_rank < $category_infos['rank_owner'] || ($my_rank <= $author_rank && $my_rank != $ranks['max'])){
-			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour effectuer cette action', 'article&id='.$id.'&pid='.$pid);
+			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour 
+				effectuer cette action', 'article&id='.$id.'&pid='.$pid);
 		}
 		if($article_infos['status'] === 1){
 			set_error('Erreur', 'exclamation-sign', 'Cet article est déjà fermé', 'article&id='.$id);
@@ -77,7 +78,8 @@ if(isset($_GET['id']) && !empty($_GET['id']) && ctype_digit($_GET['id'])){
 		display_comment(false, $id, $pid);
 	}else if(isset($_POST['open_article'])){
 		if($my_rank < $category_infos['rank_owner'] || ($my_rank <= $author_rank && $my_rank != $ranks['max'])){
-			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour effectuer cette action', 'article&id='.$id.'&pid='.$pid);
+			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour 
+				effectuer cette action', 'article&id='.$id.'&pid='.$pid);
 		}
 		if($article_infos['status'] === 0){
 			set_error('Erreur', 'exclamation-sign', 'Cet article est déjà ouvert', 'article&id='.$id);
@@ -88,15 +90,29 @@ if(isset($_GET['id']) && !empty($_GET['id']) && ctype_digit($_GET['id'])){
 	}else if(isset($_POST['edit_article'])){
 		if(($article_infos['author'] != $_SESSION['name'] && $my_rank < $category_infos['rank_owner']) || 
 			$my_rank < $category_infos['post_restriction']){
-			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour effectuer cette action', 'article&id='.$id.'&pid='.$pid);
+			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour 
+				effectuer cette action', 'article&id='.$id.'&pid='.$pid);
 		}
 		display_article_edition_form($id, $_SESSION['name']);
+	}else if(isset($_POST['edit_comment'])){
+		$edit_comment = $_POST['edit_comment'] = secure($_POST['edit_comment']);
+		if(!is_comment($edit_comment)){
+			set_error('Erreur', 'exclamation-sign', 'Ce commentaire n\'éxiste pas', 'article&id='.$id);
+		}
+		$comment_infos = get_comment_infos($edit_comment);
+		if($comment_infos['author'] != $_SESSION['name'] || $my_rank < $category_infos['post_restriction']){
+			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour 
+				effectuer cette action', 'article&id='.$id);
+		}
+		display_comment_edition_form($edit_comment);
 	}else if(isset($_POST['submit_article_edition'])){
 		if($_SESSION['name'] != $article_infos['author']){
-			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour effectuer cette action', 'article&id='.$id.'&pid='.$pid);
+			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour 
+				effectuer cette action', 'article&id='.$id.'&pid='.$pid);
 		}
 		if($my_rank < $category_infos['post_restriction']){
-			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour effectuer cette action', 'article&id='.$id.'&pid='.$pid);
+			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour 
+				effectuer cette action', 'article&id='.$id.'&pid='.$pid);
 		}
 		if(!isset($_POST['new_article_title']) || empty($_POST['new_article_title']) || 
 			!is_string($_POST['new_article_title']) || mb_strlen($_POST['new_article_title']) > 100){
@@ -139,6 +155,21 @@ if(isset($_GET['id']) && !empty($_GET['id']) && ctype_digit($_GET['id'])){
 		}
 		update_article($id, false, false, $move_article);
 		display_article($id, $pid);
+	}else if(isset($_POST['submit_comment_edition'])){
+		$submit_comment_edition = $_POST['submit_comment_edition'] = secure($_POST['submit_comment_edition']);
+		if(!is_comment($submit_comment_edition)){
+			set_error('Erreur', 'exclamation-sign', 'Erreur lors de l\'édition du commentaire', 'article&id='.$id);
+		}
+		$comment_infos = get_comment_infos($submit_comment_edition);
+		if($comment_infos['author'] != $_SESSION['name'] || get_rank($comment_infos['author']) < $category_infos['post_restriction']){
+			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour effectuer cette action', 'article&id='.$id);
+		}
+		if(!isset($_POST['new_content']) || empty($_POST['new_content']) || !is_string($_POST['new_content'])){
+			set_error('Erreur', 'exclamation-sign', 'Erreur avec le nouveau contenu du commentaire', 'article&id='.$id);
+		}
+		$new_content = $_POST['new_content'] = secure($_POST['new_content']);
+		update_comment($submit_comment_edition, $new_content);
+		display_article($comment_infos['parent_id'], 1);
 	}else{
 		if($pid != 1){
 			display_comment(false, $id, $pid);

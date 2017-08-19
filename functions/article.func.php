@@ -125,7 +125,7 @@ function display_comment($comment_id, $article_id, $page_id){
 			</form>";
 	// Display all comments
 	}else{
-		$query = mysqli_prepare($mysqli, 'SELECT COUNT(*) FROM comments WHERE article_id = ?');
+		$query = mysqli_prepare($mysqli, 'SELECT COUNT(*) FROM comments WHERE parent_id = ?');
 		mysqli_stmt_bind_param($query, 'i', $article_id);
 		mysqli_stmt_execute($query);
 		mysqli_stmt_bind_result($query, $count);
@@ -134,7 +134,7 @@ function display_comment($comment_id, $article_id, $page_id){
 		$page_count = ceil($count / $per_page);
 		$position = ($page_id - 1) * $per_page;
 		$mysqli = get_link();
-		$query = mysqli_prepare($mysqli, 'SELECT * FROM  comments WHERE article_id = ? LIMIT ?, ?');
+		$query = mysqli_prepare($mysqli, 'SELECT * FROM  comments WHERE parent_id = ? LIMIT ?, ?');
 		mysqli_stmt_bind_param($query, 'iii', $article_id, $position, $per_page);
 		mysqli_stmt_execute($query);
 		mysqli_stmt_bind_result($query, $id, $parent_id, $author, $content, $reply_to, $date);
@@ -189,7 +189,7 @@ function display_comment($comment_id, $article_id, $page_id){
 				}
 			}else if($comment_infos['author'] == $_SESSION['name'] && $my_rank >= $category_infos['post_restriction']){
 				if($article_infos['status'] === 0){
-					echo 		"<button name=\"edit_comment\" class=\"btn btn-primary\">
+					echo 		"<button name=\"edit_comment\" class=\"btn btn-primary\" value=\"".$id."\">
 								<span class=\"glyphicon glyphicon-edit\"></span>
 								éditer
 							</button> ";
@@ -231,6 +231,33 @@ function display_comment($comment_id, $article_id, $page_id){
 			}
 		}
 	}
+}
+function display_comment_edition_form($comment_id){
+	$comment_infos = get_comment_infos($comment_id);
+	$fdate = date_create($comment_infos['date']);
+	$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
+	$user_infos = get_user_infos($comment_infos['author']);
+	$comment_infos['content'] = format_text($comment_infos['content']);
+	display_article($comment_infos['parent_id'], false);
+	echo	"<div class=\"col-sm-8 col-sm-offset-2\">
+			<h4 class=\"text-left\">
+				<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
+				<a href=\"".get_base_url()."profile&user=".$comment_infos['author']."\">
+					<abbr title=\"".$user_infos."\">".$comment_infos['author']."</abbr>
+				</a>
+				".$fdate."
+			</h4>
+			<form method=\"POST\">
+				<div class=\"form-group\">
+					<textarea name=\"new_content\" class=\"form-control\" autofocus required>".$comment_infos['content']."</textarea>
+				</div>
+				<button name=\"submit_comment_edition\" class=\"btn btn-primary col-sm-3 
+					col-sm-offset-4 col-xs-3 col-xs-offset-4\" value=\"".$comment_id."\">
+					<span class=\"glyphicon glyphicon-pencil\"></span>
+					Publier	
+				</button>
+			</form>
+		</div>";
 }
 function display_article($article_id, $page_id){
 	$mysqli = get_link();
@@ -408,4 +435,10 @@ function update_article($article_id, $new_title, $new_content, $new_category, $i
 		mysqli_stmt_bind_param($query, 'ii', $is_pinned, $article_id);
 		mysqli_stmt_execute($query);
 	}
+}
+function update_comment($comment_id, $new_content){
+	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'UPDATE comments SET content = ? WHERE id = ?');
+	mysqli_stmt_bind_param($query, 'si', $new_content, $comment_id);
+	mysqli_stmt_execute($query);
 }
