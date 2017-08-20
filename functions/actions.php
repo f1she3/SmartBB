@@ -55,9 +55,9 @@ function is_user($input){
 function is_rank($input_rank){
 	$ranks = get_rank_list();
 	$result = false;
-	foreach($ranks as $key => $value){
-		if(isset($ranks[$key])){
-			$result = true;
+	foreach($ranks as $key => $rank){
+		if($key == $input_rank){
+			$result = true;	
 			break;
 		}
 	}
@@ -80,7 +80,9 @@ function get_rank_list(){
 	$ranks[1] = 'Modérateur';
 	$ranks[2] = 'Administrateur';
 	$ranks[3] = 'Chef Administrateur';
-	// Change this value to the number of ranks
+	// Change this value to the actual number of ranks - 1
+	$ranks['moderator'] = 1;
+	$ranks['administrator'] = 2;
 	$ranks['max'] = 3;
 
 	return $ranks;

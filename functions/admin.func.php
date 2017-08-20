@@ -36,7 +36,7 @@ function display_server_infos(){
 	echo	"<div class=\"page-header\">
 			<h3 class=\"text-center\">Administration</h3>
 		</div>
-		<form method=\"POST\" class=\"col-md-6 col-md-offset-3\">
+		<form method=\"POST\" class=\"col-md-8 col-md-offset-2\">
 			<div class=\"input-group\">
 				<input type=\"text\" name=\"user\" list=\"search_users\" class=\"form-control\" maxlength=\"25\" autofocus>
 				<span class=\"input-group-btn\">
@@ -48,10 +48,8 @@ function display_server_infos(){
 		</form>
 		<datalist id=\"search_users\">";
 	$ret_datalist_options = datalist_options($_SESSION['name'], false);
-	$i = 0;
-	while(isset($ret_datalist_options[$i])){
-		echo $ret_datalist_options[$i];
-		$i++;
+	foreach($ret_datalist_options as $option){
+		echo "<option value=\"".$option."\">";
 	}
 	echo "</datalist>";
 	$infos = server_infos();

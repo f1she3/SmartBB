@@ -3,18 +3,17 @@
 - Cloner système amis
 - Créer système réputation
 - Ajouter gestion / création catégories
-- Ajouter système de recherche
 - Mettre en avant page welcome
 - Ajouter page règlement
 - Ajouter système oublie mdp
-- Ajouter fonctionnalités page mon compte : - Cacher email
-							  - Autoriser autres membres mp
+- Ajouter fonctionnalités page mon compte : Cacher email / Autoriser autres membres mp
+- Ajouter système de recherche
 - Supprimer article après fermeture
+
 [A VOIR] - Système présentation membres
-[BUG] - Impossible éditer articles 
 
-[EN COURS] - Utilité page admin
-
+[FAIT] - Ergonomie bannir et changer rang utilisateur par admin
+[FAIT] - Utilité page admin
 [FAIT] - Suppression commentaires, édition articles / commentaires
 [FAIT] - Gérer les retours à la ligne dans les articles & commentaires
 [FAIT] - Forcer les articles à wrapper, couper les lignes longues

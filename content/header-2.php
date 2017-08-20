@@ -31,7 +31,7 @@
 					<ul class="nav navbar-nav navbar-right"> 
 						<li class="<?php echo ($page == 'home') ? 'active' : '' ?>">
 							<a href="<?= get_root_url().get_base_url().'home' ?>">
-								<span class="glyphicon glyphicon-th-list"></span>
+								<span class="glyphicon glyphicon-home"></span>
 								ACCUEIL	
 							</a>
 						</li>
@@ -46,7 +46,7 @@
 								}
 								echo "<li class=\"".$class."\">
 										<a href=\"".get_root_url().get_base_url()."admin\">
-											<span class=\"glyphicon glyphicon-wrench\"></span> ADMINISTRATION 
+											<span class=\"glyphicon glyphicon-tasks\"></span> ADMINISTRATION 
 										</a>
 									</li>";
 							}						
@@ -55,7 +55,7 @@
 						<li class="<?php echo ($page == 'profile') ? ' active' : '' ?>">
 							<a href="<?= get_root_url().get_base_url().'profile' ?>">
 								<span class="glyphicon glyphicon-user"></span>
-								COMPTE
+								MON PROFIL
 							</a>
 						</li>
 						<li>

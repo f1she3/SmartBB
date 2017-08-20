@@ -10,7 +10,7 @@ function set_error($title, $icon, $content, $location){
 	}
 	if($icon){
 		if($icon == 'error'){
-			$icon =	"<img src=\"../css/images/emojis/e_s.svg\" height=\"40\" width=\"40\" class=\"center-block\">
+			$icon =	"<span class=\"glyphicon glyphicon-arrow-left\"></span>
 					<h4 class=\"text-center\">
 						<span class=\"glyphicon glyphicon-".$icon."\"></span>
 					</h4>";
@@ -27,10 +27,18 @@ function set_error($title, $icon, $content, $location){
 	}else{
 		$content = '';
 	}
-	if($location){
-		$location = 	"<a href=\"".get_root_url().get_base_url().$location."\">
-					<img src=\"".get_root_url()."/css/images/home.svg\" height=\"75\" width=\"75\" class=\"center-block\">
-				</a>";
+	if($location === 'home'){
+		$location = 	"<h1 class=\"text-center\">
+						<a href=\"".get_root_url().get_base_url().$location."\" class=\"text-danger\">
+							<span class=\"glyphicon glyphicon-home\"></span>
+						</a>
+					</h1>";
+	}else if($location){
+		$location = 	"<h1 class=\"text-center\">
+						<a href=\"".get_root_url().get_base_url().$location."\" class=\"text-danger\">
+							<span class=\"glyphicon glyphicon-circle-arrow-left\"></span>
+						</a>
+					</h1>";
 	}else{
 		$location = '';
 	}
