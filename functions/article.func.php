@@ -302,7 +302,10 @@ function display_article($article_id, $page_id){
 		}else{
 			echo 	"<button name=\"open_article\" class=\"btn btn-success\">
 					<span class=\"glyphicon glyphicon-ok\"> ouvrir</span> 
-				</button>";
+				</button>
+				<button name=\"delete_article\" class=\"btn btn-danger pull-right\">
+					<span class=\"glyphicon glyphicon-trash\">
+				</button> ";
 		}
 	}
 	if($article_infos['author'] == $_SESSION['name']){
@@ -441,4 +444,7 @@ function update_comment($comment_id, $new_content){
 	$query = mysqli_prepare($mysqli, 'UPDATE comments SET content = ? WHERE id = ?');
 	mysqli_stmt_bind_param($query, 'si', $new_content, $comment_id);
 	mysqli_stmt_execute($query);
+}
+function display_article_deletion_form(){
+	// WORK HERE	
 }

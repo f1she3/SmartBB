@@ -87,6 +87,12 @@ if(isset($_GET['id']) && !empty($_GET['id']) && ctype_digit($_GET['id'])){
 		set_article_status($id, 0);
 		display_article($id, false);
 		display_comment(false, $id, $pid);
+	}else if(isset($_POST['delete_article'])){
+		if($my_rank <= $author_rank || $my_rank < $category_infos['rank_owner']){
+			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour 
+				effectuer cette action', 'article&id='.$id);
+		}
+		display_article_deletion_form();
 	}else if(isset($_POST['edit_article'])){
 		if(($article_infos['author'] != $_SESSION['name'] && $my_rank < $category_infos['rank_owner']) || 
 			$my_rank < $category_infos['post_restriction']){
