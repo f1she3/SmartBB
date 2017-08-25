@@ -85,7 +85,7 @@ function display_new_cat_form($category_name){
 				<select name=\"access_restriction\" class=\"form-control\">";
 	$ranks = get_rank_list();
 	foreach($ranks as $key => $value){
-		if($value != $ranks['max']){
+		if($value != $ranks['max'] && $value != $ranks['moderator'] && $value != $ranks['administrator']){
 			if($key == $category_infos['access_restriction']){
 				$attribute = 'selected';
 			}else{
@@ -101,7 +101,7 @@ function display_new_cat_form($category_name){
 				<select name=\"post_restriction\" class=\"form-control\">";
 	$ranks = get_rank_list();
 	foreach($ranks as $key => $value){
-		if($value != $ranks['max']){
+		if($value != $ranks['max'] && $value != $ranks['moderator'] && $value != $ranks['administrator']){
 			if($key == $category_infos['post_restriction']){
 				$attribute = 'selected';
 			}else{
@@ -116,7 +116,7 @@ function display_new_cat_form($category_name){
 				<label>Gérée par :</label>
 				<select name=\"owned_by\" class=\"form-control\">";
 	foreach($ranks as $key => $value){
-		if($value != $ranks['max']){
+		if($value != $ranks['max'] && $value != $ranks['moderator'] && $value != $ranks['administrator']){
 			if($key == $category_infos['rank_owner']){
 				$attribute = 'selected';
 			}else if($value == $ranks[1]){
@@ -165,7 +165,7 @@ function update_category($old_category_name, $category_name, $access_restriction
 	}else{
 		$query = mysqli_prepare($mysqli, 'INSERT INTO categories (name, access_restriction, post_restriction, 
 			rank_owner, is_pinned) VALUES (?, ?, ?, ?, ?)');
-		mysqli_stmt_bind_param($query, 'siii', $category_name, $access_restriction, $post_restriction, $rank_owner, $is_pinned);
+		mysqli_stmt_bind_param($query, 'siiii', $category_name, $access_restriction, $post_restriction, $rank_owner, $is_pinned);
 		mysqli_stmt_execute($query);
 	}
 }
