@@ -220,7 +220,8 @@ function display_comment($comment_id, $article_id, $page_id){
 			if($my_rank >= $category_infos['post_restriction']){
 				echo 	"<form method=\"POST\">
 						<div class=\"form-group col-md-8 col-md-offset-2\">
-							<textarea class=\"form-control\" style=\"resize:none\" name=\"comment\" placeholder=\"Commenter cet article\" maxlength=\"500\" required></textarea>
+							<textarea class=\"form-control\" style=\"resize:none\" name=\"comment\" 
+								placeholder=\"Commenter cet article\" maxlength=\"500\" required></textarea>
 						</div>
 						<div class=\"form-group col-md-4 col-md-offset-4\">
 							<button class=\"btn btn-primary col-sm-2 col-xs-2 col-xs-offset-5\" name=\"submit_comment\">
@@ -393,7 +394,8 @@ function display_article_edition_form($article_id, $editor){
 	}
 		$article_infos['content'] = format_new_line($article_infos['content']);
 		echo	"<div class=\"form-group col-sm-10 col-sm-offset-1\">
-				<textarea name=\"new_article_content\" class=\"form-control\" rows=\"10\" placeholder=\"[h1 center]Mon article[/h1]\" maxlength=\"1000\" ".$textarea_attribute.">".$article_infos['content']."</textarea>
+				<textarea name=\"new_article_content\" class=\"form-control\" rows=\"10\" placeholder=\"[h1 center]Mon article[/h1]\" 
+					maxlength=\"1000\" ".$textarea_attribute.">".$article_infos['content']."</textarea>
 			</div>";
 		if($my_rank >= $category_infos['rank_owner']){
 			if($article_infos['is_pinned'] === 1){
@@ -446,5 +448,37 @@ function update_comment($comment_id, $new_content){
 	mysqli_stmt_execute($query);
 }
 function display_article_deletion_form(){
-	// WORK HERE	
+	echo 	"<div class=\"page-header\">
+			<h3 class=\"text-center\">
+				Supprimer cet article ?
+			</h3>
+		</div>
+		<form method=\"POST\" class=\"col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2\">
+			<div class=\"form-group\">
+				<label>Veuillez saisir votre mot de passe :</label>
+				<input type=\"password\" name=\"password\" class=\"form-control\" placeholder=\"Votre mot de passe\" maxlength=\"60\" autofocus required>
+			</div>
+			<button name=\"submit_article_deletion\" class=\"btn btn-danger\">
+				<span class=\"glyphicon glyphicon-trash\">
+				Supprimer
+			</button>";
+}
+function delete_comment($parent_id, $comment_id){
+	$mysqli = get_link();
+	if($parent_id === NULL){
+		$query = mysqli_prepare($mysqli, 'DELETE FROM comments WHERE id = ?');
+		mysqli_stmt_bind_param($query, 'i', $comment_id);
+		mysqli_stmt_execute($query);
+	}else{
+		$query = mysqli_prepare($mysqli, 'DELETE FROM comments WHERE parent_id = ?');
+		mysqli_stmt_bind_param($query, 'i', $parent_id);
+		mysqli_stmt_execute($query);
+	}
+}
+function delete_article($id){
+	$mysqli = get_link();
+	delete_comment($id, false);
+	$query = mysqli_prepare($mysqli, 'DELETE FROM articles WHERE id = ?');
+	mysqli_stmt_bind_param($query, 'i', $id);
+	mysqli_stmt_execute($query);
 }

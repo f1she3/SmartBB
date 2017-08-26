@@ -17,6 +17,34 @@ function is_banned($username){
 		return $result;
 	}
 }
+function check_ids($type, $input, $username){
+	$mysqli = get_link();
+	if($type == 'name'){
+		$query = mysqli_prepare($mysqli, 'SELECT id FROM users WHERE BINARY name = ?');
+		mysqli_stmt_bind_param($query, 's', $username);
+		mysqli_stmt_execute($query);
+		$result = mysqli_stmt_fetch($query);
+		if(!empty($result)){
+			return true;
+		
+		}else{
+			return false;
+		}
+	
+	}else if($type == 'password'){
+		$query = mysqli_prepare($mysqli, 'SELECT password FROM users WHERE BINARY name = ?');
+		mysqli_stmt_bind_param($query, 's', $username);
+		mysqli_stmt_execute($query);
+		mysqli_stmt_bind_result($query, $db_password);
+		mysqli_stmt_fetch($query);
+		if(password_verify($input, $db_password)){
+			return true;
+	
+		}else{
+			return false;
+		}
+	}
+}
 function is_category($input_name){
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'SELECT id FROM categories WHERE BINARY name = ?');

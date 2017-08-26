@@ -11,8 +11,8 @@
 
 [A VOIR] - Système présentation membres
 
-[EN COURS]- Supprimer article après fermeture
 
+[FAIT] - Supprimer article après fermeture
 [FAIT] - Ergonomie bannir et changer rang utilisateur par admin
 [FAIT] - Utilité page admin
 [FAIT] - Suppression commentaires, édition articles / commentaires

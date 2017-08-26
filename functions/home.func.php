@@ -49,9 +49,9 @@ function display_home_page(){
 					<span class=\"glyphicon glyphicon-trash\"></span>
 				</button>";
 		}
-	echo "<hr>";
+	echo 		"<hr>";
 	display_articles($result['name'], false);
-	echo "</form>";
+	echo 	"</form>";
 	$x++;
 }
 if($x == 0){

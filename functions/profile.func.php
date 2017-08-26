@@ -53,7 +53,7 @@ function display_user_infos($username, $is_current_user){
 	}
 	if(!$is_current_user){
 		echo "<div class=\"page-header\">
-				<h3 class=\"text-center\">".$username."</h3>
+				<h3 class=\"text-center\">\"".$username."\"</h3>
 			</div>";
 		if($my_rank >= $ranks['administrator'] && $my_rank > $user_rank){
 			echo 	"<form method=\"POST\">";
@@ -121,8 +121,7 @@ function display_user_infos($username, $is_current_user){
 		echo "<h3 class=\"text-center\">Informations</h3>
 				<pre>
 					<ul>
-						<li><h4>Pseudo : ".$username."</h4></li>
-						<li><h4>Inscription : ".$fdate."</h4></li>
+						<li><h4>Inscription ".$fdate."</h4></li>
 						<li><h4>".$msg_text." ".$user_infos['article_count']."</h4></li>
 						<li><h4>Grade : ".$ranks[$user_infos['rank']]."</h4></li>
 					</ul>
@@ -134,13 +133,12 @@ function display_user_infos($username, $is_current_user){
 				</a>
 			</div>
 			<div class=\"page-header\">
-				<h3 class=\"text-center\">".$username."</h3>
+				<h3 class=\"text-center\">\"".$username."\"</h3>
 			</div>
 			<h3 class=\"text-center\">Informations</h3>
 			<pre class=\"col-sm-8 col-sm-offset-2\">
 				<ul>
-					<li style=\"font-size:18px\">Pseudo : ".$username."</li>
-					<li style=\"font-size:18px\">Inscription : ".$fdate."</li>
+					<li style=\"font-size:18px\">Inscription ".$fdate."</li>
 					<li style=\"font-size:18px\">".$friend_text." ".$user_infos['friend_count']."</li>
 					<li style=\"font-size:18px\">".$msg_text." ".$user_infos['article_count']."</li>
 					<li style=\"font-size:18px\">Grade : ".$ranks[$user_infos['rank']]."</li>

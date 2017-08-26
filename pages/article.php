@@ -88,11 +88,27 @@ if(isset($_GET['id']) && !empty($_GET['id']) && ctype_digit($_GET['id'])){
 		display_article($id, false);
 		display_comment(false, $id, $pid);
 	}else if(isset($_POST['delete_article'])){
-		if($my_rank <= $author_rank || $my_rank < $category_infos['rank_owner']){
+		if(($my_rank != $ranks['max'] && $my_rank <= $author_rank) || $my_rank < $category_infos['rank_owner']){
 			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour 
 				effectuer cette action', 'article&id='.$id);
 		}
 		display_article_deletion_form();
+	}else if(isset($_POST['submit_article_deletion'])){
+		if(($my_rank != $ranks['max'] && $my_rank <= $author_rank) || $my_rank < $category_infos['rank_owner']){
+			set_error('Erreur', 'exclamation-sign', 'Vous n\'avez pas les droits nécessaires pour 
+				effectuer cette action', 'article&id='.$id);
+		}
+		if(!isset($_POST['password']) || empty($_POST['password']) || !is_string($_POST['password']) || 
+			mb_strlen($_POST['password']) < 6 || mb_strlen($_POST['password']) > 60){
+			set_error('Erreur', 'exclamation-sign', 'Erreur avec le mot de passe', 'article&id='.$id);
+		}
+		$password = $_POST['password'] = secure($_POST['password']);
+		if(!check_ids('password', $password, $_SESSION['name'])){
+			set_error('Erreur', 'exclamation-sign', 'Erreur avec le mot de passe', 'article&id='.$id);
+		}
+		delete_article($id);
+		redirect('home');
+				
 	}else if(isset($_POST['edit_article'])){
 		if(($article_infos['author'] != $_SESSION['name'] && $my_rank < $category_infos['rank_owner']) || 
 			$my_rank < $category_infos['post_restriction']){
