@@ -5,11 +5,18 @@
 - Ajouter gestion / création catégories
 - Mettre en avant page welcome
 - Ajouter page règlement
-- Ajouter système oublie mdp
 - Ajouter fonctionnalités page mon compte : Cacher email / Autoriser autres membres mp
 - Ajouter système de recherche
 
 [A VOIR] - Système présentation membres
+[A VOIR] - Gérer les droits des admin (création catégorie ...etc)
+[EN COURS] - Ajouter système oublie mdp : 
+	-Entrer / vérifier email
+	-Envoyer un code par mail, et le sauvegarder en db
+	-Laisser 3 essais, si valide formulaire nouveau mot de passe, sinon code
+	passé à NULL en db
+	-Passer le code à NULL en db si connection réalisée avec succès / Si +
+	de 48h
 
 
 [FAIT] - Supprimer article après fermeture

@@ -70,15 +70,29 @@ function is_logged(){
 }
 function is_user($input){
 	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'SELECT name FROM users WHERE BINARY name = ?');
-	mysqli_stmt_bind_param($query, 's', $input);
-	mysqli_stmt_execute($query); $result = mysqli_stmt_fetch($query);
+	$query = mysqli_prepare($mysqli, 'SELECT name FROM users WHERE BINARY name = ? OR email = ?');
+	mysqli_stmt_bind_param($query, 'ss', $input, $input);
+	mysqli_stmt_execute($query); 
+	mysqli_stmt_bind_result($query, $name);
+	$result = mysqli_stmt_fetch($query);
 	if($result == 0){
 		return false;
 	
 	}else{
-		return true;
+		return $name;
 	}
+}
+function get_user_infos($user){
+	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'SELECT * FROM users WHERE BINARY name = ?');
+	mysqli_stmt_bind_param($query, 's', $user);
+	mysqli_stmt_execute($query);
+	$result = array();
+	mysqli_stmt_bind_result($query, $result['id'], $result['name'], $result['email'], $result['password'], 
+		$result['reg_date'], $result['rank'], $result['recovery_code']);
+	mysqli_stmt_fetch($query);
+
+	return $result;
 }
 function is_rank($input_rank){
 	$ranks = get_rank_list();

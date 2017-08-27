@@ -1,6 +1,6 @@
 <?php
 
-function get_user_infos($user){
+function get_user_description($user){
 	$rank = get_rank($user);
 	$ranks = get_rank_list();
 	$infos['rank'] = $ranks[$rank];
@@ -78,12 +78,12 @@ function display_comment($comment_id, $article_id, $page_id){
 		$comment_infos = get_comment_infos($comment_id);
 		$fdate = date_create($comment_infos['date']);
 		$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
-		$user_infos = get_user_infos($comment_infos['author']);
+		$user_description = get_user_description($comment_infos['author']);
 		$content = format_text($comment_infos['content']);
 		echo	"<h4 class=\"text-left\">
 				<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
 				<a href=\"".get_base_url()."profile&user=".$comment_infos['author']."\">
-					<abbr title=\"".$user_infos."\">".$comment_infos['author']."</abbr>
+					<abbr title=\"".$user_description."\">".$comment_infos['author']."</abbr>
 				</a>
 				".$fdate."
 			</h4>";
@@ -153,12 +153,12 @@ function display_comment($comment_id, $article_id, $page_id){
 		while(mysqli_stmt_fetch($query)){
 			$fdate = date_create($date);
 			$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
-			$user_infos = get_user_infos($author);
+			$user_description = get_user_description($author);
 			$content = format_text($content);
 			echo	"<h4 class=\"text-left\">
 					<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
 					<a href=\"".get_base_url()."profile&user=".$author."\">
-						<abbr title=\"".$user_infos."\">".$author."</abbr>
+						<abbr title=\"".$user_description."\">".$author."</abbr>
 					</a>
 					".$fdate."
 				</h4>";
@@ -237,14 +237,14 @@ function display_comment_edition_form($comment_id){
 	$comment_infos = get_comment_infos($comment_id);
 	$fdate = date_create($comment_infos['date']);
 	$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
-	$user_infos = get_user_infos($comment_infos['author']);
+	$user_description = get_user_description($comment_infos['author']);
 	$comment_infos['content'] = format_text($comment_infos['content']);
 	display_article($comment_infos['parent_id'], false);
 	echo	"<div class=\"col-sm-8 col-sm-offset-2\">
 			<h4 class=\"text-left\">
 				<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
 				<a href=\"".get_base_url()."profile&user=".$comment_infos['author']."\">
-					<abbr title=\"".$user_infos."\">".$comment_infos['author']."</abbr>
+					<abbr title=\"".$user_description."\">".$comment_infos['author']."</abbr>
 				</a>
 				".$fdate."
 			</h4>
@@ -266,7 +266,7 @@ function display_article($article_id, $page_id){
 	$category_infos = get_category_infos($article_infos['category']);
 	$fdate = date_create($article_infos['date']);
 	$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
-	$user_infos = get_user_infos($article_infos['author']);
+	$user_description = get_user_description($article_infos['author']);
 	$article_infos['content'] = format_text($article_infos['content']);
 	if($article_infos['status'] === 1){
 		$prefix = "<kbd>Fermé</kbd>";
@@ -284,7 +284,7 @@ function display_article($article_id, $page_id){
 		<h4 class=\"text-left\">
 			<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
 			<a href=\"".get_base_url()."profile&user=".$article_infos['author']."\">
-				<abbr title=\"".$user_infos."\">".$article_infos['author']."</abbr>
+				<abbr title=\"".$user_description."\">".$article_infos['author']."</abbr>
 			</a>
 			".$fdate."
 		</h4>
@@ -328,7 +328,7 @@ function display_article($article_id, $page_id){
 }
 function post_comment($parent_id, $author, $content, $reply_to){
 	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'INSERT INTO comments (article_id, author, content, reply_to, date) VALUES (?, ?, ?, ?, NOW())');
+	$query = mysqli_prepare($mysqli, 'INSERT INTO comments (parent_id, author, content, reply_to, date) VALUES (?, ?, ?, ?, NOW())');
 	mysqli_stmt_bind_param($query, 'isss', $parent_id, $author, $content, $reply_to);
 	mysqli_stmt_execute($query);
 }
