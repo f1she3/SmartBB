@@ -36,21 +36,21 @@
 							</a>
 						</li>
 						<?php
-							
-						if(get_rank($_SESSION['name']) > 0){ 
-							if(get_rank($_SESSION['name']) > 2){
-								if($page == 'admin'){
-									$class = 'active';
-								}else{
-									$class = '';
-								}
-								echo "<li class=\"".$class."\">
-										<a href=\"".get_root_url().get_base_url()."admin\">
-											<span class=\"glyphicon glyphicon-tasks\"></span> ADMINISTRATION 
-										</a>
-									</li>";
-							}						
-						}
+
+						$my_rank = get_rank($_SESSION['name']);
+						$ranks = get_rank_list();
+						if($my_rank >= $ranks['administrator']){
+							if($page == 'admin'){
+								$class = 'active';
+							}else{
+								$class = '';
+							}
+							echo "<li class=\"".$class."\">
+									<a href=\"".get_root_url().get_base_url()."admin\">
+										<span class=\"glyphicon glyphicon-tasks\"></span> ADMINISTRATION 
+									</a>
+								</li>";
+						}						
 						?>
 						<li class="<?php echo ($page == 'profile') ? ' active' : '' ?>">
 							<a href="<?= get_root_url().get_base_url().'profile' ?>">

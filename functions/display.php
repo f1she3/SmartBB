@@ -42,7 +42,7 @@ function set_error($title, $icon, $content, $location){
 	}else{
 		$location = '';
 	}
-	die($title.$icon.$content.$location.file_get_contents('content/footer-1.html'));
+	die($title.$icon.$content.$location.file_get_contents('content/footer.html'));
 }
 function datalist_options($username, $rank_restriction){
 	$mysqli = get_link();

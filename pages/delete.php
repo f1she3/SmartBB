@@ -29,7 +29,7 @@ if(isset($_POST['submit'])){
 		<b>Important</b> : 
 			Seuls vos identifiants seront supprimés. Votre nom d'utilisateur ainsi que vos publications sur ce forum 
 			<b>
-				<a href="<?= get_base_url() ?>rules">seront conservées</a>
+				<a href="<?= get_base_url() ?>rules">seront conservés</a>
 			</b>.
 	</div>
 </div>
@@ -49,7 +49,9 @@ if(isset($_POST['submit'])){
 <div class="col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title"><strong>Supprimer mon compte</strong></h3>
+			<h3 class="panel-title">
+				<strong>Supprimer mon compte</strong>
+			</h3>
 		</div>
 		<div class="panel-body">
 			<form method="POST" action="">

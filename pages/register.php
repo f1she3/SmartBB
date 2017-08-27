@@ -9,7 +9,7 @@ if(isset($_POST['reg_submit'])){
 	if(!empty($_POST['name'])){
 		if(!empty($_POST['email'])){
 			if(!empty($_POST['password'])){
-				if(!empty($_POST['r_password'])){
+				if(!empty($_POST['repeat_password'])){
 					$name = $_POST['name'] = secure($_POST['name']);
 					$ret_check_pattern_username = preg_match('#^[a-zA-Z0-9_@\#\*\$[\]éè-]+$#', $name);
 					if($ret_check_pattern_username){
@@ -20,7 +20,7 @@ if(isset($_POST['reg_submit'])){
 							if($ret_check_pattern_email){
 								$value['mail'] = $email;
 								if(strlen($_POST['password']) >= 6){
-									if($_POST['password'] == $_POST['r_password']){
+									if($_POST['password'] == $_POST['repeat_password']){
 										$ret_is_used_username = is_used('name', $name);
 										if(!$ret_is_used_username){
 											$email_hash = sha1($email);
@@ -28,7 +28,7 @@ if(isset($_POST['reg_submit'])){
 											if(!$ret_is_used_email){
 												$_POST['password'] = secure($_POST['password']);
 												$password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-												$_POST['r_password'] = secure($_POST['r_password']);
+												$_POST['repeat_password'] = secure($_POST['repeat_password']);
 												register($name, $email_hash, $password);
 												$_SESSION['name'] = $name;
 												header('Refresh: 3; url = '.get_base_url().'home');
@@ -95,15 +95,15 @@ if(!empty($style)){
 			</div>
 			<div class="form-group">
 				<label for="email_reg">Votre adresse email :</label>
-				<input class="form-control" placeholder="me@example.com" name="email" type="email" maxlength="40" value="<?= $value['mail']; ?>" required>
+				<input class="form-control" placeholder="exemple@exemple.com" name="email" type="email" maxlength="40" value="<?= $value['mail']; ?>" required>
 			</div>
 			<div class="form-group">
 				<label for="password_reg">Votre mot de passe :</label>
 				<input class="form-control" placeholder="6 caractères minimum" name="password" type="password" maxlength="60" required>
 			</div>
 			<div class="form-group">
-				<label for="r_password_reg">Répétez votre mot de passe :</label>
-				<input class="form-control" placeholder="************" name="r_password" type="password" maxlength="60" required>
+				<label for="repeat_password">Répétez votre mot de passe :</label>
+				<input class="form-control" placeholder="************" name="repeat_password" type="password" maxlength="60" required>
 			</div>
 			<button name="reg_submit" class="btn btn-success center-block">Inscription</button>
 		</form>
