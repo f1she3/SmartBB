@@ -78,6 +78,7 @@ if(!empty($style)){
 					<label for="password_log">Mot de passe :</label>
 					<input class="form-control" placeholder="************" name="password" type="password" required>
 				</div>
+				<a href="<?= get_root_url().get_base_url() ?>forget">Mot de passe oublié</a>
 				<button name="submit" class="btn btn-primary center-block">Connexion</button>
 			</form>
 		</div>

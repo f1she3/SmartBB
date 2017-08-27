@@ -59,7 +59,10 @@ if(isset($_POST['submit'])){
 					<input type="email" class="form-control" name="email" maxlength="40" 
 						placeholder="exemple@exemple.com" autofocus required>
 				</div>
-				<button class="btn btn-primary center-block" name="submit">Confirmer</button>
+				<button class="btn btn-primary" name="submit">Confirmer</button>
+				<a class="btn btn-default" href="<?= get_root_url().get_base_url() ?>login">
+					Annuler
+				</a>
 			</form>
 		</div>
 	</div>
