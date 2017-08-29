@@ -37,21 +37,25 @@ if(isset($_GET['page']) && !empty($_GET['page']) && is_string($_GET['page'])){
 		$page = 'error404';
 		$file_type = 'php';
 	}
-}else if(is_logged()){
-	redirect(1);
 }else{
-	redirect(0);
+	redirect(1);
 }
 $user_ip = get_user_ip();
 if(is_logged()){
-	if(is_banned($_SESSION['name'], NULL)){
+	$is_banned = is_banned($_SESSION['name'], NULL);
+	if(is_banned['result']){
 		if($page != 'welcome'){
 			set_error('Erreur', 'ban-circle', 'Vous êtes banni de '.get_project_name(), 'welcome');
 		}
 	}
-}else if(is_banned(NULL, $user_ip)){
-	if($page != 'welcome'){
-		set_error('Erreur', 'ban-circle', 'Vous êtes banni de '.get_project_name(), 'welcome');
+}else{
+	$is_banned = is_banned(NULL, $user_ip);
+	if($is_banned['result']){
+		$bans = get_ban_duration_list();
+		$duration = $bans[$is_banned['ban_level']][0];
+		if($page != 'welcome'){
+			set_error('Erreur', 'ban-circle', 'Vous êtes banni de '.get_project_name().' : '.$duration, 'welcome');
+		}
 	}
 }
 // Enf of access right check

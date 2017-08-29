@@ -82,9 +82,17 @@ if(isset($_POST['submit_email'])){
 				$error = 'adresse email incorrecte, il vous reste '.$diff.' '.$text;
 			}else{
 				$bans = get_ban_duration_list();
-				$error = 'adresse email incorrecte, vous êtes banni pour une durée de '.$bans[0][0];
-				$ban_level = 0;
 				$user_ip = get_user_ip();
+				$ban_count = get_ban_count(NULL, $user_ip);
+				$ban_level = $ban_count;
+				if($ban_count != 0 && $ban_count < $bans['max']){
+					$ban_level = $ban_count++;	
+				}
+				if($bans[$ban_level] === $bans['max']){
+					$error = 'adresse email incorrecte, vous êtes banni à vie';
+				}else{
+					$error = 'adresse email incorrecte, vous êtes banni pour une durée de '.$bans[$ban_level][0];
+				}
 				ban(NULL, 'Ban automatique', $user_ip, $ban_level, NULL);
 				$_SESSION['attempts'] = 0;
 			}
@@ -102,9 +110,12 @@ if(isset($_POST['submit_email'])){
 		}
 		$_SESSION['attempts']++;
 		$diff = $max_attempts - $_SESSION['attempts'];
-		$ban_level = 0;
 		if($diff === 0){
 			$user_ip = get_user_ip();
+			$ban_level = $ban_count;
+			if($ban_count != 0 && $ban_count != $bans['max']){
+				$ban_level = $ban_count++;	
+			}
 			ban(NULL, 'Ban automatique', $user_ip, $ban_level, NULL);
 			$_SESSION['attempts'] = 0;
 			set_error('Erreur', 'zoom-out', 'Token invalide, veuillez ne pas réessayer', 'forget');
