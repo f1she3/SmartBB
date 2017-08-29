@@ -17,7 +17,7 @@
 	passé à NULL en db
 	-Passer le code à NULL en db si connection réalisée avec succès / Si +
 	de 48h
-
+[EN COURS] - Système de bannissement progressif automatique
 
 [FAIT] - Supprimer article après fermeture
 [FAIT] - Ergonomie bannir et changer rang utilisateur par admin
