@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="Open source real time web chat">
+		<meta name="description" content="Forum francophone de cyber-sécurité">
 		<meta name="author" content="f1she3">
 		<link rel="icon" href="<?= get_root_url().'/css/images/favicon.ico' ?>">
 		<title><?= $title; ?></title>

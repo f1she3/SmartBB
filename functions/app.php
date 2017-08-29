@@ -30,11 +30,12 @@ function get_project_name(){
 function redirect($location){
 	if(is_numeric($location)){
 		switch($location){
-			case(0):
-				$location = 'login';
-				break;
 			case(1):
-				$location = 'home';
+				if(is_logged()){
+					$location = 'home';
+				}else{
+					$location = 'login';
+				}
 				break;
 			case(2):
 				$location = 'error404';

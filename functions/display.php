@@ -1,6 +1,11 @@
 <?php
 
 function set_error($title, $icon, $content, $location){
+	if(is_logged()){
+		require_once 'content/header-2.php';
+	}else{
+		require_once 'content/header-1.php';
+	}
 	if($title){
 		$title =	"<div class=\"page-header\">
 					<h2 class=\"text-center\">".$title."</h2>

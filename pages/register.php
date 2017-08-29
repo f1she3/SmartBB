@@ -11,21 +11,21 @@ if(isset($_POST['reg_submit'])){
 			if(!empty($_POST['password'])){
 				if(!empty($_POST['repeat_password'])){
 					$name = $_POST['name'] = secure($_POST['name']);
-					$ret_check_pattern_username = preg_match('#^[a-zA-Z0-9_@\#\*\$[\]éè-]+$#', $name);
-					if($ret_check_pattern_username){
-						if(strlen($name) >= 4 && strlen($name) <= 15){
+					$check_pattern_username = preg_match('#^[a-zA-Z0-9_@\#\*\$[\]éè-]+$#', $name);
+					if($check_pattern_username){
+						if(mb_strlen($name) >= 4 && mb_strlen($name) <= 16){
 							$value['name'] = $name;
 							$email = $_POST['email'] = secure($_POST['email']);
-							$ret_check_pattern_email = preg_match('#^[a-z0-9._-]+@[a-z0-9._-]{2,20}\.[a-z]{2,4}$#', $email);
-							if($ret_check_pattern_email){
+							$check_pattern_email = preg_match('#^[a-z0-9._-]+@[a-z0-9._-]{2,20}\.[a-z]{2,4}$#', $email);
+							if($check_pattern_email){
 								$value['mail'] = $email;
-								if(strlen($_POST['password']) >= 6){
+								if(mb_strlen($_POST['password']) >= 6){
 									if($_POST['password'] == $_POST['repeat_password']){
-										$ret_is_used_username = is_used('name', $name);
-										if(!$ret_is_used_username){
+										$is_used_username = is_used('name', $name);
+										if(!$is_used_username){
 											$email_hash = sha1($email);
-											$ret_is_used_email = is_used('email', $email_hash);
-											if(!$ret_is_used_email){
+											$is_used_email = is_used('email', $email_hash);
+											if(!$is_used_email){
 												$_POST['password'] = secure($_POST['password']);
 												$password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 												$_POST['repeat_password'] = secure($_POST['repeat_password']);
