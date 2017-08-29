@@ -1,12 +1,23 @@
 <?php
 
-function is_banned($username){
+function is_banned($username, $ip){
 	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'SELECT msg, banned_by FROM ban WHERE BINARY name = ?');
-	mysqli_stmt_bind_param($query, 's', $username);
+	if($username === NULL){
+		$query = mysqli_prepare($mysqli, 'SELECT msg, banned_by, ending FROM ban WHERE BINARY ip = ?');
+		mysqli_stmt_bind_param($query, 's', $ip);
+	}else if($ip === NULL){
+		$query = mysqli_prepare($mysqli, 'SELECT msg, banned_by, ending FROM ban WHERE BINARY name = ?');
+		mysqli_stmt_bind_param($query, 's', $username);
+	}
 	mysqli_stmt_execute($query);
-	mysqli_stmt_bind_result($query, $reason, $banned_by);
+	mysqli_stmt_bind_result($query, $reason, $banned_by, $ending);
 	$result = mysqli_stmt_fetch($query);
+	$fdate = date_create();
+	$fending = date_create($ending);
+	if($fdate >= $fending){
+		deban($username, $ip);
+		redirect(1);
+	}
 	if(empty($result)){
 		return false;
 	}else{
@@ -16,6 +27,20 @@ function is_banned($username){
 
 		return $result;
 	}
+}
+function get_user_ip(){
+	$client  = @$_SERVER['HTTP_CLIENT_IP'];
+	$forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+	$remote  = $_SERVER['REMOTE_ADDR'];
+	if(filter_var($client, FILTER_VALIDATE_IP)){
+		$ip = $client;
+	}elseif(filter_var($forward, FILTER_VALIDATE_IP)){
+		$ip = $forward;
+	}else{
+		$ip = $remote;
+	}
+
+	return $ip;
 }
 function check_ids($type, $input, $username){
 	$mysqli = get_link();
@@ -89,7 +114,7 @@ function get_user_infos($user){
 	mysqli_stmt_execute($query);
 	$result = array();
 	mysqli_stmt_bind_result($query, $result['id'], $result['name'], $result['email'], $result['password'], 
-		$result['reg_date'], $result['rank'], $result['recovery_code']);
+		$result['reg_date'], $result['rank'], $result['recovery_code'], $result['token']);
 	mysqli_stmt_fetch($query);
 
 	return $result;
@@ -144,21 +169,73 @@ function set_rank($username, $rank){
 		$query = mysqli_prepare($mysqli, 'UPDATE users SET rank = ? WHERE BINARY name = ?');
 		mysqli_stmt_bind_param($query, 'is', $rank, $username);
 		mysqli_stmt_execute($query);
+		return true;
 	
 	}else{
 		return false;
 	}
 }
-function ban($username, $reason){
+function get_ban_duration_list(){
+	$current_date = date_create();
+	$ban[0][0] = '15 minutes';
+	$ban[0][1] = date_modify($current_date, '+15 minutes');
+	$ban[0][1] = date_format($current_date, 'Y-m-d H-i-s');
+	$ban[1][0] = '1 heure';
+	$ban[1][1] = date_modify($current_date, '+1 hour');
+	$ban[1][1] = date_format($current_date, 'Y-m-d H-i-s');
+	$ban[2][0] = '1 jour';
+	$ban[2][1] = date_modify($current_date, '+1 day');
+	$ban[2][1] = date_format($current_date, 'Y-m-d H-i-s');
+	$ban[3][0] = '1 semaine';
+	$ban[3][1] = date_modify($current_date, '+1 week');
+	$ban[3][1] = date_format($current_date, 'Y-m-d H-i-s');
+	$ban[4][0] = '1 mois';
+	$ban[4][1] = date_modify($current_date, '+1 month');
+	$ban[4][1] = date_format($current_date, 'Y-m-d H-i-s');
+	$ban[5][0] = '1 an'; 
+	$ban[5][1] = date_modify($current_date, '+1 year');
+	$ban[5][1] = date_format($current_date, 'Y-m-d H-i-s');
+	$ban[6][0] = 'à vie'; 
+	$ban[6][1] = NULL;
+	$ban['max'] = 6;
+
+	return $ban;
+}
+function ban($username, $reason, $ip, $ban_level, $banned_by){
+	$bans = get_ban_duration_list();
+	if($ban_level === $bans['max']){
+		$duration = 'NULL';
+	}else{
+		$duration = $bans[$ban_level][1];
+	}
+	if($banned_by === NULL){
+		$banned_by = 'NULL';
+	}
+	if($username === NULL){
+		$username = 'NULL';
+	}else{
+		$mysqli = get_link();
+		$query = mysqli_prepare($mysqli, 'UPDATE users SET ban_count = ban_count + 1 WHERE BINARY name = ?');
+		mysqli_stmt_bind_param($query, 's', $username);
+		mysqli_stmt_execute($query);
+	}
+	if($ip === NULL){
+		$ip = 'NULL';
+	}
 	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'INSERT INTO ban (name, msg, banned_by) VALUES (?, ?, ?)');
-	mysqli_stmt_bind_param($query, 'sss', $username, $reason, $_SESSION['name']);
+	$query = mysqli_prepare($mysqli, 'INSERT INTO ban (name, ip, msg, banned_by, ending) VALUES (?, ?, ?, ?, ?)');
+	mysqli_stmt_bind_param($query, 'sssss', $username, $ip, $reason, $banned_by, $duration);
 	mysqli_stmt_execute($query);
 }
-function deban($username){
+function deban($username, $ip){
 	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'DELETE FROM ban WHERE BINARY name = ?');
-	mysqli_stmt_bind_param($query, 's', $username);
+	if($username === NULL){
+		$query = mysqli_prepare($mysqli, 'DELETE FROM ban WHERE BINARY ip = ?');
+		mysqli_stmt_bind_param($query, 's', $ip);
+	}else if($ip === NULL){
+		$query = mysqli_prepare($mysqli, 'DELETE FROM ban WHERE BINARY name = ?');
+		mysqli_stmt_bind_param($query, 's', $username);
+	}
 	mysqli_stmt_execute($query);
 }
 function post_article($author, $category_name, $title, $content, $is_pinned){

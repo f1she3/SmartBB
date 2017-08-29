@@ -25,8 +25,10 @@ DROP TABLE IF EXISTS `ban`;
 CREATE TABLE `ban` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+  `ip` varchar(255) NOT NULL DEFAULT 'NULL',
   `msg` varchar(255) NOT NULL,
   `banned_by` varchar(255) NOT NULL,
+  `ending` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -100,8 +102,10 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `reg_date` date NOT NULL,
   `rank` tinyint(4) NOT NULL DEFAULT '0',
+  `recovery_code` varchar(255) NOT NULL DEFAULT 'NULL',
+  `token` varchar(255) NOT NULL DEFAULT 'NULL',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
--- 2017-08-19 21:34:07
+-- 2017-08-29 20:48:41

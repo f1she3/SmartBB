@@ -42,6 +42,18 @@ if(isset($_GET['page']) && !empty($_GET['page']) && is_string($_GET['page'])){
 }else{
 	redirect(0);
 }
+$user_ip = get_user_ip();
+if(is_logged()){
+	if(is_banned($_SESSION['name'], NULL)){
+		if($page != 'welcome'){
+			set_error('Erreur', 'ban-circle', 'Vous êtes banni de '.get_project_name(), 'welcome');
+		}
+	}
+}else if(is_banned(NULL, $user_ip)){
+	if($page != 'welcome'){
+		set_error('Erreur', 'ban-circle', 'Vous êtes banni de '.get_project_name(), 'welcome');
+	}
+}
 // Enf of access right check
 // Inclusion of several files, the order is important
 if(is_logged()){
