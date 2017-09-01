@@ -4,22 +4,22 @@ $error = '';
 $style = 'a';
 if(isset($_POST['submit'])){
 	$style = '';
-	if(isset($_POST['name']) && !empty($_POST['name']) && is_string($_POST['name'])){
-		$name = $_POST['name'] = secure($_POST['name']);
+	if(isset($_POST['input']) && !empty($_POST['input']) && is_string($_POST['input'])){
+		$input = $_POST['input'] = secure($_POST['input']);
 		if(isset($_POST['password']) && !empty($_POST['password']) && is_string($_POST['password'])){
 			$password = $_POST['password'] = secure($_POST['password']);
 			$password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-			$is_user = is_user($name);
+			$is_user = is_user($input);
 			if($is_user != NULL){
-				if(!empty($name)){
+				if(!empty($input)){
 					if(!empty($_POST['password'])){	
 						if(strlen($_POST['password']) >= 6){
 							$is_banned = is_banned($is_user, NULL);
 							if(!$is_banned['result']){
-								$check_name = check_ids('name', false, $is_user);
+								$check_input = check_ids('name', false, $is_user);
 								$check_pass = check_ids('password', $_POST['password'], $is_user);
-								if($check_name && $check_pass){
-									$_SESSION['name'] = $is_user;
+								if($check_input && $check_pass){
+									login($is_user);
 									redirect(1);
 								}else{
 									$error = 'nom d\'utilisateur ou mot de passe incorrect';
@@ -71,8 +71,8 @@ if(!empty($style)){
 		<div class="panel-body">
 			<form method="POST" action="">
 				<div class="form-group">
-					<label for="name_log">Pseudo :</label>
-					<input type="text" name="name" class="form-control" placeholder="e-mail ou pseudo" maxlength="40" autofocus required>
+					<label for="input_log">Pseudo ou e-mail :</label>
+					<input type="text" name="input" class="form-control" placeholder="Pseudo ou e-mail" maxlength="40" autofocus required>
 				</div>
 				<div class="form-group">
 					<label for="password_log">Mot de passe :</label>

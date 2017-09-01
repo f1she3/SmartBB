@@ -16,8 +16,7 @@ if(isset($_POST['submit_email'])){
 	$style = '';
 	if(isset($_POST['email']) && !empty($_POST['email']) && is_string($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
 		$email = $_POST['email'] = secure($_POST['email']);
-		$email_hash = sha1($email);
-		$is_user = is_user($email_hash);
+		$is_user = is_user($email);
 		if($is_user != NULL){
 			$user_infos = get_user_infos($is_user);
 			if($email_hash === $user_infos['email']){
@@ -118,7 +117,7 @@ if(isset($_POST['submit_email'])){
 							$repeat_new_password = $_POST['repeat_new_password'] = secure($_POST['repeat_new_password']);
 							if($repeat_new_password === $new_password){
 								$new_password = password_hash($new_password, PASSWORD_DEFAULT);
-								update_password($_SESSION['tmp_name'], $new_password);
+								finish_recovery_process($_SESSION['tmp_name'], $new_password);
 								header('Refresh: 3; url = '.get_base_url().'login');
 								set_error('Réinitialisation réalisée avec succès !', 'ok', 'Vous allez être redirigé ...', 'login');
 

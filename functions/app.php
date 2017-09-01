@@ -76,8 +76,9 @@ function is_logged(){
 }
 function is_user($input){
 	$mysqli = get_link();
+	$hash = sha1($input);
 	$query = mysqli_prepare($mysqli, 'SELECT name FROM users WHERE BINARY name = ? OR email = ?');
-	mysqli_stmt_bind_param($query, 'ss', $input, $input);
+	mysqli_stmt_bind_param($query, 'ss', $input, $hash);
 	mysqli_stmt_execute($query); 
 	mysqli_stmt_bind_result($query, $name);
 	$result = mysqli_stmt_fetch($query);
