@@ -27,6 +27,7 @@ function is_banned($username, $ip){
 		$result['result'] = true;
 		$result['message'] = $reason;
 		$result['banned_by'] = $banned_by;
+		$result['ending'] = $ending;
 		$result['ban_level'] = $ban_level;
 
 		return $result;
@@ -107,28 +108,6 @@ function is_category($input_name){
 		return false;
 	}
 }
-function is_logged(){
-	if(isset($_SESSION['name']) && !empty($_SESSION['name'])){
-		return true;
-
-	}else{
-		return false;
-	}
-}
-function is_user($input){
-	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'SELECT name FROM users WHERE BINARY name = ? OR email = ?');
-	mysqli_stmt_bind_param($query, 'ss', $input, $input);
-	mysqli_stmt_execute($query); 
-	mysqli_stmt_bind_result($query, $name);
-	$result = mysqli_stmt_fetch($query);
-	if($result == 0){
-		return false;
-	
-	}else{
-		return $name;
-	}
-}
 function get_user_infos($user){
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'SELECT * FROM users WHERE BINARY name = ?');
@@ -199,25 +178,25 @@ function set_rank($username, $rank){
 }
 function get_ban_duration_list(){
 	$current_date = date_create();
-	$ban[0][0] = '15 minutes';
+	$ban[0][0] = 'de 15 minutes';
 	$ban[0][1] = date_modify($current_date, '+15 minutes');
 	$ban[0][1] = date_format($current_date, 'Y-m-d H-i-s');
-	$ban[1][0] = '1 heure';
+	$ban[1][0] = 'de 1 heure';
 	$ban[1][1] = date_modify($current_date, '+1 hour');
 	$ban[1][1] = date_format($current_date, 'Y-m-d H-i-s');
-	$ban[2][0] = '1 jour';
+	$ban[2][0] = 'de 1 jour';
 	$ban[2][1] = date_modify($current_date, '+1 day');
 	$ban[2][1] = date_format($current_date, 'Y-m-d H-i-s');
-	$ban[3][0] = '1 semaine';
+	$ban[3][0] = 'de 1 semaine';
 	$ban[3][1] = date_modify($current_date, '+1 week');
 	$ban[3][1] = date_format($current_date, 'Y-m-d H-i-s');
-	$ban[4][0] = '1 mois';
+	$ban[4][0] = 'de 1 mois';
 	$ban[4][1] = date_modify($current_date, '+1 month');
 	$ban[4][1] = date_format($current_date, 'Y-m-d H-i-s');
-	$ban[5][0] = '1 an'; 
+	$ban[5][0] = 'de 1 an'; 
 	$ban[5][1] = date_modify($current_date, '+1 year');
 	$ban[5][1] = date_format($current_date, 'Y-m-d H-i-s');
-	$ban[6][0] = 'à vie'; 
+	$ban[6][0] = 'indéfinie'; 
 	$ban[6][1] = NULL;
 	$ban['max'] = 6;
 
@@ -225,11 +204,10 @@ function get_ban_duration_list(){
 }
 function ban($username, $reason, $ip, $ban_level, $banned_by){
 	$bans = get_ban_duration_list();
-	if($ban_level === $bans['max']){
+	if($bans[$ban_level] === $bans['max']){
 		$duration = 'NULL';
-	}else{
-		$duration = $bans[$ban_level][1];
 	}
+	$duration = $bans[$ban_level][1];
 	if($banned_by === NULL){
 		$banned_by = 'NULL';
 	}
@@ -321,4 +299,33 @@ function get_category_infos($category){
 	mysqli_stmt_fetch($query);
 	
 	return $result;
+}
+function auto_ban_process($user_ip){
+	$max_attempts = 3;
+	if(!isset($_SESSION['attempts'])){
+		$_SESSION['attempts'] = 0;
+	}
+	$_SESSION['attempts']++;
+	$diff = $max_attempts - $_SESSION['attempts'];
+	if($diff === 0){
+		$bans = get_ban_duration_list();
+		$ban_count = get_ban_count(NULL, $user_ip);
+		$ban_level = $ban_count;
+		if($ban_count != 0 && $ban_count != $bans['max']){
+			$ban_level = $ban_count++;	
+		}
+		ban(NULL, 'Ban automatique', $user_ip, $ban_level, NULL);
+		$_SESSION['attempts'] = 0;
+		$error = 'Code erroné, vous êtes banni pour une durée '.$bans[$ban_level][0];
+	}else{
+		if($diff > 1){
+			$text = 'essais';
+		}else{
+			$text = 'essai';
+		}
+		$type = 'danger';
+		$error = 'Code erroné, il vous reste '.$diff.' '.$text;
+	}
+	
+	return $error;	
 }

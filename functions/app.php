@@ -66,3 +66,25 @@ function secure($var){
 	
 	return $var;
 }
+function is_logged(){
+	if(isset($_SESSION['name']) && !empty($_SESSION['name'])){
+		return true;
+
+	}else{
+		return false;
+	}
+}
+function is_user($input){
+	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'SELECT name FROM users WHERE BINARY name = ? OR email = ?');
+	mysqli_stmt_bind_param($query, 'ss', $input, $input);
+	mysqli_stmt_execute($query); 
+	mysqli_stmt_bind_result($query, $name);
+	$result = mysqli_stmt_fetch($query);
+	if($result == 0){
+		return false;
+	
+	}else{
+		return $name;
+	}
+}

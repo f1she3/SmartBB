@@ -14,7 +14,8 @@ if(isset($_POST['submit'])){
 				if(!empty($name)){
 					if(!empty($_POST['password'])){	
 						if(strlen($_POST['password']) >= 6){
-							if(!is_banned($is_user)){
+							$is_banned = is_banned($is_user, NULL);
+							if(!$is_banned['result']){
 								$check_name = check_ids('name', false, $is_user);
 								$check_pass = check_ids('password', $_POST['password'], $is_user);
 								if($check_name && $check_pass){
@@ -24,9 +25,8 @@ if(isset($_POST['submit'])){
 									$error = 'nom d\'utilisateur ou mot de passe incorrect';
 								}
 							}else{
-							$is_banned = is_banned($is_user);
-							$error = 'banni pour la raison suivante : "'.format_text($is_banned['message']).'"';
-						}
+								$error = 'banni pour la raison suivante : "'.format_text($is_banned['message']).'"';
+							}
 					}else{
 						$error = 'nom d\'utilisateur ou mot de passe incorrect';
 					}
@@ -72,11 +72,11 @@ if(!empty($style)){
 			<form method="POST" action="">
 				<div class="form-group">
 					<label for="name_log">Pseudo :</label>
-					<input class="form-control" placeholder="e-mail ou pseudo" name="name" type="text" maxlength="40" autofocus required>
+					<input type="text" name="name" class="form-control" placeholder="e-mail ou pseudo" maxlength="40" autofocus required>
 				</div>
 				<div class="form-group">
 					<label for="password_log">Mot de passe :</label>
-					<input class="form-control" placeholder="************" name="password" type="password" required>
+					<input type="password" name="password" class="form-control" placeholder="************" maxlength="64" required>
 				</div>
 				<a href="<?= get_root_url().get_base_url() ?>forget">Mot de passe oublié ?</a>
 				<button name="submit" class="btn btn-primary center-block">Connexion</button>

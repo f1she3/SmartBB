@@ -43,7 +43,7 @@ if(isset($_GET['page']) && !empty($_GET['page']) && is_string($_GET['page'])){
 $user_ip = get_user_ip();
 if(is_logged()){
 	$is_banned = is_banned($_SESSION['name'], NULL);
-	if(is_banned['result']){
+	if($is_banned['result']){
 		if($page != 'welcome'){
 			set_error('Erreur', 'ban-circle', 'Vous êtes banni de '.get_project_name(), 'welcome');
 		}
@@ -53,8 +53,11 @@ if(is_logged()){
 	if($is_banned['result']){
 		$bans = get_ban_duration_list();
 		$duration = $bans[$is_banned['ban_level']][0];
+		$come_back = $is_banned['ending'];
+		$come_back = date_create($come_back);
+		$come_back = date_format($come_back, 'd/m/Y à H\hi \e\t s\s');
 		if($page != 'welcome'){
-			set_error('Erreur', 'ban-circle', 'Vous êtes banni de '.get_project_name().' : '.$duration, 'welcome');
+			set_error('Erreur', 'ban-circle', 'Vous êtes banni de '.get_project_name().' : <abbr title="retour le '.$come_back.'">'.$duration, 'welcome');
 		}
 	}
 }

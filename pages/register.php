@@ -27,7 +27,7 @@ if(isset($_POST['reg_submit'])){
 											$is_used_email = is_used('email', $email_hash);
 											if(!$is_used_email){
 												$_POST['password'] = secure($_POST['password']);
-												$password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+												$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 												$_POST['repeat_password'] = secure($_POST['repeat_password']);
 												register($name, $email_hash, $password);
 												$_SESSION['name'] = $name;
@@ -91,7 +91,7 @@ if(!empty($style)){
 		<form method="POST" action="">
 			<div class="form-group">
 				<label for="name_reg">Votre nom d'utilisateur :</label>
-				<input class="form-control" placeholder="4 caractères minimum" name="name" type="text" maxlength="15" value="<?= $value['name']; ?>" autofocus required>
+				<input class="form-control" placeholder="4 caractères minimum" name="name" type="text" maxlength="16" value="<?= $value['name']; ?>" autofocus required>
 			</div>
 			<div class="form-group">
 				<label for="email_reg">Votre adresse email :</label>
@@ -99,11 +99,11 @@ if(!empty($style)){
 			</div>
 			<div class="form-group">
 				<label for="password_reg">Votre mot de passe :</label>
-				<input class="form-control" placeholder="6 caractères minimum" name="password" type="password" maxlength="60" required>
+				<input class="form-control" placeholder="6 caractères minimum" name="password" type="password" maxlength="64" required>
 			</div>
 			<div class="form-group">
 				<label for="repeat_password">Répétez votre mot de passe :</label>
-				<input class="form-control" placeholder="************" name="repeat_password" type="password" maxlength="60" required>
+				<input class="form-control" placeholder="************" name="repeat_password" type="password" maxlength="64" required>
 			</div>
 			<button name="reg_submit" class="btn btn-success center-block">Inscription</button>
 		</form>
