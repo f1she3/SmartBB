@@ -2,9 +2,16 @@
 
 $error = '';
 $style = 'a';
-$max_attempts = 3;
-$_SESSION['code_validate'] = 0;
-$_SESSION['token_validate'] = 0;
+$user_ip = get_user_ip();
+if(!isset($_SESSION['code_validate'])){
+	$_SESSION['code_validate'] = 0;
+}
+if(!isset($_SESSION['token_validate'])){
+	$_SESSION['token_validate'] = 0;
+}
+if(!isset($_SESSION['tmp_name'])){
+	$_SESSION['tmp_name'] = 0;
+}
 if(isset($_POST['submit_email'])){
 	$style = '';
 	if(isset($_POST['email']) && !empty($_POST['email']) && is_string($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
@@ -68,34 +75,7 @@ if(isset($_POST['submit_email'])){
 				display_confirm_email_form('danger', $error, $style);
 			}
 		}else{
-			if(!isset($_SESSION['attempts'])){
-				$_SESSION['attempts'] = 0;
-			}
-			$_SESSION['attempts']++;
-			$diff = $max_attempts - $_SESSION['attempts'];
-			if($diff > 0){
-				if($diff === 1){
-					$text = 'essai';
-				}else{
-					$text = 'essais';
-				}
-				$error = 'adresse email incorrecte, il vous reste '.$diff.' '.$text;
-			}else{
-				$bans = get_ban_duration_list();
-				$user_ip = get_user_ip();
-				$ban_count = get_ban_count(NULL, $user_ip);
-				$ban_level = $ban_count;
-				if($ban_count != 0 && $ban_count < $bans['max']){
-					$ban_level = $ban_count++;	
-				}
-				if($bans[$ban_level] === $bans['max']){
-					$error = 'adresse email incorrecte, vous êtes banni à vie';
-				}else{
-					$error = 'adresse email incorrecte, vous êtes banni pour une durée de '.$bans[$ban_level][0];
-				}
-				ban(NULL, 'Ban automatique', $user_ip, $ban_level, NULL);
-				$_SESSION['attempts'] = 0;
-			}
+			$error = auto_ban_process($user_ip);
 			display_confirm_email_form('danger', $error, $style);
 		}
 	}else{
@@ -105,50 +85,72 @@ if(isset($_POST['submit_email'])){
 }else if(isset($_GET['token']) && !empty($_GET['token']) && is_string($_GET['token'])){
 	$token = $_GET['token'] = secure($_GET['token']);
 	if(!is_token($token)){
-		if(!isset($_SESSION['attempts'])){
-			$_SESSION['attempts'] = 0;
-		}
-		$_SESSION['attempts']++;
-		$diff = $max_attempts - $_SESSION['attempts'];
-		if($diff === 0){
-			$user_ip = get_user_ip();
-			$ban_level = $ban_count;
-			if($ban_count != 0 && $ban_count != $bans['max']){
-				$ban_level = $ban_count++;	
-			}
-			ban(NULL, 'Ban automatique', $user_ip, $ban_level, NULL);
-			$_SESSION['attempts'] = 0;
-			set_error('Erreur', 'zoom-out', 'Token invalide, veuillez ne pas réessayer', 'forget');
-		}else{
-			set_error('Erreur', 'zoom-out', 'Token invalide, veuillez ne pas réessayer', 'forget');
-		}
+		$error = auto_ban_process($user_ip);
+		set_error('Erreur', 'exclamation-sign', $error, 'forget');
 	}
 	if(isset($_POST['submit_code'])){
 		if(isset($_POST['code']) && !empty($_POST['code']) && is_string($_POST['code'])){
 			$code = $_POST['code'] = secure($_POST['code']);
 			$name = check_codes($token, $code);
-			if($name != NULL){
+			if($name != NULL && is_user($name)){
 				$_SESSION['tmp_name'] = $name;
 				$_SESSION['code_validate'] = 1;
 				$_SESSION['token_validate'] = 1;
-				display_new_password_form();
-			}
-		}
-	}else if(isset($_POST['submit_password'])){
-		if($_SESSION['code_validate'] && $_SESSION['token_validate']){
-			if(isset($_POST['new_password'], $_POST['repeat_new_password']) && !empty($_POST['new_password']) && 
-				!empty($_POST['repeat_new_password']) && is_string($_POST['new_password']) && is_string($_POST['repeat_new_password'])){
-				$new_password = $_POST['new_password'] = secure($_POST['new_password']);
-				$repeat_new_password = $_POST['repeat_new_password'] = secure($_POST['repeat_new_password']);
-				update_passwords($new_password, $repeat_password);
+				display_new_password_form('a', '');
 			}else{
-				$error = 'Veuillez saisir votre nouveau mot de passe';
+				$type = 'danger';
+				$error = auto_ban_process($user_ip);
+				display_confirm_code_form($type, $error);
 			}
 		}else{
-			set_error('Erreur', 'exclamation-sign', 'Erreur lors du processus de réinitialisation, veuillez suivre les instructions', 'forget');
+			$type = 'danger';
+			$error = auto_ban_process($user_ip);
+			display_confirm_code_form($type, $error);
+		}
+	}else if(isset($_POST['submit_password'])){
+		if($_SESSION['code_validate'] && $_SESSION['token_validate'] && $_SESSION['tmp_name']){
+			if(isset($_POST['new_password']) && !empty($_POST['new_password']) && is_string($_POST['new_password'])){
+				if(mb_strlen($_POST['new_password']) >= 6){
+					if(mb_strlen($_POST['new_password']) <= 64){
+						$new_password = $_POST['new_password'] = secure($_POST['new_password']);
+						if(isset($_POST['repeat_new_password']) && !empty($_POST['repeat_new_password']) && 
+							is_string($_POST['repeat_new_password'])){
+							$repeat_new_password = $_POST['repeat_new_password'] = secure($_POST['repeat_new_password']);
+							if($repeat_new_password === $new_password){
+								$new_password = password_hash($new_password, PASSWORD_DEFAULT);
+								update_password($_SESSION['tmp_name'], $new_password);
+								header('Refresh: 3; url = '.get_base_url().'login');
+								set_error('Réinitialisation réalisée avec succès !', 'ok', 'Vous allez être redirigé ...', 'login');
+
+							}else{
+								$error = 'Les mots de passe entrés sont différents';
+								display_new_password_form('', $error);
+							}
+						}else{
+							$error = 'Veuillez répéter votre mot de passe';
+							display_new_password_form('', $error);
+						}
+					}else{
+						$error = 'Le mot de passe est trop long';
+						display_new_password_form('', $error);
+					}
+				}else{
+					$error = 'Le nouveau mot de passe est trop court';
+					display_new_password_form('', $error);
+				}
+			}else{
+				$error = 'Veuillez saisir votre nouveau mot de passe';
+				display_new_password_form('', $error);
+			}
+		}else{
+			$error = 'Erreur lors du processus de réinitialisation, veuillez suivre les instructions envoyées par mail';
+			auto_ban_process($user_ip);
+			display_new_password_form('', $error);
 		}
 	}else{
-		display_confirm_code_form();
+		$type = 'danger';
+		$error = '';
+		display_confirm_code_form($type, $error);
 	}
 }else{
 	display_confirm_email_form('danger', $error, $style);

@@ -99,10 +99,20 @@ function display_confirm_email_form($type, $error, $style){
 			</div>
 		</div>";
 }
-function display_confirm_code_form(){
+function display_confirm_code_form($type, $error){
 	echo 	"<div class=\"page-header\">
 			<h3 class=\"text-center\">Votre code de sécurité</h3>
 		</div>
+		<div class=\"col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3\">";
+	if(!empty($error)){
+		echo 	"<div class=\"alert alert-".$type." text-center\">
+				<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></span> ".$error."
+			</div>";
+	}
+	if(!empty($style)){
+		echo 	"<div class=\"alert alert-".$type." invisible\">".$style."</div>";
+	}
+	echo	"</div>
 		<div class=\"col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3\">
 			<div class=\"panel panel-default\">
 				<div class=\"panel-heading\">
@@ -126,10 +136,21 @@ function display_confirm_code_form(){
 			</div>
 		</div>";
 }
-function display_new_password_form(){
+function display_new_password_form($style, $error){
+	$type = 'danger';
 	echo 	"<div class=\"page-header\">
 			<h3 class=\"text-center\">Réinitialiser votre mot de passe</h3>
 		</div>
+		<div class=\"col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3\">";
+	if(!empty($error)){
+		echo 	"<div class=\"alert alert-".$type." text-center\">
+				<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></span> ".$error."
+			</div>";
+	}
+	if(!empty($style)){
+		echo 	"<div class=\"alert alert-".$type." invisible\">".$style."</div>";
+	}
+	echo	"</div>
 		<div class=\"col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3\">
 			<div class=\"panel panel-default\">
 				<div class=\"panel-heading\">
@@ -141,12 +162,12 @@ function display_new_password_form(){
 					<form method=\"POST\">
 						<div class=\"form-group\">
 							<label>Nouveau mot de passe :</label>
-							<input type=\"password\" class=\"form-control\" name=\"new_password\" maxlength=\"60\" 
+							<input type=\"password\" class=\"form-control\" name=\"new_password\" maxlength=\"64\" 
 								placeholder=\"*****************\" autofocus required>
 						</div>
 						<div class=\"form-group\">
 							<label>Répétez le mot de passe :</label>
-							<input type=\"password\" class=\"form-control\" name=\"repeat_new_password\" maxlength=\"60\" 
+							<input type=\"password\" class=\"form-control\" name=\"repeat_new_password\" maxlength=\"64\" 
 								placeholder=\"*****************\" autofocus required>
 						</div>
 						<button class=\"btn btn-primary center-block\" name=\"submit_password\">
@@ -157,4 +178,10 @@ function display_new_password_form(){
 				</div>
 			</div>
 		</div>";
+}
+function update_password($username, $new_password){
+	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'UPDATE users SET password = ? WHERE BINARY name = ?');
+	mysqli_stmt_bind_param($query, 'ss', $new_password, $username);
+	mysqli_stmt_execute($query);
 }
