@@ -38,7 +38,7 @@ if(isset($_GET['page']) && !empty($_GET['page']) && is_string($_GET['page'])){
 		$file_type = 'php';
 	}
 }else{
-	redirect(1);
+	redirect('welcome');
 }
 $user_ip = get_user_ip();
 if(is_logged()){

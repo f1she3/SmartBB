@@ -1,9 +1,6 @@
 - Gérer les droits pour les icones de smiley / Gérer un footer
-- Créer formulaire de création d'article
 - Cloner système amis
 - Créer système réputation
-- Ajouter gestion / création catégories
-- Mettre en avant page welcome
 - Ajouter page règlement
 - Ajouter fonctionnalités page mon compte : Cacher email / Autoriser autres membres mp
 - Ajouter système de recherche
@@ -11,6 +8,7 @@
 [A VOIR] - Système présentation membres
 [A VOIR] - Gérer les droits des admin (création catégorie ...etc)
 
+[FAIT] - Mettre en avant page welcome (si pas spécifiée page par défaut)
 [FAIT] - Système de bannissement progressif automatique
 [FAIT] - Ajouter système oublie mdp : 
 	-Entrer / vérifier email
@@ -30,6 +28,8 @@
 [FAIT] - Ajouter système d'épinglage aux catégories
 [FAIT] - Edition catégorie
 [FAIT] - Création : articles / commentaires
+[FAIT] - Créer formulaire de création d'article
+[FAIT] - Ajouter gestion / création catégories
 [FAIT] - Système propriétaire de catégorie, par défault modos propriétaires
 toutes catégories, membre ou rang
 [FAIT] - Système de fermeture / ré-ouverture d'article
