@@ -45,6 +45,8 @@ if(is_logged()){
 	$is_banned = is_banned($_SESSION['name'], NULL);
 	if($is_banned['result']){
 		if($page != 'welcome'){
+			$title = 'Erreur';
+			require 'content/header-2.php';
 			set_error('Erreur', 'ban-circle', 'Vous êtes banni de '.get_project_name(), 'welcome');
 		}
 	}
@@ -57,6 +59,8 @@ if(is_logged()){
 		$come_back = date_create($come_back);
 		$come_back = date_format($come_back, 'd/m/Y à H\hi \e\t s\s');
 		if($page != 'welcome'){
+			$title = 'Erreur';
+			require 'content/header-1.php';
 			set_error('Erreur', 'ban-circle', 'Vous êtes banni de '.get_project_name().' : <abbr title="retour le '.$come_back.'">'.$duration, 'welcome');
 		}
 	}
