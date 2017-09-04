@@ -57,8 +57,8 @@ function display_user_infos($username, $is_current_user){
 			</div>";
 		if($my_rank >= $ranks['administrator'] && $my_rank > $user_rank){
 			echo 	"<form method=\"POST\">";
-			$is_banned = is_banned($username);
-			if($is_banned){
+			$is_banned = is_banned($username, NULL);
+			if($is_banned['result']){
 				echo 	"<div class=\"col-sm-4 col-xs-6\">
 						<blockquote>".$is_banned['message']."
 							<footer>Bannit par <i>".$is_banned['banned_by']."</i></footer>

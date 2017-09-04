@@ -11,17 +11,21 @@ function is_banned($username, $ip){
 	}
 	mysqli_stmt_execute($query);
 	mysqli_stmt_bind_result($query, $reason, $banned_by, $ending, $ban_level);
-	$result = mysqli_stmt_fetch($query);
+	$i = 0;
+	while(mysqli_stmt_fetch($query)){
+		$i++;
+	}
 	$fdate = date_create();
 	$fending = date_create($ending);
-	if($fdate >= $fending){
-		deban($username, $ip);
-		redirect(1);
+	$null = date_create('0000-00-00 00:00:00');
+	if($fending != $null){
+		if($fdate >= $fending){
+			deban($username, $ip);
+		}
 	}
-	if(empty($result)){
+	if($i === 0){
 		$result = array();
 		$result['result'] = false;
-		return $result;
 	}else{
 		$result = array();
 		$result['result'] = true;
@@ -29,9 +33,9 @@ function is_banned($username, $ip){
 		$result['banned_by'] = $banned_by;
 		$result['ending'] = $ending;
 		$result['ban_level'] = $ban_level;
-
-		return $result;
 	}
+	
+	return $result;
 }
 function get_ban_count($username, $ip){
 	$mysqli = get_link();
@@ -204,10 +208,15 @@ function get_ban_duration_list(){
 }
 function ban($username, $reason, $ip, $ban_level, $banned_by){
 	$bans = get_ban_duration_list();
-	if($bans[$ban_level] === $bans['max']){
-		$duration = 'NULL';
+	if($ban_level === NULL){
+		$ban_level = 'NULL';
+		$ending = 'NULL';
+	}else{
+		if($bans[$ban_level] === $bans['max']){
+			$ending = 'NULL';
+		}
+		$ending = $bans[$ban_level][1];
 	}
-	$duration = $bans[$ban_level][1];
 	if($banned_by === NULL){
 		$banned_by = 'NULL';
 	}
@@ -222,7 +231,7 @@ function ban($username, $reason, $ip, $ban_level, $banned_by){
 	}
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'INSERT INTO ban (name, ip, msg, banned_by, ending, ban_level) VALUES (?, ?, ?, ?, ?, ?)');
-	mysqli_stmt_bind_param($query, 'sssssi', $username, $ip, $reason, $banned_by, $duration, $ban_level);
+	mysqli_stmt_bind_param($query, 'sssssi', $username, $ip, $reason, $banned_by, $ending, $ban_level);
 	mysqli_stmt_execute($query);
 }
 function deban($username, $ip){

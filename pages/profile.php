@@ -15,19 +15,19 @@ if(isset($_GET['user']) && !empty($_GET['user']) && is_string($_GET['user'])){
 			mb_strlen($_POST['ban_message']) <= 50){
 			$ban_message = $_POST['ban_message'] = secure($_POST['ban_message']);
 			if($user_rank < $my_rank){
-				ban($user, $ban_message);
+				ban($user, $ban_message, NULL, NULL, $_SESSION['name']);
 			}
 		}
 	}else if(isset($_POST['submit_deban'])){
-		$ret_is_banned = is_banned($user);
+		$is_banned = is_banned($user, NULL);
 		$ranks = get_rank_list();
-		if($ret_is_banned){
+		if($is_banned['result']){
 			if($my_rank > $user_rank){
 				if($my_rank == $ranks['max']){
-					deban($user);
+					deban($user, NULL);
 				}else{
-					if($my_rank > get_rank($ret_is_banned['banned_by'])){
-						deban($user);
+					if($my_rank > get_rank($is_banned['banned_by'])){
+						deban($user, NULL);
 					}
 				}
 			}
