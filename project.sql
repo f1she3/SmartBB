@@ -28,7 +28,9 @@ CREATE TABLE `ban` (
   `ip` varchar(255) NOT NULL DEFAULT 'NULL',
   `msg` varchar(255) NOT NULL,
   `banned_by` varchar(255) NOT NULL,
+  `ban_level` tinyint(4) NOT NULL DEFAULT '0',
   `ending` datetime DEFAULT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -108,4 +110,4 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
--- 2017-08-29 20:48:41
+-- 2017-09-04 09:16:23

@@ -61,7 +61,7 @@ function check_codes($token, $code){
 		return $name;
 	}
 }
-function display_confirm_email_form($type, $error, $style){
+function display_confirm_email_form($type, $error, $style, $status){
 	echo 	"<div class=\"page-header\">
 			<h3 class=\"text-center\">Mot de passe oublié</h3>
 		</div>
@@ -74,30 +74,32 @@ function display_confirm_email_form($type, $error, $style){
 	if(!empty($style)){
 		echo "<div class=\"alert alert-".$type." invisible\">".$style."</div>";
 	}
-	echo	"</div>
-		<div class=\"col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3\">
-			<div class=\"panel panel-default\">
-				<div class=\"panel-heading\">
-					<h3 class=\"panel-title\">
-						<strong>Réinitialiser mon mot de passe</strong>
-					</h3>
+	echo	"</div>";
+	if($status){
+		echo	"<div class=\"col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3\">
+				<div class=\"panel panel-default\">
+					<div class=\"panel-heading\">
+						<h3 class=\"panel-title\">
+							<strong>Réinitialiser mon mot de passe</strong>
+						</h3>
+					</div>
+					<div class=\"panel-body\">
+						<form method=\"POST\">
+							<div class=\"form-group\">
+								<label>Votre adresse email :</label>
+								<input type=\"email\" class=\"form-control\" name=\"email\" maxlength=\"40\" 
+									placeholder=\"exemple@exemple.com\" autofocus required>
+							</div>
+							<button class=\"btn btn-primary\" name=\"submit_email\">Confirmer</button>
+							<a class=\"btn btn-default\" href=\"".get_root_url().get_base_url()."login\">
+								<span class=\"glyphicon glyphicon-remove\"></span>
+								Annuler
+							</a>
+						</form>
+					</div>
 				</div>
-				<div class=\"panel-body\">
-					<form method=\"POST\">
-						<div class=\"form-group\">
-							<label>Votre adresse email :</label>
-							<input type=\"email\" class=\"form-control\" name=\"email\" maxlength=\"40\" 
-								placeholder=\"exemple@exemple.com\" autofocus required>
-						</div>
-						<button class=\"btn btn-primary\" name=\"submit_email\">Confirmer</button>
-						<a class=\"btn btn-default\" href=\"".get_root_url().get_base_url()."login\">
-							<span class=\"glyphicon glyphicon-remove\"></span>
-							Annuler
-						</a>
-					</form>
-				</div>
-			</div>
-		</div>";
+			</div>";
+	}
 }
 function display_confirm_code_form($type, $error){
 	echo 	"<div class=\"page-header\">

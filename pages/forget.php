@@ -16,10 +16,11 @@ if(isset($_POST['submit_email'])){
 	$style = '';
 	if(isset($_POST['email']) && !empty($_POST['email']) && is_string($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
 		$email = $_POST['email'] = secure($_POST['email']);
+		$email_hash = sha1($email);
 		$is_user = is_user($email);
 		if($is_user != NULL){
 			$user_infos = get_user_infos($is_user);
-			if($email_hash === $user_infos['email']){
+			if($email_hash == $user_infos['email']){
 				$code = code_gen(9);
 				$token = code_gen(32);
 				set_recovery_codes($is_user, $code, $token);
@@ -55,31 +56,32 @@ if(isset($_POST['submit_email'])){
 											</h3>
 										</div>
 										<h3 class=\"text-center\">
-											Votre code de sécurité : 
+											Voici votre code de sécurité : 
 										</h3>
 										<h3 class=\"text-center\">
 											<kbd>".$code."</kbd>
 										</h3><br>
-										<h3 class=\"text-center\">
-											<a href=\"".get_root_url().get_base_url()."forget&token=".$token."\" target=\"_blank\">Valider ici</a>
-										</h3>
+										<h4 class=\"text-center\">
+											Veuillez le valider
+											<a href=\"".get_root_url().get_base_url()."forget&token=".$token."\" target=\"_blank\"> ici</a>
+										</h4>
 									</div>
 								</body>
 							</html>";
 				mail($to, $subject, $content, $headers);
 				$msg = 'Un email vous a été envoyé, veuillez suivre les instructions de ce dernier';
-				display_confirm_email_form('success', $msg, $style);
+				display_confirm_email_form('success', $msg, $style, false);
 			}else{
 				$error = 'adresse email incorrecte';
-				display_confirm_email_form('danger', $error, $style);
+				display_confirm_email_form('danger', $error, $style, true);
 			}
 		}else{
 			$error = auto_ban_process($user_ip);
-			display_confirm_email_form('danger', $error, $style);
+			display_confirm_email_form('danger', $error, $style, true);
 		}
 	}else{
 		$error = 'adresse email invalide';
-		display_confirm_email_form('danger', $error, $style);
+		display_confirm_email_form('danger', $error, $style, true);
 	}
 }else if(isset($_GET['token']) && !empty($_GET['token']) && is_string($_GET['token'])){
 	$token = $_GET['token'] = secure($_GET['token']);
@@ -152,5 +154,5 @@ if(isset($_POST['submit_email'])){
 		display_confirm_code_form($type, $error);
 	}
 }else{
-	display_confirm_email_form('danger', $error, $style);
+	display_confirm_email_form('danger', $error, $style, true);
 }
