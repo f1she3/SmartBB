@@ -27,6 +27,7 @@ function set_error($title, $icon, $content, $location){
 	}else{
 		$content = '';
 	}
+	$location = get_location($location);
 	if($location === 'home'){
 		$location = 	"<h1 class=\"text-center\">
 						<a href=\"".get_root_url().get_base_url().$location."\" class=\"text-danger\">

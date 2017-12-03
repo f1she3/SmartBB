@@ -27,9 +27,9 @@ function get_root_url(){
 function get_project_name(){
 	return constant('PROJECT_NAME');
 }
-function redirect($location){
-	if(is_numeric($location)){
-		switch($location){
+function get_location($input){
+	if(is_numeric($input)){
+		switch($input){
 			case(1):
 				if(is_logged()){
 					$location = 'home';
@@ -44,11 +44,17 @@ function redirect($location){
 				$location = 'contacts';
 				break;
 			default:
-				$page = 'error404';
+				$location = 'error404';
 				break;
 		}
+	}else{
+		$location = $input;
 	}
-	header('Location:'.get_root_url().get_base_url().$location);
+
+	return $location;
+}
+function redirect($location){
+	header('Location:'.get_root_url().get_base_url().get_location($location));
 }
 function get_link(){
 	$mysqli = mysqli_connect(constant('HOST'), constant('USER'), constant('PASSWORD'),

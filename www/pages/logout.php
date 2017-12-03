@@ -2,4 +2,4 @@
 
 unset($_SESSION);
 session_destroy();
-redirect(0);
+redirect(1);
