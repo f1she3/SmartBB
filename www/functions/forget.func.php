@@ -181,11 +181,11 @@ function display_new_password_form($style, $error){
 			</div>
 		</div>";
 }
-function finish_recovery_process($username, $new_password){
+function finish_recovery_process($username){
 	$mysqli = get_link();
 	$var = 'NULL';
-	$query = mysqli_prepare($mysqli, 'UPDATE users SET password = ?, recovery_code = ?, token = ? WHERE BINARY name = ?');
-	mysqli_stmt_bind_param($query, 'ssss', $new_password, $var, $var, $username);
+	$query = mysqli_prepare($mysqli, 'UPDATE users recovery_code = ?, token = ? WHERE BINARY name = ?');
+	mysqli_stmt_bind_param($query, 'sss', $var, $var, $username);
 	mysqli_stmt_execute($query);
 	$_SESSION['code_validate'] = 0;
 	$_SESSION['token_validate'] = 0;

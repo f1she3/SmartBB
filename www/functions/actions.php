@@ -97,6 +97,12 @@ function check_ids($type, $input, $username){
 		}
 	}
 }
+function update_password($username, $new_password){
+	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'UPDATE users SET password = ? WHERE BINARY name = ?');
+	mysqli_stmt_bind_param($query, 'ss', $new_password, $username);
+	mysqli_stmt_execute($query);
+}
 function is_category($input_name){
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'SELECT id FROM categories WHERE BINARY name = ?');
