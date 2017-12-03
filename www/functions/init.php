@@ -9,7 +9,7 @@ require 'display.php';
  * DEFAULT_SHORT : 	/?page=page
  * ROUTER : 		/page (requires an additonal webserver configuration)
  */ 
-define('ROUTING_MODE', 'DEFAULT_SHORT');
+define('ROUTING_MODE', 'ROUTER');
 // Define root url according to ROUTING_MODE
 define_base_url(constant('ROUTING_MODE'));
 session_start();
