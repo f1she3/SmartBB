@@ -170,7 +170,7 @@ function display_new_password_form($style, $error){
 						<div class=\"form-group\">
 							<label>Répétez le mot de passe :</label>
 							<input type=\"password\" class=\"form-control\" name=\"repeat_new_password\" maxlength=\"64\" 
-								placeholder=\"*****************\" autofocus required>
+								placeholder=\"*****************\" required>
 						</div>
 						<button class=\"btn btn-primary center-block\" name=\"submit_password\">
 							<span class=\"glyphicon glyphicon-ok\"></span>

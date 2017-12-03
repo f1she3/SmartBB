@@ -128,8 +128,8 @@ function display_user_infos($username, $is_current_user){
 				</pre>";
 	}else{
 		echo 	"<div class=\"icon\">
-				<a href=\"".get_base_url()."delete\">
-					<span class=\"glyphicon glyphicon-trash\"></span>
+				<a href=\"".get_base_url()."config\">
+					<span class=\"glyphicon glyphicon-cog\"></span>
 				</a>
 			</div>
 			<div class=\"page-header\">
