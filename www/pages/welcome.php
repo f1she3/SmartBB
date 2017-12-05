@@ -6,7 +6,7 @@
 </p>
 <p class="text-justify">
 <?= get_project_name() ?> est un <b>forum francophone de <a
-   href="https://fr.wikipedia.org/wiki/Cybers%C3%A9curit%C3%A9">cyber-sécurité</a></b>
+   href="https://fr.wikipedia.org/wiki/Cybers%C3%A9curit%C3%A9" target="_blank">cyber-sécurité</a></b>
 	où vous pouvez apprendre et partager sur différents sujets, liés de
 	près ou de loin à l'informatique et à la cyber-sécurité, avec d'autres
 	membres passionnés. <?= get_project_name() ?> a pour but de créer une communauté de
