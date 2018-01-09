@@ -71,7 +71,7 @@ if(is_logged()){
 	$title = get_project_name().' @'.$_SESSION['name']; 
 	require 'content/header-2.php';
 }else{
-	$title = 'Project | '.$page;
+	$title = get_project_name().' | '.$page;
 	require 'content/header-1.php';
 }
 $pages = scandir('functions/');
