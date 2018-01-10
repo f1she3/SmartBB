@@ -184,9 +184,13 @@ function get_rank_list(){
 	$ranks[1] = 'Modérateur';
 	$ranks[2] = 'Administrateur';
 	$ranks[3] = 'Chef Administrateur';
-	// Change this value to the actual number of ranks - 1
+	// These var are the one used by the code to symbolically represent ranks,
+	// not their id in the code. That way when a rank is added, only the
+	// they point to has to be changed
+	$ranks['user'] = 0;
 	$ranks['moderator'] = 1;
 	$ranks['administrator'] = 2;
+	// Change this value to the actual number of ranks - 1
 	$ranks['max'] = 3;
 
 	return $ranks;
