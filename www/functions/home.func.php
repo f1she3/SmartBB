@@ -5,16 +5,22 @@ function display_home_page(){
 			<h2 class=\"text-center\">Accueil</h2>
 		</div>";
 	$ranks = get_rank_list();
-	if(get_rank($_SESSION['name']) == $ranks['max']){
-		echo "<form method=\"POST\">
-				<button name=\"new_category\" class=\"btn btn-default\">
-					<span class=\"glyphicon glyphicon-plus\"></span>
-					 Catégorie
-				</button>
-			</form>";
+	if(is_logged()){
+		if(get_rank($_SESSION['name']) == $ranks['max']){
+			echo "<form method=\"POST\">
+					<button name=\"new_category\" class=\"btn btn-default\">
+						<span class=\"glyphicon glyphicon-plus\"></span>
+						 Catégorie
+					</button>
+				</form>";
+		}
 	}
 	$mysqli = get_link();
-	$my_rank = get_rank($_SESSION['name']);
+	if(is_logged()){
+		$my_rank = get_rank($_SESSION['name']);
+	}else{
+		$my_rank = $ranks['visitor'];
+	}
 	$query = mysqli_prepare($mysqli, 'SELECT * FROM categories WHERE access_restriction <= ? ORDER BY is_pinned DESC');
 	mysqli_stmt_bind_param($query, 'i', $my_rank);
 	mysqli_stmt_execute($query);
@@ -30,32 +36,40 @@ function display_home_page(){
 		while(mysqli_stmt_fetch($req)){
 			$i++;
 		}
-		echo 	"<form method=\"POST\">
-				<h3>
+		if(is_logged()){
+			echo 	"<form method=\"POST\">
+					<h3>
+						".$result['name']."
+						<a href=\"".get_base_url()."category&cat=".$result['name']."\">(".$i.")</a>
+					</h3>";
+			if(get_rank($_SESSION['name']) >= $result['post_restriction']){
+				echo "<button name=\"write_article\" class=\"btn btn-success btn-sm\" value=\"".$result['name']."\">
+						<span class=\"glyphicon glyphicon-pencil\"></span>
+						<span class=\"glyphicon glyphicon-plus\"></span>
+					</button> ";
+			}
+			if(get_rank($_SESSION['name']) == $ranks['max']){
+				echo 	"<button name=\"edit_category\" class=\"btn btn-primary btn-sm\" value=\"".$result['name']."\">
+						<span class=\"glyphicon glyphicon-wrench\"></span>
+					</button>
+					<button name=\"delete_category\" class=\"btn btn-danger btn-sm\" value=\"".$result['name']."\">
+						<span class=\"glyphicon glyphicon-trash\"></span>
+					</button>";
+			}
+		}else{
+			echo 	"<h3>
 					".$result['name']."
 					<a href=\"".get_base_url()."category&cat=".$result['name']."\">(".$i.")</a>
 				</h3>";
-		if(get_rank($_SESSION['name']) >= $result['post_restriction']){
-			echo "<button name=\"write_article\" class=\"btn btn-success btn-sm\" value=\"".$result['name']."\">
-					<span class=\"glyphicon glyphicon-pencil\"></span>
-					<span class=\"glyphicon glyphicon-plus\"></span>
-				</button> ";
+			
 		}
-		if(get_rank($_SESSION['name']) == $ranks['max']){
-			echo 	"<button name=\"edit_category\" class=\"btn btn-primary btn-sm\" value=\"".$result['name']."\">
-					<span class=\"glyphicon glyphicon-wrench\"></span>
-				</button>
-				<button name=\"delete_category\" class=\"btn btn-danger btn-sm\" value=\"".$result['name']."\">
-					<span class=\"glyphicon glyphicon-trash\"></span>
-				</button>";
-		}
-	echo 		"<hr>";
-	display_articles($result['name'], false);
-	echo 	"</form>";
-	$x++;
-}
-if($x == 0){
-	echo "<p class=\"text-center\">Aucune catégorie pour le moment</p>";
+		echo 		"<hr>";
+		display_articles($result['name'], false);
+		echo 	"</form>";
+		$x++;
+	}
+	if($x == 0){
+		echo "<p class=\"text-center\">Aucune catégorie pour le moment</p>";
 	}
 }
 function display_new_cat_form($category_name){

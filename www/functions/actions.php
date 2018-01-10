@@ -180,14 +180,16 @@ function get_rank($username){
 }
 function get_rank_list(){
 	// Add ranks here
-	$ranks[0] = 'Membre';
-	$ranks[1] = 'Modérateur';
-	$ranks[2] = 'Administrateur';
-	$ranks[3] = 'Chef Administrateur';
+	$ranks[0] = 'Visiteur';
+	$ranks[1] = 'Membre';
+	$ranks[2] = 'Modérateur';
+	$ranks[3] = 'Administrateur';
+	$ranks[4] = 'Chef Administrateur';
 	// These var are the one used by the code to symbolically represent ranks,
 	// not their id in the code. That way when a rank is added, only the
 	// they point to has to be changed
-	$ranks['user'] = 0;
+	$ranks['visitor'] = 0;
+	$ranks['user'] = 1;
 	$ranks['moderator'] = 1;
 	$ranks['administrator'] = 2;
 	// Change this value to the actual number of ranks - 1
