@@ -6,48 +6,51 @@
 
 function set_error($title, $icon, $content, $location){
 	if($title){
-		$title =	"<div class=\"page-header\">
-					<h2 class=\"text-center\">".$title."</h2>
-				</div>";
+		$display_title =	"<div class=\"page-header\">
+						<h2 class=\"text-center\">".$title."</h2>
+					</div>";
 	}else{
-		$title = '';
+		$display_title = '';
 	}
 	if($icon){
-		if($icon == 'error'){
-			$icon =	"<span class=\"glyphicon glyphicon-arrow-left\"></span>
+		if($icon === 'error'){
+			$display_icon =	"<span class=\"glyphicon glyphicon-arrow-left\"></span>
 					<h4 class=\"text-center\">
 						<span class=\"glyphicon glyphicon-".$icon."\"></span>
 					</h4>";
 		}else{
-			$icon = 	"<h4 class=\"text-center\">
-						<span class=\"glyphicon glyphicon-".$icon."\"></span>
-					</h4>";
+			$display_icon = "<h4 class=\"text-center\">
+					<span class=\"glyphicon glyphicon-".$icon."\"></span>
+				</h4>";
 		}
 	}else{
-		$icon = '';
+		$display_icon = '';
 	}
 	if($content){
-		$content = 	"<h4 class=\"text-center\">".$content."</h4>";
+		$display_content = 	"<h4 class=\"text-center\">".$content."</h4>";
 	}else{
-		$content = '';
+		$display_content = '';
 	}
-	$location = get_location($location);
-	if($location === 'home'){
-		$location = 	"<h1 class=\"text-center\">
-						<a href=\"".get_root_url().get_base_url().$location."\" class=\"text-danger\">
-							<span class=\"glyphicon glyphicon-home\"></span>
-						</a>
-					</h1>";
-	}else if($location){
-		$location = 	"<h1 class=\"text-center\">
-						<a href=\"".get_root_url().get_base_url().$location."\" class=\"text-danger\">
-							<span class=\"glyphicon glyphicon-circle-arrow-left\"></span>
-						</a>
-					</h1>";
+	if($location === 1){
+		die(get_location(1));
+		$display_location = 	"<h1 class=\"text-center\">
+					<a href=\"".get_root_url().get_base_url().get_location(1)."\" class=\"text-danger\">
+						<span class=\"glyphicon glyphicon-home\"></span>
+					</a>
+				</h1>";
 	}else{
-		$location = '';
-	}
-	die($title.$icon.$content.$location.file_get_contents('content/footer.html'));
+		$location = get_location($location);
+		if($location){
+			$display_location = 	"<h1 class=\"text-center\">
+							<a href=\"".get_root_url().get_base_url().$location."\" class=\"text-danger\">
+								<span class=\"glyphicon glyphicon-circle-arrow-left\"></span>
+							</a>
+						</h1>";
+		}else{
+			$display_location = '';
+		}
+	}	
+	die($display_title.$display_icon.$display_content.$display_location.file_get_contents('content/footer.html'));
 }
 function datalist_options($username, $rank_restriction){
 	$mysqli = get_link();
