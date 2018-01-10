@@ -63,6 +63,17 @@ function get_location($input){
 
 	return $location;
 }
+function is_forum_public($visibility){
+	if($visibility === 'PUBLIC'){
+		$result = true;
+	}else if($visibility === 'PRIVATE'){
+		$result = false;
+	}else{
+		$result = NULL;
+	}
+
+	return $result;
+}
 function redirect($location){
 	header('Location:'.get_root_url().get_base_url().get_location($location));
 }
@@ -85,25 +96,46 @@ function secure($var){
 function get_auth_pages($is_logged){
 	if(is_logged()){
 		$auth_pages = scandir('pages/');
-		if($key = array_search('login', $auth_pages) !== FALSE){
+		if($key = array_search('login', $auth_pages) !== false){
 			unset($auth_pages[$key]);
 		}
-		if($key = array_search('register', $auth_pages) !== FALSE){
+		if($key = array_search('register', $auth_pages) !== false){
 			unset($auth_pages[$key]);
 		}
-		if($key = array_search('forget', $auth_pages) !== FALSE){
+		if($key = array_search('forget', $auth_pages) !== false){
 			unset($auth_pages[$key]);
 		}
 	}else{
-		$auth_pages = array(
-			0 => 'login.php',
-			1 => 'register.php',
-			2 => 'welcome.php',
-			3 => 'error404.php',
-			4 => 'error403.php',
-			5 => 'forget.php',
-			6 => 'home.php'
-		);
+		if(is_forum_public(constant('FORUM_VISIBILITY')) === true){
+			$auth_pages = array(
+				0 => 'login.php',
+				1 => 'register.php',
+				2 => 'welcome.php',
+				3 => 'error404.php',
+				4 => 'error403.php',
+				5 => 'forget.php',
+				6 => 'home.php'
+			);
+		}else if(is_forum_public(constant('FORUM_VISIBILITY')) === false){
+			$auth_pages = array(
+				0 => 'login.php',
+				1 => 'register.php',
+				2 => 'welcome.php',
+				3 => 'error404.php',
+				4 => 'error403.php',
+				5 => 'forget.php',
+			);
+		}else{
+			$title = get_project_name().' | erreur';
+			$page = 'error';
+			if(is_logged()){
+				require 'content/header-2.php';
+
+			}else{
+				require 'content/header-1.php';
+			}
+			set_error('[System error]', 'wrench', 'Forum visibility not correctly defined, check the documentation again', '');
+		}
 	}
 
 	return $auth_pages;

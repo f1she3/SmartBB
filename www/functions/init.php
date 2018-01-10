@@ -6,14 +6,22 @@ header('Content-type: text/html; charset=utf-8');
 require 'app.php';
 require 'actions.php';
 require 'display.php';
-/* ROUTING_MODE : 
+/*
+ * ROUTING_MODE :
  * DEFAULT : 		/index.php?page=page
  * DEFAULT_SHORT : 	/?page=page
- * ROUTER : 		/page (requires an additonal webserver configuration)
- */ 
+ * ROUTER : 		/page
+ * ROUTER requires webserver configuration provided in
+ * folder /conf
+ *
+ */
 define('ROUTING_MODE', 'DEFAULT_SHORT');
+
 // Define root url according to ROUTING_MODE
 define_base_url(constant('ROUTING_MODE'));
+
+// Define if the forum will be visible to non registered users
+define('FORUM_VISIBILITY', 'PUBLICI');
 session_start();
 define('PROJECT_NAME', '[DEV]');
 define('HOST', 'p:127.0.0.1');
