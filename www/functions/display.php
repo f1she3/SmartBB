@@ -1,4 +1,8 @@
 <?php
+/* display.php
+ *
+ * Defines functions that will display content
+ */
 
 function set_error($title, $icon, $content, $location){
 	if($title){
