@@ -1,4 +1,8 @@
 <?php
+/* app.php
+ *
+ * Defines the functions used internally by the system
+ */
 
 function define_base_url($routing_mode){
 	switch($routing_mode){
@@ -72,26 +76,28 @@ function secure($var){
 	
 	return $var;
 }
-function is_logged(){
-	if(isset($_SESSION['name']) && !empty($_SESSION['name'])){
-		return true;
+function get_auth_pages($is_logged){
+	if(is_logged()){
+		$auth_pages = scandir('pages/');
+		if($key = array_search('login', $auth_pages) !== FALSE){
+			unset($auth_pages[$key]);
+		}
+		if($key = array_search('register', $auth_pages) !== FALSE){
+			unset($auth_pages[$key]);
+		}
+		if($key = array_search('forget', $auth_pages) !== FALSE){
+			unset($auth_pages[$key]);
+		}
+	}else{
+		$auth_pages = array(
+			0 => 'login',
+			1 => 'register',
+			2 => 'welcome',
+			3 => 'error404',
+			4 => 'error403',
+			5 => 'forget'
+		);
+	}
 
-	}else{
-		return false;
-	}
-}
-function is_user($input){
-	$mysqli = get_link();
-	$hash = sha1($input);
-	$query = mysqli_prepare($mysqli, 'SELECT name FROM users WHERE BINARY name = ? OR email = ?');
-	mysqli_stmt_bind_param($query, 'ss', $input, $hash);
-	mysqli_stmt_execute($query); 
-	mysqli_stmt_bind_result($query, $name);
-	$result = mysqli_stmt_fetch($query);
-	if($result == 0){
-		return false;
-	
-	}else{
-		return $name;
-	}
+	return $auth_pages;
 }

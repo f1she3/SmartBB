@@ -21,15 +21,14 @@ if(isset($_GET['page']) && !empty($_GET['page']) && is_string($_GET['page'])){
 		if(is_logged()){
 			$ranks = get_rank_list();
 			$my_rank = get_rank($_SESSION['name']);
-			if($page === 'login' || $page === 'register' || $page === 'forget'){
+			if(!in_array($page, get_auth_pages(is_logged()))){
 				$page = 'error404';
 				$file_type = 'php';
 			}else if($page == 'admin' && $my_rank < $ranks['administrator']){
 				$page = 'error404';
 				$file_type = 'php';
 			}
-		}else if($page != 'login' && $page != 'register' && $page != 'welcome' &&
-			$page != 'error404' && $page != 'error403' && $page != 'forget'){
+		}else if(!in_array($page, get_auth_pages(is_logged()))){
 			$page = 'error404';
 			$file_type = 'php';
 		}
