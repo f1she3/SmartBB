@@ -8,6 +8,9 @@ require 'actions.php';
 require 'display.php';
 /*
  * ROUTING_MODE :
+ *
+ * Define the global shape of the URL
+ *
  * DEFAULT : 		/index.php?page=page
  * DEFAULT_SHORT : 	/?page=page
  * ROUTER : 		/page
@@ -20,8 +23,17 @@ define('ROUTING_MODE', 'DEFAULT_SHORT');
 // Define root url according to ROUTING_MODE
 define_base_url(constant('ROUTING_MODE'));
 
-// Define if the forum will be visible to non registered users
-define('FORUM_VISIBILITY', 'PUBLICI');
+/*
+ * FORUM_VISIBILITY :
+ *
+ * Define if the forum will be visible to 
+ * unregistered users
+ *
+ * PUBLIC : all users can see, but only registered can post
+ * PRIVATE : only registered users can see
+ *
+ */
+define('FORUM_VISIBILITY', 'PUBLIC');
 session_start();
 define('PROJECT_NAME', '[DEV]');
 define('HOST', 'p:127.0.0.1');
