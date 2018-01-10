@@ -34,13 +34,19 @@ function get_project_name(){
 function get_location($input){
 	if(is_numeric($input)){
 		switch($input){
+			// Home page
 			case(1):
 				if(is_logged()){
 					$location = 'home';
 				}else{
-					$location = 'login';
+					if(in_array('home.php', get_auth_pages(is_logged)){
+						$location = 'home';
+					}else{
+						$location = 'login';
+					}
 				}
 				break;
+			// Error page
 			case(2):
 				$location = 'error404';
 				break;

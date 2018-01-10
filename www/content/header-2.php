@@ -7,7 +7,9 @@
 		<meta name="description" content="Forum francophone de cyber-sécurité">
 		<meta name="author" content="f1she3">
 		<link rel="icon" href="<?= get_root_url().'/css/images/favicon.ico' ?>">
-		<title><?= $title; ?></title>
+		<title>
+			<?= $title; ?>
+		</title>
 		<link href="<?= get_root_url().'/css/bootstrap.min.css' ?>" rel="stylesheet">
 		<link href="<?= get_root_url().'/css/style.css' ?>" rel="stylesheet">
 	</head>
@@ -29,10 +31,10 @@
 				</div>
 				<div id="navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav navbar-right"> 
-						<li class="<?php echo ($page == 'home') ? 'active' : '' ?>">
-							<a href="<?= get_root_url().get_base_url().'home' ?>">
+						<li class="<?php echo ($page == get_location(1)) ? 'active' : '' ?>">
+							<a href="<?= get_root_url().get_base_url().get_location(1) ?>">
 								<span class="glyphicon glyphicon-home"></span>
-								ACCUEIL	
+								ACCUEIL
 							</a>
 						</li>
 						<?php
@@ -55,7 +57,7 @@
 						<li class="<?php echo ($page == 'profile') ? ' active' : '' ?>">
 							<a href="<?= get_root_url().get_base_url().'profile' ?>">
 								<span class="glyphicon glyphicon-user"></span>
-								MON PROFIL
+								COMPTE
 							</a>
 						</li>
 						<li>
