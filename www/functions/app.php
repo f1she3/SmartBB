@@ -39,7 +39,7 @@ function get_location($input){
 				if(is_logged()){
 					$location = 'home';
 				}else{
-					if(in_array('home.php', get_auth_pages(is_logged)){
+					if(in_array('home.php', get_auth_pages(is_logged()))){
 						$location = 'home';
 					}else{
 						$location = 'login';
@@ -96,12 +96,13 @@ function get_auth_pages($is_logged){
 		}
 	}else{
 		$auth_pages = array(
-			0 => 'login',
-			1 => 'register',
-			2 => 'welcome',
-			3 => 'error404',
-			4 => 'error403',
-			5 => 'forget'
+			0 => 'login.php',
+			1 => 'register.php',
+			2 => 'welcome.php',
+			3 => 'error404.php',
+			4 => 'error403.php',
+			5 => 'forget.php',
+			6 => 'home.php'
 		);
 	}
 
