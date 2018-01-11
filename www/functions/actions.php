@@ -190,8 +190,8 @@ function get_rank_list(){
 	// they point to has to be changed
 	$ranks['visitor'] = 0;
 	$ranks['user'] = 1;
-	$ranks['moderator'] = 1;
-	$ranks['administrator'] = 2;
+	$ranks['moderator'] = 2;
+	$ranks['administrator'] = 3;
 	// Change this value to the actual number of ranks - 1
 	$ranks['max'] = 3;
 
