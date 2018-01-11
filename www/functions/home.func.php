@@ -6,7 +6,7 @@ function display_home_page(){
 		</div>";
 	$ranks = get_rank_list();
 	if(is_logged()){
-		if(get_rank($_SESSION['name']) == $ranks['max']){
+		if(get_rank($_SESSION['name']) === $ranks['max']){
 			echo "<form method=\"POST\">
 					<button name=\"new_category\" class=\"btn btn-default\">
 						<span class=\"glyphicon glyphicon-plus\"></span>
@@ -48,7 +48,7 @@ function display_home_page(){
 						<span class=\"glyphicon glyphicon-plus\"></span>
 					</button> ";
 			}
-			if(get_rank($_SESSION['name']) == $ranks['max']){
+			if(get_rank($_SESSION['name']) === $ranks['max']){
 				echo 	"<button name=\"edit_category\" class=\"btn btn-primary btn-sm\" value=\"".$result['name']."\">
 						<span class=\"glyphicon glyphicon-wrench\"></span>
 					</button>
@@ -68,7 +68,7 @@ function display_home_page(){
 		echo 	"</form>";
 		$x++;
 	}
-	if($x == 0){
+	if($x === 0){
 		echo "<p class=\"text-center\">Aucune catégorie pour le moment</p>";
 	}
 }
@@ -103,7 +103,7 @@ function display_new_cat_form($category_name){
 		// Skip symbolic ranks
 		// ex : $ranks['user']
 		if(!is_numeric($value)){
-			if($key == $category_infos['access_restriction']){
+			if($key === $category_infos['access_restriction']){
 				$attribute = 'selected';
 			}else{
 				$attribute = '';
@@ -119,7 +119,7 @@ function display_new_cat_form($category_name){
 	$ranks = get_rank_list();
 	foreach($ranks as $key => $value){
 		if(!is_numeric($value) && $value !== $ranks[$ranks['visitor']]){
-			if($key == $category_infos['post_restriction']){
+			if($key === $category_infos['post_restriction']){
 				$attribute = 'selected';
 			}else{
 				$attribute = '';
@@ -134,9 +134,9 @@ function display_new_cat_form($category_name){
 				<select name=\"owned_by\" class=\"form-control\">";
 	foreach($ranks as $key => $value){
 		if(!is_numeric($value) && $value !== $ranks[$ranks['visitor']]){
-			if($key == $category_infos['rank_owner']){
+			if($key === $category_infos['rank_owner']){
 				$attribute = 'selected';
-			}else if($key == $ranks['moderator']){
+			}else if($key === $ranks['moderator']){
 				$attribute = 'selected';
 			}else{
 				$attribute = '';
