@@ -99,7 +99,9 @@ function display_new_cat_form($category_name){
 				<select name=\"access_restriction\" class=\"form-control\">";
 	$ranks = get_rank_list();
 	foreach($ranks as $key => $value){
-		if($value != $ranks['max'] && $value != $ranks['moderator'] && $value != $ranks['administrator']){
+		// Skip symbolic ranks
+		// ex : $ranks['user']
+		if(!is_numeric($value)){
 			if($key == $category_infos['access_restriction']){
 				$attribute = 'selected';
 			}else{
@@ -115,7 +117,7 @@ function display_new_cat_form($category_name){
 				<select name=\"post_restriction\" class=\"form-control\">";
 	$ranks = get_rank_list();
 	foreach($ranks as $key => $value){
-		if($value != $ranks['max'] && $value != $ranks['moderator'] && $value != $ranks['administrator']){
+		if(!is_numeric($value) && $value !== $ranks[$ranks['visitor']]){
 			if($key == $category_infos['post_restriction']){
 				$attribute = 'selected';
 			}else{
@@ -130,10 +132,10 @@ function display_new_cat_form($category_name){
 				<label>Gérée par :</label>
 				<select name=\"owned_by\" class=\"form-control\">";
 	foreach($ranks as $key => $value){
-		if($value != $ranks['max'] && $value != $ranks['moderator'] && $value != $ranks['administrator']){
+		if(!is_numeric($value) && $value !== $ranks[$ranks['visitor']]){
 			if($key == $category_infos['rank_owner']){
 				$attribute = 'selected';
-			}else if($value == $ranks[1]){
+			}else if($key == $ranks['moderator']){
 				$attribute = 'selected';
 			}else{
 				$attribute = '';
