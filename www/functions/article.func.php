@@ -73,6 +73,7 @@ function is_comment($input_id){
 }
 function display_comment($comment_id, $article_id, $page_id){
 	$mysqli = get_link();
+	$ranks = get_rank_list();
 	// Display specific comment
 	if($comment_id){
 		$comment_infos = get_comment_infos($comment_id);
@@ -175,30 +176,36 @@ function display_comment($comment_id, $article_id, $page_id){
 			}
 			echo 	"<form method=\"POST\">";
 			$article_infos = get_article_infos($article_id);
-			$my_rank = get_rank($_SESSION['name']);
+			if(is_logged()){
+				$my_rank = get_rank($_SESSION['name']);
+			}else{
+				$my_rank = $ranks['visitor'];
+			}
 			$category_infos = get_category_infos($article_infos['category']);
 			$comment_infos = get_comment_infos($id);
-			if($comment_infos['author'] != $_SESSION['name']){
-				if($article_infos['status'] === 0){
-					if($my_rank >= $category_infos['post_restriction']){
-						echo 	"<button name=\"reply\" class=\"btn btn-primary\" value=\"".$id."\">
-								<span class=\"glyphicon glyphicon-share\"></span> 
-								répondre
-							</button> ";
+			if(is_logged()){
+				if($comment_infos['author'] != $_SESSION['name']){
+					if($article_infos['status'] === 0){
+						if($my_rank >= $category_infos['post_restriction']){
+							echo 	"<button name=\"reply\" class=\"btn btn-primary\" value=\"".$id."\">
+									<span class=\"glyphicon glyphicon-share\"></span> 
+									répondre
+								</button> ";
+						}
+					}
+				}else if($comment_infos['author'] == $_SESSION['name'] && $my_rank >= $category_infos['post_restriction']){
+					if($article_infos['status'] === 0){
+						echo 		"<button name=\"edit_comment\" class=\"btn btn-primary\" value=\"".$id."\">
+									<span class=\"glyphicon glyphicon-edit\"></span>
+									éditer
+								</button> ";
 					}
 				}
-			}else if($comment_infos['author'] == $_SESSION['name'] && $my_rank >= $category_infos['post_restriction']){
-				if($article_infos['status'] === 0){
-					echo 		"<button name=\"edit_comment\" class=\"btn btn-primary\" value=\"".$id."\">
-								<span class=\"glyphicon glyphicon-edit\"></span>
-								éditer
-							</button> ";
+				if($comment_infos['author'] != $_SESSION['name']){
+					echo		"<a href=\"#\" class=\"btn btn-info\">
+								<span class=\"glyphicon glyphicon-send\"> mp</span> 
+							</a>";
 				}
-			}
-			if($comment_infos['author'] != $_SESSION['name']){
-				echo		"<a href=\"#\" class=\"btn btn-info\">
-							<span class=\"glyphicon glyphicon-send\"> mp</span> 
-						</a>";
 			}
 			echo	"</form><hr>";
 		}
@@ -214,22 +221,26 @@ function display_comment($comment_id, $article_id, $page_id){
 			echo 	"</ul>";
 		}
 		$article_infos = get_article_infos($article_id);
-		$my_rank = get_rank($_SESSION['name']);
-		$category_infos = get_category_infos($article_infos['category']);
-		if($article_infos['status'] === 0){
-			if($my_rank >= $category_infos['post_restriction']){
-				echo 	"<form method=\"POST\">
-						<div class=\"form-group col-md-8 col-md-offset-2\">
-							<textarea class=\"form-control\" style=\"resize:none\" name=\"comment\" 
-								placeholder=\"Commenter cet article\" maxlength=\"500\" required></textarea>
-						</div>
-						<div class=\"form-group col-md-4 col-md-offset-4\">
-							<button class=\"btn btn-primary col-sm-2 col-xs-2 col-xs-offset-5\" name=\"submit_comment\">
-								<span class=\"glyphicon glyphicon-send\"></span> 
-							</button>
-						</div>
-					</form>";
+		if(is_logged()){
+			$my_rank = get_rank($_SESSION['name']);
+			$category_infos = get_category_infos($article_infos['category']);
+			if($article_infos['status'] === 0){
+				if($my_rank >= $category_infos['post_restriction']){
+					echo 	"<form method=\"POST\">
+							<div class=\"form-group col-md-8 col-md-offset-2\">
+								<textarea class=\"form-control\" style=\"resize:none\" name=\"comment\" 
+									placeholder=\"Commenter cet article\" maxlength=\"500\" required></textarea>
+							</div>
+							<div class=\"form-group col-md-4 col-md-offset-4\">
+								<button class=\"btn btn-primary col-sm-2 col-xs-2 col-xs-offset-5\" name=\"submit_comment\">
+									<span class=\"glyphicon glyphicon-send\"></span> 
+								</button>
+							</div>
+						</form>";
+				}
 			}
+		}else{
+			$my_rank = $ranks['visitor'];
 		}
 	}
 }
@@ -293,33 +304,37 @@ function display_article($article_id, $page_id){
 		</pre>
 		<form method=\"POST\">";
 	$author_rank = get_rank($article_infos['author']);
-	$my_rank = get_rank($_SESSION['name']);
 	$ranks = get_rank_list();
-	if($my_rank == $ranks['max'] || $my_rank >= $category_infos['rank_owner'] && $my_rank > $author_rank){
-		if($article_infos['status'] === 0){
-			echo 	"<button name=\"close_article\" class=\"btn btn-danger pull-right\">
-					<span class=\"glyphicon glyphicon-lock\"> fermer</span> 
-				</button>";
-		}else{
-			echo 	"<button name=\"open_article\" class=\"btn btn-success\">
-					<span class=\"glyphicon glyphicon-ok\"> ouvrir</span> 
-				</button>
-				<button name=\"delete_article\" class=\"btn btn-danger pull-right\">
-					<span class=\"glyphicon glyphicon-trash\">
-				</button> ";
+	if(is_logged()){
+		$my_rank = get_rank($_SESSION['name']);
+		if($my_rank == $ranks['max'] || $my_rank >= $category_infos['rank_owner'] && $my_rank > $author_rank){
+			if($article_infos['status'] === 0){
+				echo 	"<button name=\"close_article\" class=\"btn btn-danger pull-right\">
+						<span class=\"glyphicon glyphicon-lock\"> fermer</span> 
+					</button>";
+			}else{
+				echo 	"<button name=\"open_article\" class=\"btn btn-success\">
+						<span class=\"glyphicon glyphicon-ok\"> ouvrir</span> 
+					</button>
+					<button name=\"delete_article\" class=\"btn btn-danger pull-right\">
+						<span class=\"glyphicon glyphicon-trash\">
+					</button> ";
+			}
 		}
-	}
-	if($article_infos['author'] == $_SESSION['name']){
-		if($article_infos['status'] === 0 && $my_rank >= $category_infos['post_restriction']){
-			echo 	"<button name=\"edit_article\" class=\"btn btn-primary\">
-					<span class=\"glyphicon glyphicon-edit\"></span>
-					éditer
-				</button> ";
+		if($article_infos['author'] == $_SESSION['name']){
+			if($article_infos['status'] === 0 && $my_rank >= $category_infos['post_restriction']){
+				echo 	"<button name=\"edit_article\" class=\"btn btn-primary\">
+						<span class=\"glyphicon glyphicon-edit\"></span>
+						éditer
+					</button> ";
+			}
+		}else{
+			echo 		"<a href=\"#\" class=\"btn btn-info\">
+						<span class=\"glyphicon glyphicon-send\"> mp</span> 
+					</a>";
 		}
 	}else{
-		echo 		"<a href=\"#\" class=\"btn btn-info\">
-					<span class=\"glyphicon glyphicon-send\"> mp</span> 
-				</a>";
+		$my_rank = $ranks['visitor'];
 	}
 	echo	"</form><hr>";
 	if($page_id){
