@@ -29,6 +29,22 @@
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-right">
+						<?php
+						if(is_forum_public()){
+							if($page === get_location(1)){
+								$class = 'active';
+							}else{
+								$class = '';
+							}
+							echo 	"<li class=\"".$class."\">
+									<a href=\"".get_root_url().get_base_url().get_location(1)."\">
+										<span class=\"glyphicon glyphicon-home\"></span> ";
+							$home_page_name = strtoupper(get_location(1));
+							echo 			$home_page_name."
+									</a>
+								</li>";
+						}
+						?>
 						<li class="<?php echo ($page == 'register') ? 'active' : '' ?>">
 							<a href="<?= get_root_url().get_base_url().'register' ?>">
 								<span class="glyphicon glyphicon-user"></span>
