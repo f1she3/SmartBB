@@ -63,7 +63,8 @@ function get_location($input){
 
 	return $location;
 }
-function is_forum_public($visibility){
+function is_forum_public(){
+	$visibility = constant('FORUM_VISIBILITY');
 	if($visibility === 'PUBLIC'){
 		$result = true;
 	}else if($visibility === 'PRIVATE'){
@@ -116,7 +117,7 @@ function get_auth_pages($is_logged){
 				5 => 'forget.php',
 				6 => 'home.php'
 			);
-		}else if(is_forum_public(constant('FORUM_VISIBILITY')) === false){
+		}else if(is_forum_public() === false){
 			$auth_pages = array(
 				0 => 'login.php',
 				1 => 'register.php',
@@ -127,7 +128,7 @@ function get_auth_pages($is_logged){
 			);
 		}else{
 			$title = get_project_name().' | erreur';
-			$page = 'error';
+			$page = 'error404';
 			if(is_logged()){
 				require 'content/header-2.php';
 
