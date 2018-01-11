@@ -32,7 +32,6 @@ function set_error($title, $icon, $content, $location){
 		$display_content = '';
 	}
 	if($location === 1){
-		die(get_location(1));
 		$display_location = 	"<h1 class=\"text-center\">
 					<a href=\"".get_root_url().get_base_url().get_location(1)."\" class=\"text-danger\">
 						<span class=\"glyphicon glyphicon-home\"></span>
