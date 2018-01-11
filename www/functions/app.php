@@ -115,7 +115,9 @@ function get_auth_pages($is_logged){
 				3 => 'error404.php',
 				4 => 'error403.php',
 				5 => 'forget.php',
-				6 => 'home.php'
+				6 => 'home.php',
+				7 => 'article.php',
+				8 => 'category.php'
 			);
 		}else if(is_forum_public() === false){
 			$auth_pages = array(
