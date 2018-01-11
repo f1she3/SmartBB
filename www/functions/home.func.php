@@ -84,6 +84,7 @@ function display_new_cat_form($category_name){
 		$category_infos['access_restriction'] = '';
 		$category_infos['post_restriction'] = '';
 		$category_infos['rank_owner'] = '';
+		$category_infos['is_pinned'] = 0;
 		$button_name = 'submit_cat_creation';
 		echo 		"Nouvelle catégorie";
 	}
