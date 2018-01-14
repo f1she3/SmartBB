@@ -88,7 +88,7 @@ function display_comment($comment_id, $article_id, $page_id){
 				</a>
 				".$fdate."
 			</h4>";
-		if($comment_infos['reply_to'] == 0){
+		if($comment_infos['reply_to'] === 0){
 			echo 	"<pre>".$content."</pre>";
 		}else if(is_comment($comment_infos['reply_to'])){
 			$parent_comment = get_comment_infos($comment_infos['reply_to']);
@@ -140,16 +140,7 @@ function display_comment($comment_id, $article_id, $page_id){
 		mysqli_stmt_execute($query);
 		mysqli_stmt_bind_result($query, $id, $parent_id, $author, $content, $reply_to, $date);
 		if($page_id > 1){
-			$article_infos = get_article_infos($article_id);
-			echo 	"<div class=\"page-header\">
-					<h2 class=\"text-center\">".$article_infos['title']."</h2>
-				</div>
-				<ul class=\"breadcrumb\">
-					<li><a href=\"".get_base_url().get_location(1)."\">Accueil</a></li>
-					<li><a href=\"".get_base_url()."category&cat=".$article_infos['category']."\">".$article_infos['category']."</a></li>
-					<li><a href=\"".get_base_url()."article&id=".$article_id."\">".$article_infos['title']."</a></li>
-					<li>".$page_id."</li>
-				</ul>";
+			display_breadcrumb($article_id);
 		}
 		while(mysqli_stmt_fetch($query)){
 			$fdate = date_create($date);
@@ -163,7 +154,7 @@ function display_comment($comment_id, $article_id, $page_id){
 					</a>
 					".$fdate."
 				</h4>";
-			if($reply_to == 0){
+			if($reply_to === 0){
 				echo 	"<pre>".$content."</pre>";
 			}else if(is_comment($reply_to)){
 				$parent_comment = get_comment_infos($reply_to);
@@ -274,7 +265,6 @@ function display_comment_edition_form($comment_id){
 function display_article($article_id, $page_id){
 	$mysqli = get_link();
 	$article_infos = get_article_infos($article_id);
-	$category_infos = get_category_infos($article_infos['category']);
 	$fdate = date_create($article_infos['date']);
 	$fdate = date_format($fdate, 'G:i, \l\e j/m Y');
 	$user_description = get_user_description($article_infos['author']);
@@ -286,13 +276,9 @@ function display_article($article_id, $page_id){
 	}
 	echo 	"<div class=\"page-header\">
 			<h2 class=\"text-center\">".$prefix." ".$article_infos['title']."</h2>
-		</div>
-		<ul class=\"breadcrumb\">
-			<li><a href=\"".get_base_url().get_location(1)."\">Accueil</a></li>
-			<li><a href=\"".get_base_url()."category&cat=".$article_infos['category']."\">".$article_infos['category']."</a></li>
-			<li><a href=\"".get_base_url()."article&id=".$article_infos['id']."\">".$article_infos['title']."</a></li>
-		</ul>
-		<h4 class=\"text-left\">
+		</div>";
+	display_breadcrumb($article_id);
+	echo	"<h4 class=\"text-left\">
 			<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
 			<a href=\"".get_base_url()."profile&user=".$article_infos['author']."\">
 				<abbr title=\"".$user_description."\">".$article_infos['author']."</abbr>
@@ -301,8 +287,16 @@ function display_article($article_id, $page_id){
 		</h4>
 		<pre>
 			<p style=\"white-space: pre-wrap\">".$article_infos['content']."</p>
-		</pre>
-		<form method=\"POST\">";
+		</pre>";
+	display_buttons($article_id);
+	if($page_id){
+		display_comment(false, $article_id, $page_id);
+	}
+}
+function display_buttons($article_id){
+	$article_infos = get_article_infos($article_id);
+	$category_infos = get_category_infos($article_infos['category']);
+	echo "<form method=\"POST\">";
 	$author_rank = get_rank($article_infos['author']);
 	$ranks = get_rank_list();
 	if(is_logged()){
@@ -321,7 +315,7 @@ function display_article($article_id, $page_id){
 					</button> ";
 			}
 		}
-		if($article_infos['author'] == $_SESSION['name']){
+		if($article_infos['author'] === $_SESSION['name']){
 			if($article_infos['status'] === 0 && $my_rank >= $category_infos['post_restriction']){
 				echo 	"<button name=\"edit_article\" class=\"btn btn-primary\">
 						<span class=\"glyphicon glyphicon-edit\"></span>
@@ -337,9 +331,7 @@ function display_article($article_id, $page_id){
 		$my_rank = $ranks['visitor'];
 	}
 	echo	"</form><hr>";
-	if($page_id){
-		display_comment(false, $article_id, $page_id);
-	}
+	
 }
 function post_comment($parent_id, $author, $content, $reply_to){
 	$mysqli = get_link();
@@ -375,13 +367,9 @@ function display_article_edition_form($article_id, $editor){
 	}
 	echo 	"<div class=\"page-header\">
 			<h3 class=\"text-center\">Éditer mon article</h3>
-		</div>
-		<ul class=\"breadcrumb\">
-			<li><a href=\"".get_base_url().get_location(1)."\">Accueil</a></li>
-			<li><a href=\"".get_base_url()."category&cat=".$article_infos['category']."\">".$article_infos['category']."</a></li>
-			<li><a href=\"".get_base_url()."article&id=".$article_id."\">".$article_infos['title']."</a></li>
-		</ul>
-		<form method=\"POST\">
+		</div>";
+	display_breadcrumb($article_id);
+	echo 	"<form method=\"POST\">
 			<div class=\"form-group col-md-4 col-md-offset-1 col-sm-6 col-sm-offset-1 col-xs-6\">
 				<label>Titre : </label>
 				<input name=\"new_article_title\" class=\"form-control\" maxlength=\"100\" 
@@ -407,27 +395,26 @@ function display_article_edition_form($article_id, $editor){
 		echo		"</select>
 			</div>";
 	}
-		$article_infos['content'] = format_new_line($article_infos['content']);
-		echo	"<div class=\"form-group col-sm-10 col-sm-offset-1\">
-				<textarea name=\"new_article_content\" class=\"form-control\" rows=\"10\" placeholder=\"[h1 center]Mon article[/h1]\" 
-					maxlength=\"1000\" ".$textarea_attribute.">".$article_infos['content']."</textarea>
+	$article_infos['content'] = format_new_line($article_infos['content']);
+	echo	"<div class=\"form-group col-sm-10 col-sm-offset-1\">
+			<textarea name=\"new_article_content\" class=\"form-control\" rows=\"10\" placeholder=\"[h1 center]Mon article[/h1]\" 
+				maxlength=\"1000\" ".$textarea_attribute.">".$article_infos['content']."</textarea>
+		</div>";
+	if($my_rank >= $category_infos['rank_owner']){
+		if($article_infos['is_pinned'] === 1){
+			$checkbox_attribute = 'checked';
+		}else{
+			$checkbox_attribute = '';
+		}
+		echo	"<div class=\"checkbox col-sm-8 col-sm-offset-1\">
+				<label><input type=\"checkbox\" name=\"pin\" ".$checkbox_attribute."> Épingler</label>
 			</div>";
-		if($my_rank >= $category_infos['rank_owner']){
-			if($article_infos['is_pinned'] === 1){
-				$checkbox_attribute = 'checked';
-			}else{
-				$checkbox_attribute = '';
-			}
-			echo	"<div class=\"checkbox col-sm-8 col-sm-offset-1\">
-					<label><input type=\"checkbox\" name=\"pin\" ".$checkbox_attribute."> Épingler</label>
-				</div>";
-		}		
-		echo "<button name=\"".$button_name."\" class=\"btn btn-primary col-sm-2 col-sm-offset-5 col-xs-4 col-xs-offset-4\">
-				<span class=\"glyphicon glyphicon-pencil\"></span>
-				Publier
-			</button>
-		</form>";
-
+	}		
+	echo "<button name=\"".$button_name."\" class=\"btn btn-primary col-sm-2 col-sm-offset-5 col-xs-4 col-xs-offset-4\">
+			<span class=\"glyphicon glyphicon-pencil\"></span>
+			Publier
+		</button>
+	</form>";
 }
 function update_article($article_id, $new_title, $new_content, $new_category, $is_pinned){
 	if($new_title){
@@ -496,4 +483,12 @@ function delete_article($id){
 	$query = mysqli_prepare($mysqli, 'DELETE FROM articles WHERE id = ?');
 	mysqli_stmt_bind_param($query, 'i', $id);
 	mysqli_stmt_execute($query);
+}
+function display_breadcrumb($article_id){
+	$article_infos = get_article_infos($article_id);
+	echo 	"<ul class=\"breadcrumb\">
+			<li><a href=\"".get_base_url().get_location(1)."\">Accueil</a></li>
+			<li><a href=\"".get_base_url()."category&cat=".$article_infos['category']."\">".$article_infos['category']."</a></li>
+			<li><a href=\"".get_base_url()."article&id=".$article_id."\">".$article_infos['title']."</a></li>
+		</ul>";
 }
