@@ -145,7 +145,7 @@ function display_comment($comment_id, $article_id, $page_id){
 					<h2 class=\"text-center\">".$article_infos['title']."</h2>
 				</div>
 				<ul class=\"breadcrumb\">
-					<li><a href=\"".get_base_url()."home\">Accueil</a></li>
+					<li><a href=\"".get_base_url().get_location(1)."\">Accueil</a></li>
 					<li><a href=\"".get_base_url()."category&cat=".$article_infos['category']."\">".$article_infos['category']."</a></li>
 					<li><a href=\"".get_base_url()."article&id=".$article_id."\">".$article_infos['title']."</a></li>
 					<li>".$page_id."</li>
@@ -288,7 +288,7 @@ function display_article($article_id, $page_id){
 			<h2 class=\"text-center\">".$prefix." ".$article_infos['title']."</h2>
 		</div>
 		<ul class=\"breadcrumb\">
-			<li><a href=\"".get_base_url()."home\">Accueil</a></li>
+			<li><a href=\"".get_base_url().get_location(1)."\">Accueil</a></li>
 			<li><a href=\"".get_base_url()."category&cat=".$article_infos['category']."\">".$article_infos['category']."</a></li>
 			<li><a href=\"".get_base_url()."article&id=".$article_infos['id']."\">".$article_infos['title']."</a></li>
 		</ul>
@@ -377,7 +377,7 @@ function display_article_edition_form($article_id, $editor){
 			<h3 class=\"text-center\">Éditer mon article</h3>
 		</div>
 		<ul class=\"breadcrumb\">
-			<li><a href=\"".get_base_url()."home\">Accueil</a></li>
+			<li><a href=\"".get_base_url().get_location(1)."\">Accueil</a></li>
 			<li><a href=\"".get_base_url()."category&cat=".$article_infos['category']."\">".$article_infos['category']."</a></li>
 			<li><a href=\"".get_base_url()."article&id=".$article_id."\">".$article_infos['title']."</a></li>
 		</ul>
