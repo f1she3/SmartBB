@@ -8,4 +8,4 @@
 	Feel free to comment and report any problem ;)
 	
 </p>
-<h3><u>By <a href="https://github.com/f1she3">f1she3</a></u></h3>
+<h3><u>By <a href="https://github.com/f1she3" target="_blank">f1she3</a></u></h3>
