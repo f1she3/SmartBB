@@ -116,7 +116,7 @@ function display_comment($comment_id, $article_id, $page_id){
 			<form method=\"POST\">
 				<input type=\"hidden\" name=\"parent_comment\" value=\"".$comment_id."\">
 				<div class=\"form-group col-md-8 col-md-offset-2\">
-					<textarea class=\"form-control\" style=\"resize:none\" name=\"answer\" maxlength=\"500\" placeholder=\"répondre à ".$comment_infos['author']."\" autofocus required></textarea>
+					<textarea class=\"form-control\" style=\"resize:none\" name=\"answer\" maxlength=\"500\" placeholder=\"reply to ".$comment_infos['author']."\" autofocus required></textarea>
 				</div>
 				<div class=\"form-group col-md-4 col-md-offset-4\">
 					<button class=\"btn btn-primary col-sm-2 col-xs-2 col-xs-offset-5\" name=\"submit_answer\">
@@ -180,7 +180,7 @@ function display_comment($comment_id, $article_id, $page_id){
 						if($my_rank >= $category_infos['post_restriction']){
 							echo 	"<button name=\"reply\" class=\"btn btn-primary\" value=\"".$id."\">
 									<span class=\"glyphicon glyphicon-share\"></span> 
-									répondre
+									reply
 								</button> ";
 						}
 					}
@@ -188,7 +188,7 @@ function display_comment($comment_id, $article_id, $page_id){
 					if($article_infos['status'] === 0){
 						echo 		"<button name=\"edit_comment\" class=\"btn btn-primary\" value=\"".$id."\">
 									<span class=\"glyphicon glyphicon-edit\"></span>
-									éditer
+									edit
 								</button> ";
 					}
 				}
@@ -220,7 +220,7 @@ function display_comment($comment_id, $article_id, $page_id){
 					echo 	"<form method=\"POST\">
 							<div class=\"form-group col-md-8 col-md-offset-2\">
 								<textarea class=\"form-control\" style=\"resize:none\" name=\"comment\" 
-									placeholder=\"Commenter cet article\" maxlength=\"500\" required></textarea>
+									placeholder=\"Comment this article\" maxlength=\"500\" required></textarea>
 							</div>
 							<div class=\"form-group col-md-4 col-md-offset-4\">
 								<button class=\"btn btn-primary col-sm-2 col-xs-2 col-xs-offset-5\" name=\"submit_comment\">
@@ -304,11 +304,11 @@ function display_buttons($article_id){
 		if($my_rank == $ranks['max'] || $my_rank >= $category_infos['rank_owner'] && $my_rank > $author_rank){
 			if($article_infos['status'] === 0){
 				echo 	"<button name=\"close_article\" class=\"btn btn-danger pull-right\">
-						<span class=\"glyphicon glyphicon-lock\"> fermer</span> 
+						<span class=\"glyphicon glyphicon-lock\"> close</span> 
 					</button>";
 			}else{
 				echo 	"<button name=\"open_article\" class=\"btn btn-success\">
-						<span class=\"glyphicon glyphicon-ok\"> ouvrir</span> 
+						<span class=\"glyphicon glyphicon-ok\"> open</span> 
 					</button>
 					<button name=\"delete_article\" class=\"btn btn-danger pull-right\">
 						<span class=\"glyphicon glyphicon-trash\">
@@ -319,7 +319,7 @@ function display_buttons($article_id){
 			if($article_infos['status'] === 0 && $my_rank >= $category_infos['post_restriction']){
 				echo 	"<button name=\"edit_article\" class=\"btn btn-primary\">
 						<span class=\"glyphicon glyphicon-edit\"></span>
-						éditer
+						edit
 					</button> ";
 			}
 		}else{
@@ -366,18 +366,18 @@ function display_article_edition_form($article_id, $editor){
 		$button_name = 'submit_article_edition';
 	}
 	echo 	"<div class=\"page-header\">
-			<h3 class=\"text-center\">Éditer mon article</h3>
+			<h3 class=\"text-center\">Edit my article</h3>
 		</div>";
 	display_breadcrumb($article_id);
 	echo 	"<form method=\"POST\">
 			<div class=\"form-group col-md-4 col-md-offset-1 col-sm-6 col-sm-offset-1 col-xs-6\">
-				<label>Titre : </label>
+				<label>Title : </label>
 				<input name=\"new_article_title\" class=\"form-control\" maxlength=\"100\" 
 					value=\"".$article_infos['title']."\" ".$title_attribute.">
 			</div>";
 	if($article_infos['author'] != $editor){
 		echo 	"<div class=\"form-group col-md-2 col-md-offset-4 col-sm-3 col-sm-offset-1 col-xs-5 col-xs-offset-1\">
-				<label>Déplacer :</label>
+				<label>Move to :</label>
 				<select name=\"move_article\" class=\"form-control\">";
 		$categories = get_category_list();
 		$i = 0;
@@ -397,7 +397,7 @@ function display_article_edition_form($article_id, $editor){
 	}
 	$article_infos['content'] = format_new_line($article_infos['content']);
 	echo	"<div class=\"form-group col-sm-10 col-sm-offset-1\">
-			<textarea name=\"new_article_content\" class=\"form-control\" rows=\"10\" placeholder=\"[h1 center]Mon article[/h1]\" 
+			<textarea name=\"new_article_content\" class=\"form-control\" rows=\"10\" placeholder=\"[h1 center]My title[/h1]\" 
 				maxlength=\"1000\" ".$textarea_attribute.">".$article_infos['content']."</textarea>
 		</div>";
 	if($my_rank >= $category_infos['rank_owner']){
@@ -407,12 +407,12 @@ function display_article_edition_form($article_id, $editor){
 			$checkbox_attribute = '';
 		}
 		echo	"<div class=\"checkbox col-sm-8 col-sm-offset-1\">
-				<label><input type=\"checkbox\" name=\"pin\" ".$checkbox_attribute."> Épingler</label>
+				<label><input type=\"checkbox\" name=\"pin\" ".$checkbox_attribute."> Pin</label>
 			</div>";
 	}		
 	echo "<button name=\"".$button_name."\" class=\"btn btn-primary col-sm-2 col-sm-offset-5 col-xs-4 col-xs-offset-4\">
 			<span class=\"glyphicon glyphicon-pencil\"></span>
-			Publier
+			Publish
 		</button>
 	</form>";
 }
@@ -452,17 +452,17 @@ function update_comment($comment_id, $new_content){
 function display_article_deletion_form(){
 	echo 	"<div class=\"page-header\">
 			<h3 class=\"text-center\">
-				Supprimer cet article ?
+				Delete this article ?
 			</h3>
 		</div>
 		<form method=\"POST\" class=\"col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2\">
 			<div class=\"form-group\">
-				<label>Veuillez saisir votre mot de passe :</label>
-				<input type=\"password\" name=\"password\" class=\"form-control\" placeholder=\"Votre mot de passe\" maxlength=\"60\" autofocus required>
+				<label>Please enter your password :</label>
+				<input type=\"password\" name=\"password\" class=\"form-control\" placeholder=\"Password\" maxlength=\"60\" autofocus required>
 			</div>
 			<button name=\"submit_article_deletion\" class=\"btn btn-danger\">
 				<span class=\"glyphicon glyphicon-trash\">
-				Supprimer
+				Delete
 			</button>";
 }
 function delete_comment($parent_id, $comment_id){
@@ -487,7 +487,7 @@ function delete_article($id){
 function display_breadcrumb($article_id){
 	$article_infos = get_article_infos($article_id);
 	echo 	"<ul class=\"breadcrumb\">
-			<li><a href=\"".get_base_url().get_location(1)."\">Accueil</a></li>
+			<li><a href=\"".get_base_url().get_location(1)."\">Home</a></li>
 			<li><a href=\"".get_base_url()."category&cat=".$article_infos['category']."\">".$article_infos['category']."</a></li>
 			<li><a href=\"".get_base_url()."article&id=".$article_id."\">".$article_infos['title']."</a></li>
 		</ul>";
