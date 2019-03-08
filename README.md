@@ -3,7 +3,13 @@
 SmartBB is an open source minimalist Bulletin Board System (BBS), where you can easily exchange with other people :
 Its goal is to provide an easy-to-install BBS for everybody (just clone and follow the instructions), in order to setup in few minutes
 a place where people can meet to exchange about anything.
-SmartBB is today quite minimalist, but an effort was made to keep the code very simple, clean and secured, and it's all coded by myself.
+SmartBB's code is :
+
+*very simple
+*clean
+*secured
+*all coded by me
+
 The administration system is just the same, it's simple but efficient.
 Please feel free to tell me your thoughts about it, to report any problem and to improve it :)
 
