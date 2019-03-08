@@ -5,10 +5,10 @@ Its goal is to provide an easy-to-install BBS for everybody (just clone and foll
 a place where people can meet to exchange about anything.
 SmartBB's code is :
 
-*very simple
-*clean
-*secured
-*all coded by me
+- very simple
+- clean
+- secured
+- all coded by me
 
 The administration system is just the same, it's simple but efficient.
 Please feel free to tell me your thoughts about it, to report any problem and to improve it :)
