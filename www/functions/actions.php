@@ -347,6 +347,16 @@ function get_category_infos($category){
 	
 	return $result;
 }
+function get_article_infos($article_id){
+	$mysqli = get_link();
+	$query = mysqli_prepare($mysqli, 'SELECT * FROM articles WHERE id = ?');
+	mysqli_stmt_bind_param($query, 'i', $article_id);
+	mysqli_stmt_execute($query);
+	mysqli_stmt_bind_result($query, $infos['id'], $infos['category'], $infos['author'], $infos['title'], $infos['content'], $infos['date'], $infos['is_pinned'], $infos['status']);
+	mysqli_stmt_fetch($query);
+
+	return $infos;
+}
 function auto_ban_process($user_ip){
 	$max_attempts = 3;
 	if(!isset($_SESSION['attempts'])){

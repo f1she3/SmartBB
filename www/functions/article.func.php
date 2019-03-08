@@ -36,16 +36,6 @@ function is_article($input_id){
 		return false;
 	}
 }
-function get_article_infos($article_id){
-	$mysqli = get_link();
-	$query = mysqli_prepare($mysqli, 'SELECT * FROM articles WHERE id = ?');
-	mysqli_stmt_bind_param($query, 'i', $article_id);
-	mysqli_stmt_execute($query);
-	mysqli_stmt_bind_result($query, $infos['id'], $infos['category'], $infos['author'], $infos['title'], $infos['content'], $infos['date'], $infos['is_pinned'], $infos['status']);
-	mysqli_stmt_fetch($query);
-
-	return $infos;
-}
 function get_comment_infos($comment_id){
 	$mysqli = get_link();
 	$query = mysqli_prepare($mysqli, 'SELECT * FROM comments WHERE id = ?');
@@ -138,9 +128,10 @@ function display_comment($comment_id, $article_id, $page_id){
 		$query = mysqli_prepare($mysqli, 'SELECT * FROM  comments WHERE parent_id = ? LIMIT ?, ?');
 		mysqli_stmt_bind_param($query, 'iii', $article_id, $position, $per_page);
 		mysqli_stmt_execute($query);
-		mysqli_stmt_bind_result($query, $id, $parent_id, $author, $content, $reply_to, $date);
+		mysqli_stmt_bind_result($query, $id, $parent_id, $author, $content, $reply_to, $date);	
+		$article_infos = get_article_infos($article_id);
 		if($page_id > 1){
-			display_breadcrumb($article_id);
+			display_breadcrumb($article_infos['category'], $article_id, false);
 		}
 		while(mysqli_stmt_fetch($query)){
 			$fdate = date_create($date);
@@ -166,7 +157,6 @@ function display_comment($comment_id, $article_id, $page_id){
 					<pre>".$content."</pre>";
 			}
 			echo 	"<form method=\"POST\">";
-			$article_infos = get_article_infos($article_id);
 			if(is_logged()){
 				$my_rank = get_rank($_SESSION['name']);
 			}else{
@@ -277,7 +267,7 @@ function display_article($article_id, $page_id){
 	echo 	"<div class=\"page-header\">
 			<h2 class=\"text-center\">".$prefix." ".$article_infos['title']."</h2>
 		</div>";
-	display_breadcrumb($article_id);
+	display_breadcrumb($article_infos['category'], $article_id, false);
 	echo	"<h4 class=\"text-left\">
 			<img src=\"../css/images/account_black.svg\" height=\"40\" width=\"40\">
 			<a href=\"".get_base_url()."profile&user=".$article_infos['author']."\">
@@ -368,7 +358,7 @@ function display_article_edition_form($article_id, $editor){
 	echo 	"<div class=\"page-header\">
 			<h3 class=\"text-center\">Edit my article</h3>
 		</div>";
-	display_breadcrumb($article_id);
+	display_breadcrumb($article_infos['category'], $article_id, false);
 	echo 	"<form method=\"POST\">
 			<div class=\"form-group col-md-4 col-md-offset-1 col-sm-6 col-sm-offset-1 col-xs-6\">
 				<label>Title : </label>
@@ -483,12 +473,4 @@ function delete_article($id){
 	$query = mysqli_prepare($mysqli, 'DELETE FROM articles WHERE id = ?');
 	mysqli_stmt_bind_param($query, 'i', $id);
 	mysqli_stmt_execute($query);
-}
-function display_breadcrumb($article_id){
-	$article_infos = get_article_infos($article_id);
-	echo 	"<ul class=\"breadcrumb\">
-			<li><a href=\"".get_base_url().get_location(1)."\">Home</a></li>
-			<li><a href=\"".get_base_url()."category&cat=".$article_infos['category']."\">".$article_infos['category']."</a></li>
-			<li><a href=\"".get_base_url()."article&id=".$article_id."\">".$article_infos['title']."</a></li>
-		</ul>";
 }

@@ -29,7 +29,7 @@ function get_root_url(){
 	return '//'.$_SERVER['HTTP_HOST'];
 }
 function get_project_name(){
-	return constant('PROJECT_NAME');
+	return 'SmartBB';
 }
 function get_location($input){
 	if(is_numeric($input)){

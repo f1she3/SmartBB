@@ -35,7 +35,6 @@ define_base_url(constant('ROUTING_MODE'));
  */
 define('FORUM_VISIBILITY', 'PUBLIC');
 session_start();
-define('PROJECT_NAME', '[DEV]');
 define('HOST', 'p:127.0.0.1');
 define('USER', 'project_usr');
 define('PASSWORD', 'roka304@');

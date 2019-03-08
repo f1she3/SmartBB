@@ -20,11 +20,8 @@ if(isset($_GET['cat']) && !empty($_GET['cat']) && is_string($_GET['cat'])){
 		}
 		echo 	"<div class=\"page-header\">
 				<h2 class=\"text-left\">".$category."</h2>
-			</div>
-			<ul class=\"breadcrumb\">
-				<li><a href=\"".get_base_url()."home\">Accueil</a></li>
-				<li><a href=\"".get_base_url()."category&cat=".$category."\">".$category."</a></li>
-			</ul>";
+			</div>";
+		display_breadcrumb($category, false, false);
 		display_articles($category, $id);
 	}else{
 		set_error('Erreur 404', 'zoom-out', 'La catégorie que vous recherchez n\'éxiste pas', 'home');

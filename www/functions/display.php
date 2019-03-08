@@ -201,17 +201,25 @@ function display_articles($category, $page_id){
 		}
 	}
 }
+function display_breadcrumb($category_name, $article_id, $opt_article_name){
+	$article_infos = get_article_infos($article_id);
+	echo 	"<ul class=\"breadcrumb\">
+			<li><a href=\"".get_base_url().get_location(1)."\"><span class=\"label label-default\">Accueil</span></a></li>
+			<li><a href=\"".get_base_url()."category&cat=".$category_name."\"><span class=\"label label-default\">".$category_name."</span></a></li>";
+	if($article_id === false && $opt_article_name !== false){
+		echo "<li>".$opt_article_name."</li>";
+	}else{
+		echo "<li><a href=\"".get_base_url()."article&id=".$article_id."\"><span class=\"label label-default\">".$article_infos['title']."</span></a></li>";
+	}
+	echo "</ul>";
+}
 function display_article_creation_form($category_name){
 	$category_infos = get_category_infos($category_name);
 	echo 	"<div class=\"page-header\">
 			<h3 class=\"text-center\">Poster un article</h3>
-		</div>
-		<ul class=\"breadcrumb\">
-			<li><a href=\"".get_base_url()."home\">Accueil</a></li>
-			<li><a href=\"".get_base_url()."category&cat=".$category_name."\">".$category_name."</a></li>
-			<li>Nouvel article</li>
-		</ul>
-		<form method=\"POST\">
+		</div>";
+	display_breadcrumb($category_name, false, 'Nouvel article');
+	echo "<form method=\"POST\">
 			<div class=\"form-group col-md-4 col-md-offset-1 col-sm-6 col-sm-offset-1 col-xs-6\">
 				<label>Titre : </label>
 				<input name=\"article_title\" class=\"form-control\" maxlength=\"100\" autofocus required>
