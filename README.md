@@ -1,3 +1,9 @@
+## Table of Contents
+
+1. [Introduction](#smartbb)
+2. [Components](#components)
+3. [Installation](#installation)
+
 ## SmartBB ##
 
 SmartBB is an open source minimalist Bulletin Board System (BBS), where you can easily exchange with other people :
